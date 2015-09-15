@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="857.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox prefHeight="57.0" prefWidth="838.0">
+         <children>
+            <GridPane alignment="TOP_CENTER" prefHeight="56.0" prefWidth="158.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefHeight="44.0" prefWidth="152.0" text="Wpisz nazwę filmu:" />
+               </children>
+            </GridPane>
+            <GridPane prefHeight="57.0" prefWidth="677.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField prefHeight="34.0" prefWidth="686.0" />
+               </children>
+            </GridPane>
+         </children>
+      </HBox>
+      <TreeTableView prefHeight="459.0" prefWidth="838.0">
+        <columns>
+          <TreeTableColumn prefWidth="638.0" text="Nazwa filmu" />
+            <TreeTableColumn minWidth="0.0" prefWidth="117.0" text="Status" />
+          <TreeTableColumn prefWidth="101.0" text="Who?" />
+        </columns>
+      </TreeTableView>
+      <ToolBar prefHeight="47.0" prefWidth="838.0">
+        <items>
+          <Button mnemonicParsing="false" text="Dodaj film" />
+            <Button mnemonicParsing="false" text="Edytuj film" />
+            <Button mnemonicParsing="false" text="Usuń film" />
+            <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="4.0" />
+            <Button mnemonicParsing="false" text="Button" />
+        </items>
+      </ToolBar>
+   </children>
+</VBox>
