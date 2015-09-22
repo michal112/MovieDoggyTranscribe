@@ -1,4 +1,4 @@
-package app.moviedoggytranscribe.Service;
+package app.moviedoggytranscribe.service;
 
 import app.moviedoggytranscribe.model.dao.Dao;
 import app.moviedoggytranscribe.model.entity.Movie;
