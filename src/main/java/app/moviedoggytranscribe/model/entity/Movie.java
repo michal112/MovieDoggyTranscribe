@@ -9,6 +9,7 @@ public class Movie {
     private String filmUrl;
     private String genre;
     private String rating;
+    private Integer id;
 
     public Movie(String title, String description, String year, String imageUrl, String filmUrl, String genre, String rating) {
         this.title = title;
@@ -74,6 +75,14 @@ public class Movie {
 
     public void setRating(String rating) {
         this.rating = rating;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
 }
