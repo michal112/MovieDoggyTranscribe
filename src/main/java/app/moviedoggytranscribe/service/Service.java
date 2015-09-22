@@ -6,6 +6,5 @@ public interface Service<T> {
 
     List<T> getAll();
     T get(Integer id);
-    Integer add(T entity);
 
 }

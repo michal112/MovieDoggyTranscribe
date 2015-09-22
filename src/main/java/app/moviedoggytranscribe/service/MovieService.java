@@ -25,15 +25,12 @@ public class MovieService implements Service<Movie> {
     @Override
     public Movie get(Integer id) {
         initMovies();
-        if (movies.isEmpty()) {
-            return null;
+        //TODO refactor
+        List<Movie> movieList = movies.stream().filter(m -> m.getId() == id).collect(Collectors.toList());
+        if (movieList.isEmpty()) {
+            return null; //TODO exception
         }
-        return movies.stream().filter(m -> m.getId() == id).collect(Collectors.toList()).get(0);
-    }
-
-    @Override
-    public Integer add(Movie entity) {
-        movieDao.add()
+        return movieList.get(0);
     }
 
     private void initMovies() {
