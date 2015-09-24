@@ -1,20 +1,24 @@
 package app.moviedoggytranscribe.service;
 
+import app.moviedoggytranscribe.exception.NoSuchMovieException;
 import app.moviedoggytranscribe.model.dao.Dao;
 import app.moviedoggytranscribe.model.entity.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+@org.springframework.stereotype.Service
 public class MovieService implements Service<Movie> {
 
     @Autowired
     private Dao<Movie> movieDao;
-    private List<Movie> movies = Collections.emptyList();
+    private List<Movie> movies;
+
+    public MovieService() {
+        this.movies = new ArrayList<>();
+    }
 
     @Override
     public List<Movie> getAll() {
@@ -23,14 +27,18 @@ public class MovieService implements Service<Movie> {
     }
 
     @Override
-    public Movie get(Integer id) {
+    public Movie get(Integer id) throws NoSuchMovieException {
         initMovies();
-        //TODO refactor
-        List<Movie> movieList = movies.stream().filter(m -> m.getId() == id).collect(Collectors.toList());
-        if (movieList.isEmpty()) {
-            return null; //TODO exception
+        if (movies.stream().anyMatch(movie -> movie.getId().equals(id))) {
+            return movies.stream().filter(movie -> movie.getId().equals(id)).collect(Collectors.toList()).get(0);
+        } else {
+            throw new NoSuchMovieException(id);
         }
-        return movieList.get(0);
+    }
+
+    @Override
+    public Integer add(Movie entity) {
+        return movieDao.add(entity);
     }
 
     private void initMovies() {

@@ -6,17 +6,17 @@ public class Movie {
     private String description;
     private String year;
     private String imageUrl;
-    private String filmUrl;
+    private String movieUrl;
     private String genre;
     private String rating;
     private Integer id;
 
-    public Movie(String title, String description, String year, String imageUrl, String filmUrl, String genre, String rating) {
+    public Movie(String title, String description, String year, String imageUrl, String movieUrl, String genre, String rating) {
         this.title = title;
         this.description = description;
         this.year = year;
         this.imageUrl = imageUrl;
-        this.filmUrl = filmUrl;
+        this.movieUrl = movieUrl;
         this.genre = genre;
         this.rating = rating;
     }
@@ -53,14 +53,6 @@ public class Movie {
         this.imageUrl = imageUrl;
     }
 
-    public String getFilmUrl() {
-        return filmUrl;
-    }
-
-    public void setFilmUrl(String filmUrl) {
-        this.filmUrl = filmUrl;
-    }
-
     public String getGenre() {
         return genre;
     }
@@ -85,4 +77,11 @@ public class Movie {
         this.id = id;
     }
 
+    public String getMovieUrl() {
+        return movieUrl;
+    }
+
+    public void setMovieUrl(String movieUrl) {
+        this.movieUrl = movieUrl;
+    }
 }

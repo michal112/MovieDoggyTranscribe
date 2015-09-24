@@ -2,6 +2,7 @@ package app.moviedoggytranscribe.constants;
 
 public class AppConstants {
 
+    public static final String APPLICATION_CONTEXT_XML = "applicationContext.xml";
     public static final String VIEWS_FOLDER_NAME = "views";
 
     public static final String KEY_COLUMN_NAME = "id";

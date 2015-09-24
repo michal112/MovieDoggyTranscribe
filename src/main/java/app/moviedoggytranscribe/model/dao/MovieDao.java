@@ -3,6 +3,7 @@ package app.moviedoggytranscribe.model.dao;
 import app.moviedoggytranscribe.constants.AppConstants;
 import app.moviedoggytranscribe.model.entity.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -20,6 +21,7 @@ public class MovieDao implements Dao<Movie> {
     private SimpleJdbcInsert simpleJdbcInsert;
 
     @Autowired
+    @Qualifier("dataSource")
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
