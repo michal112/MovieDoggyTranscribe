@@ -3,7 +3,7 @@ CREATE TABLE movie (
     title       LONGVARCHAR,
     description LONGVARCHAR,
     imageUrl    LONGVARCHAR,
-    filmUrl     LONGVARCHAR,
+    movieUrl     LONGVARCHAR,
     genre       LONGVARCHAR,
     year        LONGVARCHAR,
     rating      LONGVARCHAR

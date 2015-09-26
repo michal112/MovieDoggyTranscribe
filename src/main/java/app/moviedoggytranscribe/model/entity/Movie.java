@@ -2,23 +2,34 @@ package app.moviedoggytranscribe.model.entity;
 
 public class Movie {
 
+    private Integer id;
     private String title;
     private String description;
-    private String year;
     private String imageUrl;
     private String movieUrl;
     private String genre;
+    private String year;
     private String rating;
-    private Integer id;
 
-    public Movie(String title, String description, String year, String imageUrl, String movieUrl, String genre, String rating) {
+    public Movie() {}
+
+    public Movie(String title, String description, String imageUrl,
+                    String movieUrl, String genre, String year, String rating) {
         this.title = title;
         this.description = description;
-        this.year = year;
         this.imageUrl = imageUrl;
         this.movieUrl = movieUrl;
         this.genre = genre;
+        this.year = year;
         this.rating = rating;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -37,20 +48,20 @@ public class Movie {
         this.description = description;
     }
 
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getMovieUrl() {
+        return movieUrl;
+    }
+
+    public void setMovieUrl(String movieUrl) {
+        this.movieUrl = movieUrl;
     }
 
     public String getGenre() {
@@ -61,6 +72,14 @@ public class Movie {
         this.genre = genre;
     }
 
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
     public String getRating() {
         return rating;
     }
@@ -69,19 +88,4 @@ public class Movie {
         this.rating = rating;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getMovieUrl() {
-        return movieUrl;
-    }
-
-    public void setMovieUrl(String movieUrl) {
-        this.movieUrl = movieUrl;
-    }
 }

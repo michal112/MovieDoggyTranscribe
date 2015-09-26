@@ -4,7 +4,7 @@ public class DataSourceHolder {
 
     private static DataSourceType DATA_SOURCE_TYPE;
 
-    public static final void setDataSourceType(DataSourceType dataSourceType) {
+    public static void setDataSourceType(DataSourceType dataSourceType) {
         DATA_SOURCE_TYPE = dataSourceType;
     }
 

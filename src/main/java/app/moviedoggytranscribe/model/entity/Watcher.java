@@ -7,10 +7,12 @@ public class Watcher {
     private String name;
     private String surname;
 
-    public Watcher(String nick, String surname, String name) {
+    public Watcher() {}
+
+    public Watcher(String nick, String name, String surname) {
         this.nick = nick;
-        this.surname = surname;
         this.name = name;
+        this.surname = surname;
     }
 
     public Integer getId() {

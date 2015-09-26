@@ -6,6 +6,8 @@ public class Status {
     private String name;
     private String colour;
 
+    public Status() {}
+
     public Status(String name, String colour) {
         this.name = name;
         this.colour = colour;

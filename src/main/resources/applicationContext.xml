@@ -11,7 +11,7 @@
 		app.moviedoggytranscribe"/>
 	<context:property-placeholder location="jdbc.properties"/>
 
-    <bean id="dataSource" class="app.moviedoggytranscribe.model.AppRoutingDataSource">
+    <bean id="dataSource" class="app.moviedoggytranscribe.model.RoutingDataSource">
         <property name="targetDataSources">
             <map key-type="app.moviedoggytranscribe.model.DataSourceType">
                 <entry key="TEST" value-ref="testDataSource"/>
