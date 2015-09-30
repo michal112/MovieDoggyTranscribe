@@ -1,23 +1,25 @@
 package app.moviedoggytranscribe.model.entity;
 
 public class Watcher {
-    private int id;
+
+    private Integer id;
     private String nick;
     private String name;
     private String surname;
 
-    public Watcher(int id, String nick, String surname, String name) {
-        this.id = id;
+    public Watcher() {}
+
+    public Watcher(String nick, String name, String surname) {
         this.nick = nick;
-        this.surname = surname;
         this.name = name;
+        this.surname = surname;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -44,4 +46,5 @@ public class Watcher {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
 }

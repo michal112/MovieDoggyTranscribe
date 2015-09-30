@@ -1,21 +1,23 @@
 package app.moviedoggytranscribe.model.entity;
 
 public class Status {
-    private int id;
+
+    private Integer id;
     private String name;
     private String colour;
 
-    public Status(int id, String name, String colour) {
-        this.id = id;
+    public Status() {}
+
+    public Status(String name, String colour) {
         this.name = name;
         this.colour = colour;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -34,4 +36,5 @@ public class Status {
     public void setColour(String colour) {
         this.colour = colour;
     }
+
 }

@@ -1,15 +1,16 @@
 package app.moviedoggytranscribe.service;
 
-import app.moviedoggytranscribe.model.dao.Dao;
-import app.moviedoggytranscribe.model.entity.Movie;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import app.moviedoggytranscribe.exception.NoSuchEntityException;
+import app.moviedoggytranscribe.exception.NoSuchMovieException;
 
-@Component
-public class Service {
+import java.util.List;
 
-    @Autowired
-    Dao<Movie> movieDao;
+public interface Service<T> {
 
+    List<T> getAll();
+    T get(Integer id) throws NoSuchEntityException;
+    Integer add(T entity);
+    void delete(Integer id) throws NoSuchMovieException;
+    void update(T entity) throws NoSuchMovieException;
 
 }

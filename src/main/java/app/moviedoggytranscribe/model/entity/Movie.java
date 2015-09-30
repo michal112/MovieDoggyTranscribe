@@ -2,22 +2,34 @@ package app.moviedoggytranscribe.model.entity;
 
 public class Movie {
 
+    private Integer id;
     private String title;
     private String description;
-    private String year;
     private String imageUrl;
-    private String filmUrl;
+    private String movieUrl;
     private String genre;
+    private String year;
     private String rating;
 
-    public Movie(String title, String description, String year, String imageUrl, String filmUrl, String genre, String rating) {
+    public Movie() {}
+
+    public Movie(String title, String description, String imageUrl,
+                    String movieUrl, String genre, String year, String rating) {
         this.title = title;
         this.description = description;
-        this.year = year;
         this.imageUrl = imageUrl;
-        this.filmUrl = filmUrl;
+        this.movieUrl = movieUrl;
         this.genre = genre;
+        this.year = year;
         this.rating = rating;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -36,14 +48,6 @@ public class Movie {
         this.description = description;
     }
 
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
@@ -52,12 +56,12 @@ public class Movie {
         this.imageUrl = imageUrl;
     }
 
-    public String getFilmUrl() {
-        return filmUrl;
+    public String getMovieUrl() {
+        return movieUrl;
     }
 
-    public void setFilmUrl(String filmUrl) {
-        this.filmUrl = filmUrl;
+    public void setMovieUrl(String movieUrl) {
+        this.movieUrl = movieUrl;
     }
 
     public String getGenre() {
@@ -66,6 +70,14 @@ public class Movie {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
     }
 
     public String getRating() {
