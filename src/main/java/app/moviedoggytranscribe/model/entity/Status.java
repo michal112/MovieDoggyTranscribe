@@ -1,6 +1,6 @@
 package app.moviedoggytranscribe.model.entity;
 
-public class Status {
+public class Status implements Entity {
 
     private Integer id;
     private String name;

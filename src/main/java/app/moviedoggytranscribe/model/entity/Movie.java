@@ -1,6 +1,6 @@
 package app.moviedoggytranscribe.model.entity;
 
-public class Movie {
+public class Movie implements Entity {
 
     private Integer id;
     private String title;
