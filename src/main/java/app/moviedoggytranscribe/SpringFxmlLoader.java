@@ -6,32 +6,21 @@ import org.springframework.context.ApplicationContext;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class SpringFxmlLoader
-{
-    private ApplicationContext context;
+public class SpringFxmlLoader {
 
-    public SpringFxmlLoader(ApplicationContext context)
-    {
+    private final ApplicationContext context;
+
+    public SpringFxmlLoader(ApplicationContext context) {
         this.context = context;
     }
 
-    public Object load(String url, Class<?> controllerClass) throws IOException
-    {
-        InputStream fxmlStream = null;
-        try
-        {
-            fxmlStream = controllerClass.getResourceAsStream(url);
-            Object instance = context.getBean(controllerClass);
+    public Object load(String url, Class<?> controllerClass) throws IOException {
+        try (InputStream fxmlStream = controllerClass.getResourceAsStream(url)) {
+            Object controller = context.getBean(controllerClass);
             FXMLLoader loader = new FXMLLoader();
-            loader.setController(instance);
+            loader.setController(controller);
             return loader.load(fxmlStream);
         }
-        finally
-        {
-            if (fxmlStream != null)
-            {
-                fxmlStream.close();
-            }
-        }
     }
+
 }

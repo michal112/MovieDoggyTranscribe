@@ -10,10 +10,13 @@
 
 
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+
 <VBox
       maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="857.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <HBox prefHeight="57.0" prefWidth="856.0">
+
+    <children>
+      <HBox prefHeight="57.0">
+          <prefWidth><ViewConstants fx:constant="APP_WINDOW_WIDTH"/></prefWidth>
          <children>
             <GridPane alignment="TOP_CENTER" prefHeight="56.0" prefWidth="158.0">
                <columnConstraints>
@@ -40,21 +43,29 @@
          </children>
       </HBox>
 
-      <TableView fx:id="tableData" prefHeight="459.0" prefWidth="856.0">
+      <TableView fx:id="mainTable">
+          <prefWidth><ViewConstants fx:constant="APP_WINDOW_WIDTH"/></prefWidth>
+          <prefHeight><ViewConstants fx:constant="MAIN_VIEW_TABLE_HEIGHT"/></prefHeight>
           <columns>
-              <TableColumn prefWidth="638.0" text="Nazwa filmu">
+              <TableColumn fx:id="movieColumn">
+                  <prefWidth><ViewConstants fx:constant="MAIN_VIEW_TABLE_MOVIE_COLUMN_WIDTH"/></prefWidth>
+                  <text><ViewConstants fx:constant="MAIN_VIEW_TABLE_MOVIE_COLUMN_NAME"/></text>
                   <cellValueFactory>
                       <PropertyValueFactory property="movieName"/>
                   </cellValueFactory>
               </TableColumn>
-              <TableColumn prefWidth="117.0" text="Status">
+              <TableColumn>
+                  <prefWidth><ViewConstants fx:constant="MAIN_VIEW_TABLE_WATCHER_COLUMN_WIDTH"/></prefWidth>
+                  <text><ViewConstants fx:constant="MAIN_VIEW_TABLE_WATCHER_COLUMN_NAME"/></text>
                   <cellValueFactory>
-                      <PropertyValueFactory property="status"/>
+                      <PropertyValueFactory property="watcherName"/>
                   </cellValueFactory>
               </TableColumn>
-              <TableColumn prefWidth="101.0" text="Oglądający">
+              <TableColumn>
+                  <prefWidth><ViewConstants fx:constant="MAIN_VIEW_TABLE_STATUS_COLUMN_WIDTH"/></prefWidth>
+                  <text><ViewConstants fx:constant="MAIN_VIEW_TABLE_STATUS_COLUMN_NAME"/></text>
                   <cellValueFactory>
-                      <PropertyValueFactory property="watcher"/>
+                      <PropertyValueFactory property="status"/>
                   </cellValueFactory>
               </TableColumn>
           </columns>

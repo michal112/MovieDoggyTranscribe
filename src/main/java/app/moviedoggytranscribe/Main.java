@@ -3,6 +3,7 @@ package app.moviedoggytranscribe;
 import app.moviedoggytranscribe.constants.AppConstants;
 import app.moviedoggytranscribe.constants.ViewConstants;
 import app.moviedoggytranscribe.controller.MainViewController;
+import app.moviedoggytranscribe.exception.NoSuchMovieException;
 import app.moviedoggytranscribe.model.dao.MovieDao;
 import app.moviedoggytranscribe.model.entity.Movie;
 import app.moviedoggytranscribe.service.Service;
@@ -24,7 +25,7 @@ public class Main extends Application {
 
     @Autowired
     @Qualifier("movieService")
-    private Service<Movie> movieService;
+    private Service<Movie, NoSuchMovieException> movieService;
     private static ApplicationContext applicationContext;
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -32,7 +33,7 @@ public class Main extends Application {
         Parent root = (Parent) loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                 + File.separator + ViewConstants.MAIN_VIEW_FILE_NAME, MainViewController.class);
         primaryStage.setTitle(ViewConstants.MAIN_VIEW_TITLE);
-        primaryStage.setScene(new Scene(root, 857, 560));
+        primaryStage.setScene(new Scene(root, ViewConstants.APP_WINDOW_WIDTH, 560));
         primaryStage.setResizable(false);
         primaryStage.show();
     }

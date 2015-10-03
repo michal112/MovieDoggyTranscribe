@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -29,6 +30,7 @@ public class MovieDao implements Dao<Movie> {
     }
 
     @Override
+    @Transactional
     public Integer add(Movie movie) {
         SqlParameterSource parameters = new BeanPropertySqlParameterSource(movie);
         movie.setId((Integer) simpleJdbcInsert.executeAndReturnKey(parameters));
@@ -36,16 +38,19 @@ public class MovieDao implements Dao<Movie> {
     }
 
     @Override
+    @Transactional
     public List<Movie> getAll() {
        return jdbcTemplate.query(AppConstants.GET_ALL_MOVIES_QUERY, BeanPropertyRowMapper.newInstance(Movie.class));
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         jdbcTemplate.update(AppConstants.DELETE_MOVIE_QUERY, id);
     }
 
     @Override
+    @Transactional
     public void update(Movie movie) {
         jdbcTemplate.update(AppConstants.UPDATE_MOVIE_QUERY, movie.getTitle(),
             movie.getDescription(), movie.getImageUrl(), movie.getMovieUrl(),

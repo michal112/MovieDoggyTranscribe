@@ -17,7 +17,7 @@ public class ToMovieDataMapper implements Mapper<MovieData> {
         MovieData movieData = new MovieData();
 
         movies.forEach(movie -> {
-            movieData.setMovieName(((Movie) movie).getTitle());
+            movieData.setMovie((Movie) movie);
         });
 
         return movieData;

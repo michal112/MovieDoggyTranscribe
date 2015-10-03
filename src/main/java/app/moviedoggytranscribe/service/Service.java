@@ -1,18 +1,18 @@
 package app.moviedoggytranscribe.service;
 
 import app.moviedoggytranscribe.exception.NoSuchEntityException;
-import app.moviedoggytranscribe.exception.NoSuchMovieException;
 import app.moviedoggytranscribe.model.entity.Entity;
 
 import java.util.List;
+import java.util.Observer;
 
-public interface Service<T extends Entity> {
+public interface Service<T extends Entity, E extends NoSuchEntityException> extends Observer {
 
-    void clearData();
+    void clearEntities();
     List<T> getAll();
-    T get(Integer id) throws NoSuchEntityException;
+    T get(Integer id) throws E;
     Integer add(T entity);
-    void delete(Integer id) throws NoSuchMovieException;
-    void update(T entity) throws NoSuchMovieException;
+    void delete(Integer id) throws E;
+    void update(T entity) throws E;
 
 }

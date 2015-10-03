@@ -5,6 +5,7 @@ import app.moviedoggytranscribe.exception.NoSuchEntityException;
 import app.moviedoggytranscribe.exception.NoSuchMovieException;
 import app.moviedoggytranscribe.model.DataSourceHolder;
 import app.moviedoggytranscribe.model.DataSourceType;
+import app.moviedoggytranscribe.model.dao.MovieDao;
 import app.moviedoggytranscribe.model.entity.Movie;
 import org.junit.After;
 import org.junit.Assert;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,13 +25,15 @@ import java.util.logging.Logger;
 public class ServicesTest {
 
     @Autowired
-    private Service<Movie> movieService;
+    private Service<Movie, NoSuchMovieException> movieService;
+    @Autowired
+    private DataSourceHolder dataSourceHolder;
 
     private Logger logger = Logger.getLogger(ServicesTest.class.getName());
 
     @Before
     public void setUp() {
-        DataSourceHolder.setDataSourceType(DataSourceType.TEST);
+        dataSourceHolder.setDataSourceType(DataSourceType.TEST);
         logger.setLevel(Level.ALL);
     }
 
@@ -70,29 +74,29 @@ public class ServicesTest {
 
         try {
             movieService.delete(firstMovie.getId());
-        } catch (NoSuchMovieException e) {
+        } catch (NoSuchEntityException e) {
             logger.info("Błąd przy pobieraniu filmu, " + e.getMessage());
         }
         Assert.assertEquals(movieService.getAll().size(), 1);
         try {
             movieService.delete(Integer.MIN_VALUE);
-        } catch (NoSuchMovieException e) {
+        } catch (NoSuchEntityException e) {
             Assert.assertEquals(e.getClass().getCanonicalName(), NoSuchMovieException.class.getCanonicalName());
         }
 
         try {
             movieService.get(firstMovie.getId());
-        } catch (Exception e) {
+        } catch (NoSuchEntityException e) {
             Assert.assertEquals(e.getClass().getCanonicalName(), NoSuchMovieException.class.getCanonicalName());
         }
 
         secondMovie.setYear("2000");
         try {
             movieService.update(secondMovie);
-        } catch (NoSuchMovieException e) {
+        } catch (NoSuchEntityException e) {
             logger.info("Błąd przy pobieraniu filmu, " + e.getMessage());
         }
-        movieService.clearData();
+        movieService.clearEntities();
         try {
             Assert.assertTrue(movieService.get(secondMovie.getId()).getYear().equals(secondMovie.getYear()));
         } catch (NoSuchEntityException e) {
@@ -103,7 +107,7 @@ public class ServicesTest {
 
     @After
     public void tearDown() {
-        DataSourceHolder.setDataSourceType(DataSourceType.DEFAULT);
+        dataSourceHolder.setDataSourceType(DataSourceType.DEFAULT);
     }
 
 }

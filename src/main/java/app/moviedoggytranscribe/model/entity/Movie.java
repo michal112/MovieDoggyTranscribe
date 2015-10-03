@@ -24,6 +24,7 @@ public class Movie implements Entity {
         this.rating = rating;
     }
 
+    @Override
     public Integer getId() {
         return id;
     }

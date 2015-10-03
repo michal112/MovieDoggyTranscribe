@@ -15,6 +15,7 @@ public class Watcher implements Entity {
         this.surname = surname;
     }
 
+    @Override
     public Integer getId() {
         return id;
     }

@@ -1,47 +1,53 @@
 package app.moviedoggytranscribe.model.data;
 
-import javafx.beans.property.SimpleStringProperty;
+import app.moviedoggytranscribe.model.entity.Movie;
+import app.moviedoggytranscribe.model.entity.Status;
+import app.moviedoggytranscribe.model.entity.Watcher;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
+import java.util.List;
 
 public class MovieData implements Data {
 
-    private SimpleStringProperty movieName = new SimpleStringProperty();
-    private SimpleStringProperty watcherName = new SimpleStringProperty();;
-    private SimpleStringProperty status = new SimpleStringProperty();;
+    private ObjectProperty<Movie> movie = new SimpleObjectProperty<>();
+    private ObjectProperty<List<Watcher>> watchers = new SimpleObjectProperty<>();
+    private ObjectProperty<List<Status>> statuses = new SimpleObjectProperty<>();
 
-    public String getMovieName() {
-        return movieName.get();
+    public Movie getMovie() {
+        return movie.get();
     }
 
-    public SimpleStringProperty movieNameProperty() {
-        return movieName;
+    public ObjectProperty<Movie> movieProperty() {
+        return movie;
     }
 
-    public void setMovieName(String movieName) {
-        this.movieName.set(movieName);
+    public void setMovie(Movie movie) {
+        this.movie.set(movie);
     }
 
-    public String getWatcherName() {
-        return watcherName.get();
+    public List<Watcher> getWatchers() {
+        return watchers.get();
     }
 
-    public SimpleStringProperty watcherNameProperty() {
-        return watcherName;
+    public ObjectProperty<List<Watcher>> watchersProperty() {
+        return watchers;
     }
 
-    public void setWatcherName(String watcherName) {
-        this.watcherName.set(watcherName);
+    public void setWatchers(List<Watcher> watchers) {
+        this.watchers.set(watchers);
     }
 
-    public String getStatus() {
-        return status.get();
+    public List<Status> getStatuses() {
+        return statuses.get();
     }
 
-    public SimpleStringProperty statusProperty() {
-        return status;
+    public ObjectProperty<List<Status>> statusesProperty() {
+        return statuses;
     }
 
-    public void setStatus(String status) {
-        this.status.set(status);
+    public void setStatuses(List<Status> statuses) {
+        this.statuses.set(statuses);
     }
 
 }

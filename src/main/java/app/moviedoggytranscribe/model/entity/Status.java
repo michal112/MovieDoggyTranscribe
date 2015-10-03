@@ -13,6 +13,7 @@ public class Status implements Entity {
         this.colour = colour;
     }
 
+    @Override
     public Integer getId() {
         return id;
     }

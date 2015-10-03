@@ -1,3 +1,6 @@
 package app.moviedoggytranscribe.model.entity;
 
-public interface Entity {}
+public interface Entity {
+
+    Integer getId();
+}
