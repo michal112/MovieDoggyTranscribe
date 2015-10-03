@@ -1,7 +1,7 @@
 package app.moviedoggytranscribe.model.dao;
 
 import app.moviedoggytranscribe.constants.AppConstants;
-import app.moviedoggytranscribe.model.entity.Movie;
+import app.moviedoggytranscribe.model.entity.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class MovieDao implements Dao<Movie> {
+public class StatusDao implements Dao<Status> {
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
@@ -25,31 +25,29 @@ public class MovieDao implements Dao<Movie> {
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
-                .withTableName(AppConstants.MOVIE_TABLE_NAME).usingGeneratedKeyColumns(AppConstants.KEY_COLUMN_NAME);
+                .withTableName(AppConstants.STATUS_TABLE_NAME).usingGeneratedKeyColumns(AppConstants.KEY_COLUMN_NAME);
     }
 
     @Override
-    public Integer add(Movie movie) {
-        SqlParameterSource parameters = new BeanPropertySqlParameterSource(movie);
-        movie.setId((Integer) simpleJdbcInsert.executeAndReturnKey(parameters));
-        return movie.getId();
+    public Integer add(Status status) {
+        SqlParameterSource parameters = new BeanPropertySqlParameterSource(status);
+        status.setId((Integer) simpleJdbcInsert.executeAndReturnKey(parameters));
+        return status.getId();
     }
 
     @Override
-    public List<Movie> getAll() {
-       return jdbcTemplate.query(AppConstants.GET_ALL_MOVIES_QUERY, BeanPropertyRowMapper.newInstance(Movie.class));
+    public List<Status> getAll() {
+        return jdbcTemplate.query(AppConstants.GET_ALL_STATUSES_QUERY, BeanPropertyRowMapper.newInstance(Status.class));
     }
 
     @Override
     public void delete(Integer id) {
-        jdbcTemplate.update(AppConstants.DELETE_MOVIE_QUERY, id);
+        jdbcTemplate.update(AppConstants.DELETE_STATUS_QUERY, id);
     }
 
     @Override
-    public void update(Movie movie) {
-        jdbcTemplate.update(AppConstants.UPDATE_MOVIE_QUERY, movie.getTitle(),
-            movie.getDescription(), movie.getImageUrl(), movie.getMovieUrl(),
-                movie.getGenre(), movie.getYear(), movie.getRating(), movie.getId());
+    public void update(Status status) {
+        jdbcTemplate.update(AppConstants.UPDATE_STATUS_QUERY, status.getName(), status.getColour());
     }
 
 }

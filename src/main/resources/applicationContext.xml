@@ -8,7 +8,7 @@
        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
     
 	<context:component-scan base-package="app.moviedoggytranscribe.model.dao, app.moviedoggytranscribe.service,
-		app.moviedoggytranscribe"/>
+		app.moviedoggytranscribe, app.moviedoggytranscribe.controller"/>
 	<context:property-placeholder location="jdbc.properties"/>
 
     <bean id="dataSource" class="app.moviedoggytranscribe.model.RoutingDataSource">
@@ -27,7 +27,7 @@
 	</bean>
 
 	<jdbc:embedded-database id="testDataSource">
-		<jdbc:script location="classpath:sql/schema.sql"/>
+		<jdbc:script location="classpath:db/init.sql"/>
 	</jdbc:embedded-database>
 
 </beans>

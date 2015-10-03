@@ -21,7 +21,8 @@ public class MovieService implements Service<Movie> {
         this.movies = new ArrayList<>();
     }
 
-    public void clearMovies() {
+    @Override
+    public void clearData() {
         this.movies.clear();
     }
 
@@ -42,9 +43,9 @@ public class MovieService implements Service<Movie> {
     }
 
     @Override
-    public Integer add(Movie entity) {
-        Integer movieId = movieDao.add(entity);
-        movies.add(entity);
+    public Integer add(Movie movie) {
+        Integer movieId = movieDao.add(movie);
+        movies.add(movie);
         return movieId;
     }
 
@@ -55,15 +56,15 @@ public class MovieService implements Service<Movie> {
     }
 
     @Override
-    public void update(Movie entity) throws NoSuchMovieException {
-        if (movies.stream().anyMatch(movie -> movie.getId() == entity.getId())) {
-            Movie movie = movies.stream().filter(m -> m.getId() == entity.getId())
+    public void update(Movie movie) throws NoSuchMovieException {
+        if (movies.stream().anyMatch(m -> m.getId() == movie.getId())) {
+            Movie mov = movies.stream().filter(m -> m.getId() == movie.getId())
                     .collect(Collectors.toList()).get(0);
-            movies.remove(movie);
-            movies.add(entity);
-            movieDao.update(entity);
+            movies.remove(mov);
+            movies.add(movie);
+            movieDao.update(movie);
         } else {
-            throw new NoSuchMovieException(entity.getId());
+            throw new NoSuchMovieException(movie.getId());
         }
 
     }

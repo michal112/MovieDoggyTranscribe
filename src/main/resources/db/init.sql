@@ -8,3 +8,9 @@ CREATE TABLE movie (
     year        LONGVARCHAR,
     rating      LONGVARCHAR
 );
+
+CREATE TABLE status (
+    id     INTEGER PRIMARY KEY IDENTITY,
+    name   LONGVARCHAR,
+    colour LONGVARCHAR
+);

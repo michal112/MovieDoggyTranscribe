@@ -6,10 +6,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
+<?import app.moviedoggytranscribe.constants.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="857.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<VBox
+      maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="857.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox prefHeight="57.0" prefWidth="838.0">
+      <HBox prefHeight="57.0" prefWidth="856.0">
          <children>
             <GridPane alignment="TOP_CENTER" prefHeight="56.0" prefWidth="158.0">
                <columnConstraints>
@@ -35,14 +39,28 @@
             </GridPane>
          </children>
       </HBox>
-      <TreeTableView prefHeight="459.0" prefWidth="838.0">
-        <columns>
-          <TreeTableColumn prefWidth="638.0" text="Nazwa filmu" />
-            <TreeTableColumn minWidth="0.0" prefWidth="117.0" text="Status" />
-          <TreeTableColumn prefWidth="101.0" text="Who?" />
-        </columns>
-      </TreeTableView>
-      <ToolBar prefHeight="47.0" prefWidth="838.0">
+
+      <TableView fx:id="tableData" prefHeight="459.0" prefWidth="856.0">
+          <columns>
+              <TableColumn prefWidth="638.0" text="Nazwa filmu">
+                  <cellValueFactory>
+                      <PropertyValueFactory property="movieName"/>
+                  </cellValueFactory>
+              </TableColumn>
+              <TableColumn prefWidth="117.0" text="Status">
+                  <cellValueFactory>
+                      <PropertyValueFactory property="status"/>
+                  </cellValueFactory>
+              </TableColumn>
+              <TableColumn prefWidth="101.0" text="Oglądający">
+                  <cellValueFactory>
+                      <PropertyValueFactory property="watcher"/>
+                  </cellValueFactory>
+              </TableColumn>
+          </columns>
+      </TableView>
+
+      <ToolBar prefHeight="47.0" prefWidth="856.0">
         <items>
           <Button mnemonicParsing="false" text="Dodaj film" />
             <Button mnemonicParsing="false" text="Edytuj film" />

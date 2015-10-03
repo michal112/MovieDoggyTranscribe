@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface Service<T extends Entity> {
 
+    void clearData();
     List<T> getAll();
     T get(Integer id) throws NoSuchEntityException;
     Integer add(T entity);

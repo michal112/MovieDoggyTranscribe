@@ -1,5 +1,7 @@
 package app.moviedoggytranscribe.service;
 
+import app.moviedoggytranscribe.constants.AppConstants;
+import app.moviedoggytranscribe.exception.NoSuchEntityException;
 import app.moviedoggytranscribe.exception.NoSuchMovieException;
 import app.moviedoggytranscribe.model.DataSourceHolder;
 import app.moviedoggytranscribe.model.DataSourceType;
@@ -17,11 +19,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:applicationContext.xml"})
+@ContextConfiguration({"classpath:" + AppConstants.APPLICATION_CONTEXT_XML})
 public class ServicesTest {
 
     @Autowired
-    private MovieService movieService;
+    private Service<Movie> movieService;
 
     private Logger logger = Logger.getLogger(ServicesTest.class.getName());
 
@@ -55,12 +57,12 @@ public class ServicesTest {
 
         try {
             Assert.assertNotEquals(movieService.get(firstMovie.getId()), movieService.get(secondMovie.getId()));
-        } catch (NoSuchMovieException e) {
+        } catch (NoSuchEntityException e) {
             logger.info("Błąd przy pobieraniu filmu, " + e.getMessage());
         }
         try {
             movieService.get(Integer.MIN_VALUE);
-        } catch (NoSuchMovieException e) {
+        } catch (NoSuchEntityException e) {
             Assert.assertEquals(e.getClass().getCanonicalName(), NoSuchMovieException.class.getCanonicalName());
         }
 
@@ -90,10 +92,10 @@ public class ServicesTest {
         } catch (NoSuchMovieException e) {
             logger.info("Błąd przy pobieraniu filmu, " + e.getMessage());
         }
-        movieService.clearMovies();
+        movieService.clearData();
         try {
             Assert.assertTrue(movieService.get(secondMovie.getId()).getYear().equals(secondMovie.getYear()));
-        } catch (NoSuchMovieException e) {
+        } catch (NoSuchEntityException e) {
             logger.info("Błąd przy pobieraniu filmu, " + e.getMessage());
         }
 
