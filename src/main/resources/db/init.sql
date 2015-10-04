@@ -14,3 +14,10 @@ CREATE TABLE status (
     name   LONGVARCHAR,
     colour LONGVARCHAR
 );
+
+CREATE TABLE watcher (
+    id      INTEGER PRIMARY KEY IDENTITY,
+    nick    LONGVARCHAR,
+    name    LONGVARCHAR,
+    surname LONGVARCHAR
+);

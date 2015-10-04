@@ -20,6 +20,7 @@ public class Watcher implements Entity {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

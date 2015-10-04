@@ -47,7 +47,7 @@ public class StatusDao implements Dao<Status> {
 
     @Override
     public void update(Status status) {
-        jdbcTemplate.update(AppConstants.UPDATE_STATUS_QUERY, status.getName(), status.getColour());
+        jdbcTemplate.update(AppConstants.UPDATE_STATUS_QUERY, status.getName(), status.getColour(), status.getId());
     }
 
 }

@@ -37,13 +37,13 @@ public class MainViewController {
     @PostConstruct
     public void init() {
         movieDataList = FXCollections.observableArrayList();
-        Mapper<MovieData> movieDataMapper = new ToMovieDataMapper();
-        MovieData movieData = movieDataMapper.mapToData(movieService.getAll());
-        movieDataList.add(movieData);
     }
 
     @FXML
     private void initialize() {
+        Mapper<MovieData> movieDataMapper = new ToMovieDataMapper();
+        MovieData movieData = movieDataMapper.mapToData(movieService.getAll());
+        movieDataList.add(movieData);
         movieColumn.setCellValueFactory(cellData -> cellData.getValue().movieProperty());
         movieColumn.setCellFactory(cell -> new TableCell<MovieData, Movie>() {
             @Override

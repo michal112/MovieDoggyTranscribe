@@ -8,15 +8,23 @@ public class AppConstants {
     public static final String KEY_COLUMN_NAME = "id";
 
     public static final String STATUS_TABLE_NAME = "status";
-    public static final String GET_ALL_STATUSES_QUERY = "SELECT * FROM "+ STATUS_TABLE_NAME;
-    public static final String DELETE_STATUS_QUERY = "DELETE FROM " + STATUS_TABLE_NAME
-            + " WHERE " + KEY_COLUMN_NAME +  " = ?";
-    public static final String UPDATE_STATUS_QUERY = "UPDATE " + STATUS_TABLE_NAME + " SET name = ? +" +
+    public static final String GET_ALL_STATUSES_QUERY = "SELECT * FROM " + STATUS_TABLE_NAME;
+    public static final String DELETE_STATUS_QUERY = "DELETE FROM " + STATUS_TABLE_NAME +
+            " WHERE " + KEY_COLUMN_NAME +  " = ?";
+    public static final String UPDATE_STATUS_QUERY = "UPDATE " + STATUS_TABLE_NAME + " SET name = ?," +
             " colour = ? WHERE " + KEY_COLUMN_NAME + " = ?";
+
+    public static final String WATCHER_TABLE_NAME = "watcher";
+    public static final String GET_ALL_WATCHERS_QUERY = "SELECT * FROM " + WATCHER_TABLE_NAME;
+    public static final String DELETE_WATCHER_QUERY = "DELETE FROM " + WATCHER_TABLE_NAME +
+            " WHERE " + KEY_COLUMN_NAME +  " = ?";
+    public static final String UPDATE_WATCHER_QUERY = "UPDATE " + WATCHER_TABLE_NAME + " SET nick = ?," +
+            " name = ?, surname = ? WHERE " + KEY_COLUMN_NAME + " = ?";
+
     public static final String MOVIE_TABLE_NAME = "movie";
-    public static final String GET_ALL_MOVIES_QUERY = "SELECT * FROM "+ MOVIE_TABLE_NAME;
-    public static final String DELETE_MOVIE_QUERY = "DELETE FROM " + MOVIE_TABLE_NAME
-            + " WHERE " + KEY_COLUMN_NAME +  " = ?";
+    public static final String GET_ALL_MOVIES_QUERY = "SELECT * FROM " + MOVIE_TABLE_NAME;
+    public static final String DELETE_MOVIE_QUERY = "DELETE FROM " + MOVIE_TABLE_NAME +
+            " WHERE " + KEY_COLUMN_NAME +  " = ?";
     public static final String UPDATE_MOVIE_QUERY = "UPDATE " + MOVIE_TABLE_NAME + " SET title = ?, description = ?," +
             " imageUrl = ?, movieUrl = ?, genre = ?, year = ?, rating = ? WHERE " + KEY_COLUMN_NAME + " = ?";
 

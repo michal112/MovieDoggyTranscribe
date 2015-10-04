@@ -29,6 +29,7 @@ public class Movie implements Entity {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

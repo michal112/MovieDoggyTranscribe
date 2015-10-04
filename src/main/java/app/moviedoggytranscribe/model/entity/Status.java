@@ -18,6 +18,7 @@ public class Status implements Entity {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

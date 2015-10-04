@@ -56,6 +56,7 @@ public abstract class AbstractService<T extends Entity, E extends NoSuchEntityEx
 
     @Override
     public void update(T entity) throws E {
+        initEntities();
         if (entities.stream().anyMatch(e -> e.getId() == entity.getId())) {
             Entity en = entities.stream().filter(e -> e.getId() == entity.getId())
                     .collect(Collectors.toList()).get(0);
