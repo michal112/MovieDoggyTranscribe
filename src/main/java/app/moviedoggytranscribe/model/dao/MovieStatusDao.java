@@ -1,7 +1,7 @@
 package app.moviedoggytranscribe.model.dao;
 
 import app.moviedoggytranscribe.constants.AppConstants;
-import app.moviedoggytranscribe.model.entity.Watcher;
+import app.moviedoggytranscribe.model.entity.MovieStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class WatcherDao implements Dao<Watcher> {
+public class MovieStatusDao implements Dao<MovieStatus> {
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
@@ -26,34 +26,35 @@ public class WatcherDao implements Dao<Watcher> {
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
-                .withTableName(AppConstants.WATCHER_TABLE_NAME).usingGeneratedKeyColumns(AppConstants.KEY_COLUMN_NAME);
+                .withTableName(AppConstants.MOVIE_STATUS_TABLE_NAME)
+                        .usingGeneratedKeyColumns(AppConstants.KEY_COLUMN_NAME);
     }
 
     @Override
     @Transactional
-    public Integer add(Watcher watcher) {
-        SqlParameterSource parameters = new BeanPropertySqlParameterSource(watcher);
-        watcher.setId((Integer) simpleJdbcInsert.executeAndReturnKey(parameters));
-        return watcher.getId();
+    public Integer add(MovieStatus movieStatus) {
+        SqlParameterSource parameters = new BeanPropertySqlParameterSource(movieStatus);
+        movieStatus.setId((Integer) simpleJdbcInsert.executeAndReturnKey(parameters));
+        return movieStatus.getId();
     }
 
     @Override
     @Transactional
-    public List<Watcher> getAll() {
-        return jdbcTemplate.query(AppConstants.GET_ALL_WATCHERS_QUERY, BeanPropertyRowMapper.newInstance(Watcher.class));
+    public List<MovieStatus> getAll() {
+        return jdbcTemplate.query(AppConstants.GET_ALL_MOVIE_STATUS_QUERY,
+                BeanPropertyRowMapper.newInstance(MovieStatus.class));
     }
 
     @Override
     @Transactional
     public void delete(Integer id) {
-        jdbcTemplate.update(AppConstants.DELETE_WATCHER_QUERY, id);
+        jdbcTemplate.update(AppConstants.DELETE_MOVIE_STATUS_QUERY, id);
     }
 
     @Override
     @Transactional
-    public void update(Watcher watcher) {
-        jdbcTemplate.update(AppConstants.UPDATE_WATCHER_QUERY, watcher.getNick(), watcher.getName(),
-                watcher.getSurname(), watcher.getId());
+    public void update(MovieStatus movieStatus) {
+        throw new UnsupportedOperationException();
     }
 
 }

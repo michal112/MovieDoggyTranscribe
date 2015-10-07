@@ -6,6 +6,7 @@ import app.moviedoggytranscribe.model.dao.Dao;
 import app.moviedoggytranscribe.model.entity.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -19,10 +20,15 @@ public abstract class AbstractService<T extends Entity, E extends NoSuchEntityEx
     @Autowired
     private ExceptionFactory<E> exceptionFactory;
 
-    private List<T> entities;
+    public List<T> entities;
 
     protected AbstractService() {
         this.entities = new ArrayList<>();
+    }
+
+    @PostConstruct
+    public void init() {
+        exceptionFactory.setEntityClass(getClass());
     }
 
     @Override
@@ -57,8 +63,8 @@ public abstract class AbstractService<T extends Entity, E extends NoSuchEntityEx
     @Override
     public void update(T entity) throws E {
         initEntities();
-        if (entities.stream().anyMatch(e -> e.getId() == entity.getId())) {
-            Entity en = entities.stream().filter(e -> e.getId() == entity.getId())
+        if (entities.stream().anyMatch(e -> e.getId().equals(entity.getId()))) {
+            Entity en = entities.stream().filter(e -> e.getId().equals(entity.getId()))
                     .collect(Collectors.toList()).get(0);
             entities.remove(en);
             entities.add(entity);

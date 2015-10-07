@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -29,6 +30,7 @@ public class StatusDao implements Dao<Status> {
     }
 
     @Override
+    @Transactional
     public Integer add(Status status) {
         SqlParameterSource parameters = new BeanPropertySqlParameterSource(status);
         status.setId((Integer) simpleJdbcInsert.executeAndReturnKey(parameters));
@@ -36,16 +38,19 @@ public class StatusDao implements Dao<Status> {
     }
 
     @Override
+    @Transactional
     public List<Status> getAll() {
         return jdbcTemplate.query(AppConstants.GET_ALL_STATUSES_QUERY, BeanPropertyRowMapper.newInstance(Status.class));
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         jdbcTemplate.update(AppConstants.DELETE_STATUS_QUERY, id);
     }
 
     @Override
+    @Transactional
     public void update(Status status) {
         jdbcTemplate.update(AppConstants.UPDATE_STATUS_QUERY, status.getName(), status.getColour(), status.getId());
     }

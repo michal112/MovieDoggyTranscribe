@@ -32,7 +32,7 @@
 	</bean>
 
 	<jdbc:embedded-database id="testDataSource">
-		<jdbc:script location="classpath:db/init.sql"/>
+		<jdbc:script location="classpath:db/schema-v1.sql"/>
 	</jdbc:embedded-database>
 
 </beans>

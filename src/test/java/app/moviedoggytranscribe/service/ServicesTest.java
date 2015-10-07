@@ -1,16 +1,10 @@
 package app.moviedoggytranscribe.service;
 
 import app.moviedoggytranscribe.constants.AppConstants;
-import app.moviedoggytranscribe.exception.NoSuchEntityException;
-import app.moviedoggytranscribe.exception.NoSuchMovieException;
-import app.moviedoggytranscribe.exception.NoSuchStatusException;
-import app.moviedoggytranscribe.exception.NoSuchWatcherException;
+import app.moviedoggytranscribe.exception.*;
 import app.moviedoggytranscribe.model.DataSourceHolder;
 import app.moviedoggytranscribe.model.DataSourceType;
-import app.moviedoggytranscribe.model.entity.Entity;
-import app.moviedoggytranscribe.model.entity.Movie;
-import app.moviedoggytranscribe.model.entity.Status;
-import app.moviedoggytranscribe.model.entity.Watcher;
+import app.moviedoggytranscribe.model.entity.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,6 +32,10 @@ public class ServicesTest {
     private Service<Status, NoSuchStatusException> statusService;
     @Autowired
     private Service<Watcher, NoSuchWatcherException> watcherService;
+    @Autowired
+    private Service<MovieStatus, NoSuchConnectionException> movieStatusService;
+    @Autowired
+    private Service<MovieWatcher, NoSuchConnectionException> movieWatcherService;
 
     @Autowired
     private DataSourceHolder dataSourceHolder;
@@ -47,6 +45,8 @@ public class ServicesTest {
     private List<Movie> movies;
     private List<Status> statuses;
     private List<Watcher> watchers;
+    private List<MovieStatus> movieStatusList;
+    private List<MovieWatcher> movieWatcherList;
 
     @Before
     public void setUp() throws NoSuchFieldException {
@@ -55,36 +55,46 @@ public class ServicesTest {
         }
 
         logger.setLevel(Level.ALL);
-
-        movies = new ArrayList<>();
-        statuses = new ArrayList<>();
-        watchers = new ArrayList<>();
-
-        initData();
     }
 
     @Test
-    public void testMovieService() throws NoSuchMovieException, IllegalAccessException, NoSuchMethodException {
+    public void testServices() throws NoSuchMovieException, IllegalAccessException, NoSuchMethodException,
+            NoSuchWatcherException, NoSuchStatusException, NoSuchConnectionException {
+        initMovies();
         testCreate(movieService, movies);
         testRead(movieService, movies);
         testUpdate(movieService, movies);
         testDelete(movieService, movies);
-    }
 
-    @Test
-    public void testStatusService() throws NoSuchStatusException, NoSuchMethodException, IllegalAccessException {
+        initStatuses();
         testCreate(statusService, statuses);
         testRead(statusService, statuses);
         testUpdate(statusService, statuses);
         testDelete(statusService, statuses);
-    }
 
-    @Test
-    public void testWatcherService() throws NoSuchWatcherException, NoSuchMethodException, IllegalAccessException {
+        initWatchers();
         testCreate(watcherService, watchers);
         testRead(watcherService, watchers);
         testUpdate(watcherService, watchers);
         testDelete(watcherService, watchers);
+
+        initMovieStatusList();
+        testCreate(movieStatusService, movieStatusList);
+        testRead(movieStatusService, movieStatusList);
+        testDelete(movieStatusService, movieStatusList);
+        movieService.delete(movies.get(0).getId());
+        movieService.delete(movies.get(1).getId());
+        statusService.delete(statuses.get(0).getId());
+        statusService.delete(statuses.get(1).getId());
+
+        initMovieWatcherList();
+        testCreate(movieWatcherService, movieWatcherList);
+        testRead(movieWatcherService, movieWatcherList);
+        testDelete(movieWatcherService, movieWatcherList);
+        movieService.delete(movies.get(0).getId());
+        movieService.delete(movies.get(1).getId());
+        watcherService.delete(watchers.get(0).getId());
+        watcherService.delete(watchers.get(1).getId());
     }
 
     private <T extends Entity, E extends NoSuchEntityException>
@@ -102,7 +112,6 @@ public class ServicesTest {
         Assert.assertNotEquals(service.get(firstEntity.getId()), service.get(secondEntity.getId()));
         service.clearEntities();
         Assert.assertNotEquals(service.get(firstEntity.getId()), service.get(secondEntity.getId()));
-
     }
 
     private <T extends Entity, E extends NoSuchEntityException>
@@ -155,6 +164,8 @@ public class ServicesTest {
                 .equals(changedField.get(firstEntity)));
 
         T secondEntity = entities.get(1);
+        Integer oldId = secondEntity.getId();
+
         secondEntity.setId(Integer.MIN_VALUE);
 
         try {
@@ -170,11 +181,14 @@ public class ServicesTest {
             Assert.assertEquals(e.getClass(), ResolvableType
                     .forInstance(service).getSuperType().getGeneric(1).resolve());
         }
+
+        secondEntity.setId(oldId);
     }
 
     private <T extends Entity, E extends NoSuchEntityException>
             void testDelete(Service<T, E> service, List<T> entities) throws E {
         T firstEntity = entities.get(0);
+        T secondEntity = entities.get(1);
 
         service.delete(firstEntity.getId());
 
@@ -196,9 +210,17 @@ public class ServicesTest {
             Assert.assertEquals(e.getClass(), ResolvableType
                     .forInstance(service).getSuperType().getGeneric(1).resolve());
         }
+
+        service.delete(secondEntity.getId());
+
+        Assert.assertEquals(service.getAll().size(), 0);
+        service.clearEntities();
+        Assert.assertEquals(service.getAll().size(), 0);
     }
 
-    private void initData() {
+    private void initMovies() {
+        movies = new ArrayList<>();
+
         movies.add(new Movie("Ojciec chrzestny",
                 "Opowieść o nowojorskiej rodzinie mafijnej",
                 "http://1.fwcdn.pl/po/10/89/1089/7196615.3.jpg",
@@ -214,15 +236,57 @@ public class ServicesTest {
                 "Dramat",
                 "1999",
                 "8.6"));
+    }
+
+    private void initStatuses() {
+        statuses = new ArrayList<>();
 
         statuses.add(new Status("Mam na dysku - do obejrzenia", "yellow"));
         statuses.add(new Status("Mniej znane filmy - już dostępne w internecie", "green"));
+    }
+
+    private void initWatchers() {
+        watchers = new ArrayList<>();
 
         watchers.add(new Watcher("MJ", "Monika", "Wojciechowska"));
         watchers.add(new Watcher("S", "Paweł", "Wojciechowski"));
     }
 
+    private void initMovieStatusList() {
+        initMovies();
+        initStatuses();
+
+        movieStatusList = new ArrayList<>();
+
+        movieService.add(movies.get(0));
+        movieService.add(movies.get(1));
+        statusService.add(statuses.get(0));
+        statusService.add(statuses.get(1));
+
+        movieStatusList.add(new MovieStatus(movies.get(0).getId(), statuses.get(0).getId()));
+        movieStatusList.add(new MovieStatus(movies.get(0).getId(), statuses.get(1).getId()));
+        movieStatusList.add(new MovieStatus(movies.get(1).getId(), statuses.get(1).getId()));
+    }
+
+    private void initMovieWatcherList() {
+        initMovies();
+        initWatchers();
+
+        movieWatcherList = new ArrayList<>();
+
+        movieService.add(movies.get(0));
+        movieService.add(movies.get(1));
+        watcherService.add(watchers.get(0));
+        watcherService.add(watchers.get(1));
+
+        movieWatcherList.add(new MovieWatcher(movies.get(0).getId(), watchers.get(0).getId()));
+        movieWatcherList.add(new MovieWatcher(movies.get(0).getId(), watchers.get(1).getId()));
+        movieWatcherList.add(new MovieWatcher(movies.get(1).getId(), watchers.get(1).getId()));
+    }
+
     @After
-    public void tearDown() {}
+    public void tearDown() {
+        dataSourceHolder.setDataSourceType(DataSourceType.DEFAULT);
+    }
 
 }

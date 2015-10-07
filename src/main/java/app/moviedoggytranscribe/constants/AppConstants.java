@@ -28,4 +28,14 @@ public class AppConstants {
     public static final String UPDATE_MOVIE_QUERY = "UPDATE " + MOVIE_TABLE_NAME + " SET title = ?, description = ?," +
             " imageUrl = ?, movieUrl = ?, genre = ?, year = ?, rating = ? WHERE " + KEY_COLUMN_NAME + " = ?";
 
+    public static final String MOVIE_STATUS_TABLE_NAME = "movie_status";
+    public static final String GET_ALL_MOVIE_STATUS_QUERY = "SELECT * FROM " + MOVIE_STATUS_TABLE_NAME;
+    public static final String DELETE_MOVIE_STATUS_QUERY = "DELETE FROM " + MOVIE_STATUS_TABLE_NAME +
+            " WHERE " + KEY_COLUMN_NAME +  " = ?";
+
+    public static final String MOVIE_WATCHER_TABLE_NAME = "movie_watcher";
+    public static final String GET_ALL_MOVIE_WATCHER_QUERY = "SELECT * FROM " + MOVIE_WATCHER_TABLE_NAME;
+    public static final String DELETE_MOVIE_WATCHER_QUERY = "DELETE FROM " + MOVIE_WATCHER_TABLE_NAME +
+            " WHERE " + KEY_COLUMN_NAME +  " = ?";
+
 }

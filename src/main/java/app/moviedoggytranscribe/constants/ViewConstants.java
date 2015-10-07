@@ -1,8 +1,5 @@
 package app.moviedoggytranscribe.constants;
 
-import app.moviedoggytranscribe.model.data.MovieData;
-import app.moviedoggytranscribe.model.entity.Movie;
-
 public class ViewConstants {
 
     public static final String MAIN_VIEW_FILE_NAME = "mainView.fxml";
