@@ -2,6 +2,8 @@ package app.moviedoggytranscribe.model.dao;
 
 import app.moviedoggytranscribe.constants.AppConstants;
 import app.moviedoggytranscribe.model.entity.Movie;
+import app.moviedoggytranscribe.model.entity.Status;
+import app.moviedoggytranscribe.model.entity.Watcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -55,6 +57,18 @@ public class MovieDao implements Dao<Movie> {
         jdbcTemplate.update(AppConstants.UPDATE_MOVIE_QUERY, movie.getTitle(),
             movie.getDescription(), movie.getImageUrl(), movie.getMovieUrl(),
                 movie.getGenre(), movie.getYear(), movie.getRating(), movie.getId());
+    }
+
+    @Transactional
+    public List<Status> getStatuses(Integer movieId) {
+        return jdbcTemplate.query(AppConstants.GET_ALL_MOVIE_STASUSES, new Integer[]{ movieId },
+                BeanPropertyRowMapper.newInstance(Status.class));
+    }
+
+    @Transactional
+    public List<Watcher> getWatchers(Integer movieId) {
+        return jdbcTemplate.query(AppConstants.GET_ALL_MOVIE_WATCHERS, new Integer[]{ movieId },
+                BeanPropertyRowMapper.newInstance(Watcher.class));
     }
 
 }

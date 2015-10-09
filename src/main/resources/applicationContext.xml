@@ -9,7 +9,7 @@
     
 	<context:component-scan base-package="app.moviedoggytranscribe.model.dao, app.moviedoggytranscribe.service,
 		app.moviedoggytranscribe, app.moviedoggytranscribe.controller, app.moviedoggytranscribe.exception.factory,
-		app.moviedoggytranscribe.model"/>
+		app.moviedoggytranscribe.model, app.moviedoggytranscribe.mapper"/>
 	<context:property-placeholder location="jdbc.properties"/>
 
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

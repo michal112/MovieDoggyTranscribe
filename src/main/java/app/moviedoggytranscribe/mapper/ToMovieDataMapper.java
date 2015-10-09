@@ -1,26 +1,33 @@
 package app.moviedoggytranscribe.mapper;
 
 import app.moviedoggytranscribe.model.data.MovieData;
-import app.moviedoggytranscribe.model.entity.Entity;
 import app.moviedoggytranscribe.model.entity.Movie;
+import app.moviedoggytranscribe.service.SimpleMovieService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class ToMovieDataMapper implements Mapper<MovieData> {
+@Component
+public class ToMovieDataMapper implements Mapper<Movie, MovieData> {
+
+    @Autowired
+    private SimpleMovieService movieService;
 
     @Override
-    public MovieData mapToData(List<? extends Entity> entities) {
-        List<? extends Entity> movies = entities.stream().filter(entity -> entity.getClass().equals(Movie.class))
-                .collect(Collectors.toList());
+    public List<MovieData> mapToData(List<Movie> movies) {
+        List<MovieData> movieDataList = new ArrayList<>();
 
-        MovieData movieData = new MovieData();
+        for (Movie movie : movies) {
+            MovieData movieData = new MovieData();
+            movieData.setMovie(movie);
+            movieData.setStatuses(movieService.getMovieStasuses(movie));
+            movieData.setWatchers(movieService.getMovieWatchers(movie));
+            movieDataList.add(movieData);
+        }
 
-        movies.forEach(movie -> {
-            movieData.setMovie((Movie) movie);
-        });
-
-        return movieData;
+        return movieDataList;
     }
 
 }

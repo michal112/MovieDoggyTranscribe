@@ -32,6 +32,11 @@ public abstract class AbstractService<T extends Entity, E extends NoSuchEntityEx
     }
 
     @Override
+    public Dao<T> getDao() {
+        return dao;
+    }
+
+    @Override
     public List<T> getAll() {
         initEntities();
         return this.entities;

@@ -5,8 +5,8 @@ import app.moviedoggytranscribe.model.entity.Entity;
 
 import java.util.List;
 
-public interface Mapper<V extends Data> {
+public interface Mapper<T extends Entity, V extends Data> {
 
-    V mapToData(List<? extends Entity> entities);
+    List<V> mapToData(List<T> entities);
 
 }

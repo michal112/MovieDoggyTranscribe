@@ -27,15 +27,15 @@ import java.util.logging.Logger;
 public class ServicesTest {
 
     @Autowired
-    private Service<Movie, NoSuchMovieException> movieService;
+    private AbstractService<Movie, NoSuchMovieException> movieService;
     @Autowired
-    private Service<Status, NoSuchStatusException> statusService;
+    private AbstractService<Status, NoSuchStatusException> statusService;
     @Autowired
-    private Service<Watcher, NoSuchWatcherException> watcherService;
+    private AbstractService<Watcher, NoSuchWatcherException> watcherService;
     @Autowired
-    private Service<MovieStatus, NoSuchConnectionException> movieStatusService;
+    private AbstractService<MovieStatus, NoSuchConnectionException> movieStatusService;
     @Autowired
-    private Service<MovieWatcher, NoSuchConnectionException> movieWatcherService;
+    private AbstractService<MovieWatcher, NoSuchConnectionException> movieWatcherService;
 
     @Autowired
     private DataSourceHolder dataSourceHolder;
@@ -80,8 +80,15 @@ public class ServicesTest {
 
         initMovieStatusList();
         testCreate(movieStatusService, movieStatusList);
+
+        Assert.assertEquals(((SimpleMovieService) movieService).getMovieStasuses(movies.get(0)).size(), 2);
+        movieStatusService.add(movieStatusList.get(2));
+        Assert.assertEquals(((SimpleMovieService) movieService).getMovieStasuses(movies.get(1)).size(), 1);
+        movieStatusService.delete(movieStatusList.get(2).getId());
+
         testRead(movieStatusService, movieStatusList);
         testDelete(movieStatusService, movieStatusList);
+
         movieService.delete(movies.get(0).getId());
         movieService.delete(movies.get(1).getId());
         statusService.delete(statuses.get(0).getId());
@@ -89,8 +96,15 @@ public class ServicesTest {
 
         initMovieWatcherList();
         testCreate(movieWatcherService, movieWatcherList);
+
+        Assert.assertEquals(((SimpleMovieService) movieService).getMovieWatchers(movies.get(0)).size(), 2);
+        movieWatcherService.add(movieWatcherList.get(2));
+        Assert.assertEquals(((SimpleMovieService) movieService).getMovieWatchers(movies.get(1)).size(), 1);
+        movieWatcherService.delete(movieWatcherList.get(2).getId());
+
         testRead(movieWatcherService, movieWatcherList);
         testDelete(movieWatcherService, movieWatcherList);
+
         movieService.delete(movies.get(0).getId());
         movieService.delete(movies.get(1).getId());
         watcherService.delete(watchers.get(0).getId());

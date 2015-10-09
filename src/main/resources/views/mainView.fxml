@@ -50,23 +50,14 @@
               <TableColumn fx:id="movieColumn">
                   <prefWidth><ViewConstants fx:constant="MAIN_VIEW_TABLE_MOVIE_COLUMN_WIDTH"/></prefWidth>
                   <text><ViewConstants fx:constant="MAIN_VIEW_TABLE_MOVIE_COLUMN_NAME"/></text>
-                  <cellValueFactory>
-                      <PropertyValueFactory property="movieName"/>
-                  </cellValueFactory>
               </TableColumn>
-              <TableColumn>
+              <TableColumn fx:id="watchersColumn">
                   <prefWidth><ViewConstants fx:constant="MAIN_VIEW_TABLE_WATCHER_COLUMN_WIDTH"/></prefWidth>
                   <text><ViewConstants fx:constant="MAIN_VIEW_TABLE_WATCHER_COLUMN_NAME"/></text>
-                  <cellValueFactory>
-                      <PropertyValueFactory property="watcherName"/>
-                  </cellValueFactory>
               </TableColumn>
-              <TableColumn>
+              <TableColumn fx:id="statusesColumn">
                   <prefWidth><ViewConstants fx:constant="MAIN_VIEW_TABLE_STATUS_COLUMN_WIDTH"/></prefWidth>
                   <text><ViewConstants fx:constant="MAIN_VIEW_TABLE_STATUS_COLUMN_NAME"/></text>
-                  <cellValueFactory>
-                      <PropertyValueFactory property="status"/>
-                  </cellValueFactory>
               </TableColumn>
           </columns>
       </TableView>
