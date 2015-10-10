@@ -1,6 +1,6 @@
 package app.moviedoggytranscribe.model.entity;
 
-public class Status {
+public class Status implements Entity {
 
     private Integer id;
     private String name;
@@ -13,10 +13,12 @@ public class Status {
         this.colour = colour;
     }
 
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

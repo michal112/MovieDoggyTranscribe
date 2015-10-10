@@ -1,8 +1,10 @@
 package app.moviedoggytranscribe.model.dao;
 
+import app.moviedoggytranscribe.model.entity.Entity;
+
 import java.util.List;
 
-public interface Dao<T> {
+public interface Dao<T extends Entity> {
 
     Integer add(T entity);
     List<T> getAll();

@@ -44,6 +44,13 @@
             <artifactId>hsqldb</artifactId>
             <version>${hsqldb.version}</version>
         </dependency>
+        <dependency>
+            <groupId>FilmwebApi</groupId>
+            <artifactId>info.talacha</artifactId>
+            <version>0.0.7</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/FilmwebApi-0.0.7.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <properties>

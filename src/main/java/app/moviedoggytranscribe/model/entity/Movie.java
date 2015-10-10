@@ -1,6 +1,6 @@
 package app.moviedoggytranscribe.model.entity;
 
-public class Movie {
+public class Movie implements Entity {
 
     private Integer id;
     private String title;
@@ -24,10 +24,12 @@ public class Movie {
         this.rating = rating;
     }
 
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

@@ -2,6 +2,8 @@ package app.moviedoggytranscribe.model.dao;
 
 import app.moviedoggytranscribe.constants.AppConstants;
 import app.moviedoggytranscribe.model.entity.Movie;
+import app.moviedoggytranscribe.model.entity.Status;
+import app.moviedoggytranscribe.model.entity.Watcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -10,6 +12,7 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -29,6 +32,7 @@ public class MovieDao implements Dao<Movie> {
     }
 
     @Override
+    @Transactional
     public Integer add(Movie movie) {
         SqlParameterSource parameters = new BeanPropertySqlParameterSource(movie);
         movie.setId((Integer) simpleJdbcInsert.executeAndReturnKey(parameters));
@@ -36,20 +40,35 @@ public class MovieDao implements Dao<Movie> {
     }
 
     @Override
+    @Transactional
     public List<Movie> getAll() {
        return jdbcTemplate.query(AppConstants.GET_ALL_MOVIES_QUERY, BeanPropertyRowMapper.newInstance(Movie.class));
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         jdbcTemplate.update(AppConstants.DELETE_MOVIE_QUERY, id);
     }
 
     @Override
-    public void update(Movie entity) {
-        jdbcTemplate.update(AppConstants.UPDATE_MOVIE_QUERY, entity.getTitle(),
-            entity.getDescription(), entity.getImageUrl(), entity.getMovieUrl(),
-                entity.getGenre(), entity.getYear(), entity.getRating(), entity.getId());
+    @Transactional
+    public void update(Movie movie) {
+        jdbcTemplate.update(AppConstants.UPDATE_MOVIE_QUERY, movie.getTitle(),
+            movie.getDescription(), movie.getImageUrl(), movie.getMovieUrl(),
+                movie.getGenre(), movie.getYear(), movie.getRating(), movie.getId());
+    }
+
+    @Transactional
+    public List<Status> getStatuses(Integer movieId) {
+        return jdbcTemplate.query(AppConstants.GET_ALL_MOVIE_STASUSES, new Integer[]{ movieId },
+                BeanPropertyRowMapper.newInstance(Status.class));
+    }
+
+    @Transactional
+    public List<Watcher> getWatchers(Integer movieId) {
+        return jdbcTemplate.query(AppConstants.GET_ALL_MOVIE_WATCHERS, new Integer[]{ movieId },
+                BeanPropertyRowMapper.newInstance(Watcher.class));
     }
 
 }
