@@ -9,10 +9,10 @@ import app.moviedoggytranscribe.model.entity.Watcher;
 import app.moviedoggytranscribe.service.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -36,6 +36,9 @@ public class MainViewController {
     private Mapper<Movie, MovieData> movieDataMapper;
     @Autowired
     private Service<Movie, NoSuchMovieException> movieService;
+
+    @FXML
+    private Button addMovie;
 
     @PostConstruct
     public void init() {
@@ -95,6 +98,15 @@ public class MainViewController {
         });
 
         mainTable.setItems(movieDataList);
+
+        addMovie.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Dialog<Integer> dialog = new Dialog<Integer>();
+                dialog.contentTextProperty().setValue("addMovieButton clicked");
+                dialog.show();
+            }
+        });
     }
 
 }
