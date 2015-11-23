@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+    
+	<context:component-scan base-package="app.moviedoggytranscribe.model.dao, app.moviedoggytranscribe.service,
+		app.moviedoggytranscribe, app.moviedoggytranscribe.controller, app.moviedoggytranscribe.exception.factory,
+		app.moviedoggytranscribe.model, app.moviedoggytranscribe.mapper"/>
+	<context:property-placeholder location="jdbc.properties"/>
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+    <bean id="dataSource" class="app.moviedoggytranscribe.model.RoutingDataSource">
+        <property name="targetDataSources">
+            <map key-type="app.moviedoggytranscribe.model.DataSourceType">
+                <entry key="TEST" value-ref="testDataSource"/>
+                <entry key="DEFAULT" value-ref="defaultDataSource"/>
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="defaultDataSource"/>
+    </bean>
+
+	<bean id="defaultDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}"/>
+		<property name="url" value="${jdbc.url}"/>
+	</bean>
+
+	<jdbc:embedded-database id="testDataSource">
+		<jdbc:script location="classpath:db/schema-v1.sql"/>
+	</jdbc:embedded-database>
+
+</beans>
