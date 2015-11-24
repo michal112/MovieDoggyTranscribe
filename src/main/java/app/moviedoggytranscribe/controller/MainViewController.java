@@ -9,11 +9,12 @@ import app.moviedoggytranscribe.model.entity.Watcher;
 import app.moviedoggytranscribe.service.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import javafx.scene.control.TextField;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -29,6 +30,8 @@ public class MainViewController {
     private TableColumn<MovieData, List<Watcher>> watchersColumn;
     @FXML
     private TableColumn<MovieData, List<Status>> statusesColumn;
+    @FXML
+    private TextField searchField;
 
     private ObservableList<MovieData> movieDataList;
 
@@ -47,6 +50,7 @@ public class MainViewController {
 
     @FXML
     private void initialize() {
+
         List<MovieData> movieDatas = movieDataMapper.mapToData(movieService.getAll());
         movieDataList.addAll(movieDatas);
 
@@ -98,15 +102,26 @@ public class MainViewController {
         });
 
         mainTable.setItems(movieDataList);
+        movieColumn.setCellValueFactory(cellData -> cellData.getValue().movieProperty());
+        FilteredList<MovieData> filteredData = new FilteredList<>(movieDataList, p -> true);
 
-        addMovie.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Dialog<Integer> dialog = new Dialog<Integer>();
-                dialog.contentTextProperty().setValue("addMovieButton clicked");
-                dialog.show();
-            }
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(movieData -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (movieData.getMovie().getTitle().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                }
+                return false;
+            });
         });
-    }
 
+        SortedList<MovieData> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(mainTable.comparatorProperty());
+        mainTable.setItems(sortedData);
+    }
 }
