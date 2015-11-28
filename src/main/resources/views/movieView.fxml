@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import app.moviedoggytranscribe.constants.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Text?>
+<HBox xmlns:fx="http://javafx.com/fxml">
+
+    <prefWidth><ViewConstants fx:constant="APP_WINDOW_WIDTH"/></prefWidth>
+    <prefHeight><ViewConstants fx:constant="APP_WINDOW_HEIGHT"/></prefHeight>
+
+    <VBox>
+        <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="500.0" layoutX="61.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
+        </ImageView>
+    </VBox>
+
+    <children>
+        <VBox>
+            <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
+            <prefWidth><ViewConstants fx:constant="APP_WINDOW_WIDTH"/></prefWidth>
+            <children>
+                <GridPane alignment="CENTER_LEFT">
+                    <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
+                    <Label alignment="CENTER">
+                        <prefWidth><ViewConstants fx:constant="MAIN_VIEW_SEARCH_LABEL_WIDTH"/></prefWidth>
+                        <text><ViewConstants fx:constant="MOVIE_VIEW_TITLE"/></text>
+                    </Label>
+                </GridPane>
+            </children>
+            <children>
+                <GridPane alignment="CENTER_LEFT">
+                    <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
+                    <Label alignment="CENTER">
+                        <prefWidth><ViewConstants fx:constant="MAIN_VIEW_SEARCH_LABEL_WIDTH"/></prefWidth>
+                        <text><ViewConstants fx:constant="MOVIE_VIEW_TYPE"/></text>
+                    </Label>
+                </GridPane>
+            </children>
+            <children>
+                <GridPane alignment="CENTER_LEFT">
+                    <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
+                    <Label alignment="CENTER">
+                        <prefWidth><ViewConstants fx:constant="MAIN_VIEW_SEARCH_LABEL_WIDTH"/></prefWidth>
+                        <text><ViewConstants fx:constant="MOVIE_VIEW_YEAR"/></text>
+                    </Label>
+                </GridPane>
+            </children>
+            <children>
+                <GridPane alignment="CENTER_LEFT">
+                    <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
+                    <Label alignment="CENTER">
+                        <prefWidth><ViewConstants fx:constant="MAIN_VIEW_SEARCH_LABEL_WIDTH"/></prefWidth>
+                        <text><ViewConstants fx:constant="MOVIE_VIEW_RATE"/></text>
+                    </Label>
+                </GridPane>
+            </children>
+            <children>
+                <GridPane alignment="CENTER_LEFT">
+                    <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
+                    <Label alignment="CENTER">
+                        <prefWidth><ViewConstants fx:constant="MAIN_VIEW_SEARCH_LABEL_WIDTH"/></prefWidth>
+                        <text><ViewConstants fx:constant="MOVIE_VIEW_DESCRIPTION"/></text>
+                    </Label>
+                </GridPane>
+            </children>
+        </VBox>
+        <VBox>
+            <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
+            <prefWidth><ViewConstants fx:constant="APP_WINDOW_WIDTH"/></prefWidth>
+            <children>
+                <GridPane alignment="CENTER_LEFT">
+                    <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
+                    <Text fx:id="title" layoutX="4.0" layoutY="57.0"></Text>
+                </GridPane>
+            </children>
+            <children>
+                <GridPane alignment="CENTER_LEFT">
+                    <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
+                    <Text fx:id="type" layoutX="4.0" layoutY="57.0"></Text>
+                </GridPane>
+            </children>
+            <children>
+                <GridPane alignment="CENTER_LEFT">
+                    <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
+                    <Text fx:id="year" layoutX="4.0" layoutY="57.0"></Text>
+                </GridPane>
+            </children>
+            <children>
+                <GridPane alignment="CENTER_LEFT">
+                    <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
+                    <Text fx:id="rating" layoutX="4.0" layoutY="57.0"></Text>
+                </GridPane>
+            </children>
+            <children>
+                <GridPane alignment="CENTER_LEFT">
+                    <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
+                    <Text fx:id="describe" layoutX="4.0" layoutY="57.0"></Text>
+                </GridPane>
+            </children>
+        </VBox>
+    </children>
+</HBox>
