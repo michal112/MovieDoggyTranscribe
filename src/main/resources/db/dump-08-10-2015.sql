@@ -17,7 +17,7 @@ CREATE TABLE "watcher" (
     "surname" TEXT
 );
 INSERT INTO "watcher" VALUES(1,'MJ','Monika','Wojciechowska');
-INSERT INTO "watcher" VALUES(2,'S','Paweł','Wojciechowski');
+INSERT INTO "watcher" VALUES(2,'PAW','Paweł','Wojciechowski');
 INSERT INTO "watcher" VALUES(3,'GW','Grzegorz','Wojciechowski');
 INSERT INTO "watcher" VALUES(4,'DK','Dawid','Koscielski');
 INSERT INTO "watcher" VALUES(5,'PW','Paweł','Wieszczeczynski');
