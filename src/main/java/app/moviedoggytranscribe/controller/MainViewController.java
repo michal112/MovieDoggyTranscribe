@@ -8,6 +8,7 @@ import app.moviedoggytranscribe.model.data.MovieData;
 import app.moviedoggytranscribe.model.entity.Movie;
 import app.moviedoggytranscribe.model.entity.Status;
 import app.moviedoggytranscribe.model.entity.Watcher;
+import app.moviedoggytranscribe.service.AbstractService;
 import app.moviedoggytranscribe.service.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,18 +19,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
-import javafx.scene.control.TextField;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,6 +46,8 @@ public class MainViewController {
     private TableColumn<MovieData, List<Status>> statusesColumn;
     @FXML
     private TextField searchField;
+    @FXML
+    private Button deleteMovie;
 
     private ObservableList<MovieData> movieDataList;
 
@@ -61,56 +63,7 @@ public class MainViewController {
 
     @FXML
     private void initialize() {
-
-        List<MovieData> movieDatas = movieDataMapper.mapToData(movieService.getAll());
-        movieDataList.addAll(movieDatas);
-
-        movieColumn.setCellValueFactory(cellData -> cellData.getValue().movieProperty());
-        movieColumn.setCellFactory(cell -> new TableCell<MovieData, Movie>() {
-            @Override
-            protected void updateItem(Movie item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item == null || empty) {
-                    setText(null);
-                } else {
-                    setText(item.getTitle());
-                }
-            }
-        });
-
-        watchersColumn.setCellValueFactory(cellData -> cellData.getValue().watchersProperty());
-        watchersColumn.setCellFactory(cell -> new TableCell<MovieData, List<Watcher>>() {
-            @Override
-            protected void updateItem(List<Watcher> item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item == null || empty) {
-                    setText(null);
-                } else {
-                    String watchers = new String();
-                    for (Watcher watcher : item) {
-                        watchers += watcher.getName() + " " + watcher.getSurname() + " ";
-                    }
-                    setText(watchers);
-                }
-            }
-        });
-
-        statusesColumn.setCellValueFactory(cellData -> cellData.getValue().statusesProperty());
-        statusesColumn.setCellFactory(cell -> new TableCell<MovieData, List<Status>>() {
-            @Override
-            protected void updateItem(List<Status> item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item == null || empty) {
-                    setText(null);
-                } else {
-                    String statuses = new String();
-                    for (Status status : item) {
-                        statuses += status.getName() + " ";
-                    }
-                    setText(statuses);
-                }
-            }
-        });
+        initializeTableView();
 
         // search engine
 
@@ -159,11 +112,84 @@ public class MainViewController {
                     } catch (IOException ex) {
                         Logger.getLogger(MovieViewController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
-                    System.out.println(mainTable.getSelectionModel().getSelectedItem());
                 }
             }
         });
 
+        // mouseEvent - click on Delete Button
+
+        deleteMovie.setOnAction((event) -> {
+            MovieData selectionMovie = mainTable.getSelectionModel().getSelectedItem();
+            if(selectionMovie == null) {
+                return;
+            }
+                try {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Usuń film");
+                    alert.setHeaderText("Czy chcesz usunąć film z bazy danych ?");
+
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK){
+                        movieService.delete(selectionMovie.getMovie().getId());
+                        movieDataList.clear();
+                        List<MovieData> movieDatas = movieDataMapper.mapToData(movieService.getAll());
+                        movieDataList.addAll(movieDatas);
+                    }
+                } catch (NoSuchMovieException e) {
+                    e.printStackTrace();
+                }
+        });
+    }
+
+    public void initializeTableView() {
+        List<MovieData> movieDatas = movieDataMapper.mapToData(movieService.getAll());
+        movieDataList.addAll(movieDatas);
+
+        movieColumn.setCellValueFactory(cellData -> cellData.getValue().movieProperty());
+        movieColumn.setCellFactory(cell -> new TableCell<MovieData, Movie>() {
+            @Override
+            protected void updateItem(Movie item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                } else {
+                    setText(item.getTitle());
+                }
+            }
+        });
+
+        watchersColumn.setCellValueFactory(cellData -> cellData.getValue().watchersProperty());
+        watchersColumn.setCellFactory(cell -> new TableCell<MovieData, List<Watcher>>() {
+            @Override
+            protected void updateItem(List<Watcher> item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                } else {
+                    String watchers = new String();
+                    for (Watcher watcher : item) {
+                        watchers += watcher.getNick() + " ";
+                    }
+                    setText(watchers);
+                }
+            }
+        });
+
+        statusesColumn.setCellValueFactory(cellData -> cellData.getValue().statusesProperty());
+        statusesColumn.setCellFactory(cell -> new TableCell<MovieData, List<Status>>() {
+            @Override
+            protected void updateItem(List<Status> item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                } else {
+                    String statuses = new String();
+                    for (Status status : item) {
+                        statuses += status.getName() + " ";
+                    }
+                    setText(statuses);
+                }
+            }
+        });
     }
 }

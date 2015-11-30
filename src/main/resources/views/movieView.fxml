@@ -96,7 +96,7 @@
             <children>
                 <GridPane alignment="CENTER_LEFT">
                     <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
-                    <Text fx:id="describe" layoutX="4.0" layoutY="57.0"></Text>
+                    <Text fx:id="describe" layoutX="4.0" layoutY="167.0"></Text>
                 </GridPane>
             </children>
         </VBox>

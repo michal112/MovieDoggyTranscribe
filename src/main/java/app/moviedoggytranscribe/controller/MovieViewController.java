@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MovieViewController implements Initializable{
+public class MovieViewController implements Initializable {
     @FXML
     private ImageView imageView;
     @FXML
@@ -23,7 +23,6 @@ public class MovieViewController implements Initializable{
     private Text rating;
     @FXML
     private Text describe;
-
 
     private MovieData movieData;
 
