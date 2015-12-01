@@ -1,7 +1,10 @@
 package app.moviedoggytranscribe.controller;
 
+import app.moviedoggytranscribe.exception.NoSuchWatcherException;
 import app.moviedoggytranscribe.model.data.MovieData;
 import app.moviedoggytranscribe.model.entity.Status;
+import app.moviedoggytranscribe.model.entity.Watcher;
+import app.moviedoggytranscribe.service.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -10,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URL;
 import java.util.Optional;
@@ -17,6 +21,9 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class MovieEditViewController implements Initializable {
+    @Autowired
+    private Service<Watcher, NoSuchWatcherException> watcherService;
+
     @FXML
     private ImageView imageView;
     @FXML
@@ -84,7 +91,12 @@ public class MovieEditViewController implements Initializable {
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK){
-                    // TODO: USUWANIE
+                    Watcher watcher = movieData.getWatchers().get(watchers.getSelectionModel().getSelectedIndex());
+                    try {
+                        watcherService.delete(watcher.getId());
+                    } catch (NoSuchWatcherException e) {
+                        e.printStackTrace();
+                    }
 
                     watchersObservableList.clear();
                     insertWatchersToListView();
