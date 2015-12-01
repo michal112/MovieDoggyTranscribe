@@ -8,7 +8,6 @@ import app.moviedoggytranscribe.model.data.MovieData;
 import app.moviedoggytranscribe.model.entity.Movie;
 import app.moviedoggytranscribe.model.entity.Status;
 import app.moviedoggytranscribe.model.entity.Watcher;
-import app.moviedoggytranscribe.service.AbstractService;
 import app.moviedoggytranscribe.service.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -98,7 +97,8 @@ public class MainViewController {
                 if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
 
                     FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                            + File.separator + "movieView.fxml"));
+                           // + File.separator + "movieView.fxml"));
+                            + File.separator + "katalogFilmowy.fxml"));
                     MovieViewController controller = new MovieViewController(mainTable.getSelectionModel().getSelectedItem());
                     loader.setController(controller);
                     Parent root;
