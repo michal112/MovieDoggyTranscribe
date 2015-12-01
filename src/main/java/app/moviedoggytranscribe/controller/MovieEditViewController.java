@@ -2,22 +2,21 @@ package app.moviedoggytranscribe.controller;
 
 import app.moviedoggytranscribe.model.data.MovieData;
 import app.moviedoggytranscribe.model.entity.Status;
-import app.moviedoggytranscribe.model.entity.Watcher;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class MovieViewController implements Initializable {
+public class MovieEditViewController implements Initializable {
     @FXML
     private ImageView imageView;
     @FXML
@@ -35,17 +34,27 @@ public class MovieViewController implements Initializable {
     @FXML
     private ListView<String> statuses;
 
+    @FXML
+    private Button addWatcher;
+    @FXML
+    private Button addStatus;
+    @FXML
+    private Button deleteWatcher;
+    @FXML
+    private Button deleteStatus;
+
     private MovieData movieData;
 
     private ObservableList<String> watchersObservableList = FXCollections.observableArrayList();
     private ObservableList<String> statusesObservableList = FXCollections.observableArrayList();
 
-    public MovieViewController(MovieData movieData) {
+    public MovieEditViewController(MovieData movieData) {
         this.movieData = movieData;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         title.setText(movieData.getMovie().getTitle());
         type.setText(movieData.getMovie().getGenre());
         imageView.setImage(new Image(movieData.getMovie().getImageUrl()));
@@ -60,6 +69,34 @@ public class MovieViewController implements Initializable {
 
         insertWatchersToListView();
         insertStatusesToListView();
+
+        addWatcher.setOnAction(event -> System.out.println("addWatcher"));
+
+        deleteWatcher.setOnAction(event -> {
+            ObservableList<String> selectedItems = watchers.getSelectionModel().getSelectedItems();
+
+            if(selectedItems == null) {
+                return;
+            }
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Usuń film");
+                alert.setHeaderText("Czy chcesz usunąć oglądającego ten film ?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK){
+                    // TODO: USUWANIE
+
+                    watchersObservableList.clear();
+                    insertWatchersToListView();
+                }
+        });
+
+        addStatus.setOnAction(event -> System.out.println("addStatus"));
+
+        deleteStatus.setOnAction(event -> {
+            ObservableList<String> selectedItems = statuses.getSelectionModel().getSelectedItems();
+            System.out.println(selectedItems);
+        });
     }
 
     private void insertWatchersToListView() {
