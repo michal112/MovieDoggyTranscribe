@@ -12,12 +12,14 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class MovieViewController implements Initializable {
+@Component
+public class MovieViewController implements Controller {
     @FXML
     private ImageView imageView;
     @FXML
@@ -35,17 +37,20 @@ public class MovieViewController implements Initializable {
     @FXML
     private ListView<String> statuses;
 
+    public void setMovieData(MovieData movieData) {
+        this.movieData = movieData;
+    }
+
     private MovieData movieData;
 
     private ObservableList<String> watchersObservableList = FXCollections.observableArrayList();
     private ObservableList<String> statusesObservableList = FXCollections.observableArrayList();
 
-    public MovieViewController(MovieData movieData) {
-        this.movieData = movieData;
-    }
+    public MovieViewController(MovieData selectedItem) {}
 
+    @FXML
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize() {
         title.setText(movieData.getMovie().getTitle());
         type.setText(movieData.getMovie().getGenre());
         imageView.setImage(new Image(movieData.getMovie().getImageUrl()));

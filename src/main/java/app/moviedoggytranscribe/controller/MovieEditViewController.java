@@ -1,5 +1,6 @@
 package app.moviedoggytranscribe.controller;
 
+import app.moviedoggytranscribe.SpringFxmlLoader;
 import app.moviedoggytranscribe.exception.NoSuchWatcherException;
 import app.moviedoggytranscribe.model.data.MovieData;
 import app.moviedoggytranscribe.model.entity.Status;
@@ -14,13 +15,15 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class MovieEditViewController implements Initializable {
+@Component
+public class MovieEditViewController implements Controller {
     @Autowired
     private Service<Watcher, NoSuchWatcherException> watcherService;
 
@@ -55,12 +58,15 @@ public class MovieEditViewController implements Initializable {
     private ObservableList<String> watchersObservableList = FXCollections.observableArrayList();
     private ObservableList<String> statusesObservableList = FXCollections.observableArrayList();
 
-    public MovieEditViewController(MovieData movieData) {
+    public void setMovieData(MovieData movieData) {
         this.movieData = movieData;
     }
 
+    public MovieEditViewController() {}
+
+    @FXML
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize() {
 
         title.setText(movieData.getMovie().getTitle());
         type.setText(movieData.getMovie().getGenre());
@@ -85,6 +91,12 @@ public class MovieEditViewController implements Initializable {
             if(selectedItems == null) {
                 return;
             }
+            Watcher watcher = movieData.getWatchers().get(watchers.getSelectionModel().getSelectedIndex());
+            try {
+                watcherService.delete(watcher.getId());
+            } catch (NoSuchWatcherException e) {
+                e.printStackTrace();
+            }/*
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Usuń film");
                 alert.setHeaderText("Czy chcesz usunąć oglądającego ten film ?");
@@ -100,7 +112,7 @@ public class MovieEditViewController implements Initializable {
 
                     watchersObservableList.clear();
                     insertWatchersToListView();
-                }
+                }*/
         });
 
         addStatus.setOnAction(event -> System.out.println("addStatus"));
