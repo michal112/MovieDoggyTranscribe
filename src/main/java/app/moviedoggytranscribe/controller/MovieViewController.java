@@ -18,7 +18,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-@Component
 public class MovieViewController implements Controller {
     @FXML
     private ImageView imageView;
@@ -49,7 +48,6 @@ public class MovieViewController implements Controller {
     public MovieViewController(MovieData selectedItem) {}
 
     @FXML
-    @Override
     public void initialize() {
         title.setText(movieData.getMovie().getTitle());
         type.setText(movieData.getMovie().getGenre());
@@ -76,5 +74,10 @@ public class MovieViewController implements Controller {
     private void insertStatusesToListView() {
         statusesObservableList.addAll(movieData.getStatuses().stream().map(Status::getName).collect(Collectors.toList()));
         statuses.setItems(statusesObservableList);
+    }
+
+    @Override
+    public void setData(Object data) {
+
     }
 }

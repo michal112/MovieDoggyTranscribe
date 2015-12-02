@@ -64,9 +64,8 @@ public class MovieEditViewController implements Controller {
 
     public MovieEditViewController() {}
 
-    @FXML
-    @Override
-    public void initialize() {
+    public void setData(Object data) {
+        setMovieData((MovieData) data);
 
         title.setText(movieData.getMovie().getTitle());
         type.setText(movieData.getMovie().getGenre());
@@ -91,12 +90,6 @@ public class MovieEditViewController implements Controller {
             if(selectedItems == null) {
                 return;
             }
-            Watcher watcher = movieData.getWatchers().get(watchers.getSelectionModel().getSelectedIndex());
-            try {
-                watcherService.delete(watcher.getId());
-            } catch (NoSuchWatcherException e) {
-                e.printStackTrace();
-            }/*
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Usuń film");
                 alert.setHeaderText("Czy chcesz usunąć oglądającego ten film ?");
@@ -112,7 +105,7 @@ public class MovieEditViewController implements Controller {
 
                     watchersObservableList.clear();
                     insertWatchersToListView();
-                }*/
+                }
         });
 
         addStatus.setOnAction(event -> System.out.println("addStatus"));

@@ -63,13 +63,15 @@ public class MainViewController implements Controller {
     @FXML
     private Button addMovie;
 
+    @Override
+    public void setData(Object data) {}
+
     @PostConstruct
     public void init() {
         movieDataList = FXCollections.observableArrayList();
     }
 
     @FXML
-    @Override
     public void initialize() {
         initializeTableView();
 
@@ -130,7 +132,7 @@ public class MainViewController implements Controller {
             MovieData selectionMovie = mainTable.getSelectionModel().getSelectedItem();
             if(selectionMovie == null) {
                 return;
-            }/*
+            }
                 try {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Usuń film");
@@ -145,7 +147,7 @@ public class MainViewController implements Controller {
                     }
                 } catch (NoSuchMovieException e) {
                     e.printStackTrace();
-                }*/
+                }
         });
 
         // mouseEvent - click on Edit Button
@@ -158,9 +160,9 @@ public class MainViewController implements Controller {
 
             SpringFxmlLoader loader = ApplicationCore.getLoader();
             FxmlElement<MovieEditViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                    + File.separator + "movieEditView.fxml", MovieEditViewController.class);
+                    + File.separator + "movieEditView.fxml", MovieEditViewController.class,
+                    mainTable.getSelectionModel().getSelectedItem());
 
-            fxmlElement.getController().setMovieData(mainTable.getSelectionModel().getSelectedItem());
             Scene scene = new Scene(fxmlElement.getRoot(), 700, 700);
             Stage stage = new Stage();
             stage.setTitle(ViewConstants.MOVIE_VIEW_WINDOW_TITLE);
@@ -220,4 +222,6 @@ public class MainViewController implements Controller {
             }
         });
     }
+
+
 }
