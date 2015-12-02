@@ -1,0 +1,216 @@
+@font-face {
+    font-family: 'Roboto Condensed';
+    src: url('RobotoCondensed-Regular.ttf');
+}
+
+.root {
+    -fx-font-size: 15px;
+    -fx-font-family: "Roboto Condensed";
+    -fx-base: rgb(98, 100, 99);
+    -fx-background: rgb(98, 100, 99);
+    -fx-focus-color: transparent;
+}
+
+.choice-box {
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+    -fx-border-radius: 3 3 3 3;
+    -fx-background-radius: 3 3 3 3;
+    -fx-background-color: rgb(255, 255, 255);
+}
+
+.check-box *.box {
+    -fx-background-color: rgb(255, 255, 255);
+}
+
+.choice-box .label {
+    -fx-font-size: 15px;
+    -fx-text-fill: black;
+}
+
+.combo-box {
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+    -fx-border-radius: 3 3 3 3;
+    -fx-background-radius: 3 3 3 3;
+    -fx-background-color: rgb(255, 255, 255);
+}
+
+.combo-box *.box {
+    -fx-background-color: rgb(255, 255, 255);
+}
+
+.combo-box .cell{
+    -fx-font-size: 15px;
+    -fx-text-fill: black;
+}
+
+.text-field, #tableTextField {
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+    -fx-border-radius: 3 3 3 3;
+    -fx-background-radius: 3 3 3 3;
+    -fx-background-color: rgb(255, 255, 255);
+}
+
+#tableTextField {
+    -fx-background-color: transparent;
+}
+
+.text-input:error {
+    -fx-focus-color: #F04B23;
+    -fx-faint-focus-color: #d3524422;
+
+    -fx-highlight-fill: -fx-accent;
+    -fx-highlight-text-fill: white;
+    -fx-background-color:
+        -fx-focus-color,
+        rgb(255, 255, 255),
+        -fx-faint-focus-color,
+        linear-gradient(from 0px 0px to 0px 5px, derive(rgb(255, 255, 255), -9%), rgb(255, 255, 255));
+    -fx-background-insets: -0.2, 1, -1.4, 3;
+    -fx-background-radius: 3, 2, 4, 0;
+}
+
+#outputSystemTable .column-header-background {
+    visibility: hidden;
+    -fx-padding: -20px;
+}
+
+#labelColumn {
+    -fx-alignment: CENTER;
+}
+
+.table-row-cell {
+    -fx-cell-size: 35px;
+    -fx-vertical-align: center;
+    -fx-text-background-color: #000000;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #FFFFFF;
+}
+
+
+.table-row-cell:focused:odd {
+    -fx-background-color: #FFFFFF;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #D4D4D4;
+}
+
+
+.table-row-cell:focused:even {
+    -fx-background-color: #D4D4D4;
+}
+
+.table-column {
+  -fx-alignment: CENTER-LEFT;
+}
+
+#labelColumn {
+    -fx-size: 10px;
+}
+
+.table-view .column-header {
+    -fx-size: 35px;
+}
+
+.label, #lightBackgroundText, #darkBackgroundText {
+    -fx-font-size: 15px;
+}
+
+#brightBackgroundText {
+    -fx-text-fill: black;
+}
+
+#darkBackgroundText {
+    -fx-font-size: 13px;
+    -fx-text-fill: white;
+}
+
+#brightStackPane {
+    -fx-background-color: rgb(219, 219, 219);
+    -fx-border-radius: 3 3 0 0;
+    -fx-background-radius: 3 3 0 0;
+}
+
+#darkStackPane {
+    -fx-background-color: #7D7E7E;
+}
+
+#darkGridPane {
+    -fx-background-color: #7D7E7E;
+}
+
+.button, #nowButton {
+    -fx-background-color: #1797D4;
+    -fx-text-fill: rgb(255, 255, 255);
+    -fx-border-radius: 3 3 3 3;
+    -fx-background-radius: 3 3 3 3;
+    -fx-font-weight: bold;
+    -fx-min-height: 30px;
+    -fx-max-height: 30px;
+    -fx-min-width: 120px;
+    -fx-max-width: 120px;
+}
+
+.button:hover {
+    -fx-background-color: #065FA1;
+}
+
+#nowButton {
+    -fx-min-height: 30px;
+    -fx-max-height: 30px;
+    -fx-min-width: 70px;
+    -fx-max-width: 70px;
+}
+
+#nowButton:hover {
+    -fx-background-color: #065FA1;
+}
+
+.tab-pane {
+    -fx-tab-min-width: 112px;
+    -fx-tab-max-width: 112px;
+    -fx-tab-min-height: 30px;
+    -fx-tab-max-height: 30px;
+}
+
+.tab {
+    -fx-border-color:transparent;
+    -fx-border-radius: 7 7 0 0;
+    -fx-background-radius: 7 7 0 0;
+    -fx-background-insets: 2px 2px 1px 0px;
+    -fx-padding: 0.5em 0.1em 0.5em 0.1em;
+}
+
+
+.tab:selected {
+    -fx-background-insets: 2px 2px 0px 0px;
+    -fx-effect: null;
+}
+
+.tab .tab-label {
+    -fx-background-color: transparent;  
+    -fx-alignment: CENTER;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-font-size: 17px;
+}
+
+.tab-pane:top *.tab-header-area {
+    -fx-background-insets: 0, 0 0 0 0;
+    -fx-padding: 0px 18px 0px 18px;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: rgb(60, 63, 62);
+}
+
+#unitLabel {
+    -fx-border-radius: 3 3 3 3;
+    -fx-background-radius: 3 3 3 3;
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-text-fill: black;
+}

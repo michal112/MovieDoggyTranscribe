@@ -8,7 +8,6 @@ import app.moviedoggytranscribe.model.data.MovieData;
 import app.moviedoggytranscribe.model.entity.Movie;
 import app.moviedoggytranscribe.model.entity.Status;
 import app.moviedoggytranscribe.model.entity.Watcher;
-import app.moviedoggytranscribe.service.AbstractService;
 import app.moviedoggytranscribe.service.Service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,7 +34,6 @@ import java.util.logging.Logger;
 
 @org.springframework.stereotype.Component
 public class MainViewController {
-
     @FXML
     private TableView<MovieData> mainTable;
     @FXML
@@ -46,6 +44,8 @@ public class MainViewController {
     private TableColumn<MovieData, List<Status>> statusesColumn;
     @FXML
     private TextField searchField;
+    @FXML
+    private Button editMovie;
     @FXML
     private Button deleteMovie;
 
@@ -104,7 +104,7 @@ public class MainViewController {
                     Parent root;
                     try {
                         root = (Parent) loader.load();
-                        Scene scene = new Scene(root, ViewConstants.APP_WINDOW_WIDTH, ViewConstants.APP_WINDOW_HEIGHT);
+                        Scene scene = new Scene(root, 700, 600);
                         Stage stage = new Stage();
                         stage.setTitle(ViewConstants.MOVIE_VIEW_WINDOW_TITLE);
                         stage.setScene(scene);
@@ -138,6 +138,31 @@ public class MainViewController {
                 } catch (NoSuchMovieException e) {
                     e.printStackTrace();
                 }
+        });
+
+        // mouseEvent - click on Edit Button
+
+        editMovie.setOnAction((event) -> {
+            MovieData selectionMovie = mainTable.getSelectionModel().getSelectedItem();
+            if(selectionMovie == null) {
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + AppConstants.VIEWS_FOLDER_NAME
+                    + File.separator + "movieEditView.fxml"));
+            MovieEditViewController controller = new MovieEditViewController(mainTable.getSelectionModel().getSelectedItem());
+            loader.setController(controller);
+            Parent root;
+            try {
+                root = (Parent) loader.load();
+                Scene scene = new Scene(root, 700, 700);
+                Stage stage = new Stage();
+                stage.setTitle(ViewConstants.MOVIE_VIEW_WINDOW_TITLE);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(MovieEditViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
 
