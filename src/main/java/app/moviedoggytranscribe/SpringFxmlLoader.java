@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class SpringFxmlLoader {
+public class SpringFxmlLoader extends FXMLLoader{
 
     private final ApplicationContext context;
 
@@ -17,11 +17,9 @@ public class SpringFxmlLoader {
     public Object load(String url, Class<?> controllerClass) throws IOException {
         try (InputStream fxmlStream = controllerClass.getResourceAsStream(url)) {
             Object controller = context.getBean(controllerClass);
-            FXMLLoader loader = new FXMLLoader();
-            loader.setController(controller);
-            loader.setRoot(loader.load(fxmlStream));
-            return loader.getRoot();
+            setController(controller);
+            setRoot(load(fxmlStream));
+            return getRoot();
         }
     }
-
 }

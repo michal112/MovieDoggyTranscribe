@@ -14,13 +14,17 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+@Component
 public class MovieEditViewController implements Initializable {
+
     @Autowired
     private Service<Watcher, NoSuchWatcherException> watcherService;
 
@@ -57,6 +61,15 @@ public class MovieEditViewController implements Initializable {
 
     public MovieEditViewController(MovieData movieData) {
         this.movieData = movieData;
+    }
+
+    public MovieEditViewController() {
+    }
+
+    @PostConstruct
+    public void init() {
+        watchersObservableList = FXCollections.observableArrayList();
+        statusesObservableList = FXCollections.observableArrayList();
     }
 
     @Override

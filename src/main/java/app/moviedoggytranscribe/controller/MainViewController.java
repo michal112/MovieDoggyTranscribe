@@ -1,5 +1,7 @@
 package app.moviedoggytranscribe.controller;
 
+import app.moviedoggytranscribe.ApplicationCore;
+import app.moviedoggytranscribe.SpringFxmlLoader;
 import app.moviedoggytranscribe.constants.AppConstants;
 import app.moviedoggytranscribe.constants.ViewConstants;
 import app.moviedoggytranscribe.exception.NoSuchMovieException;
@@ -148,6 +150,21 @@ public class MainViewController {
                 return;
             }
 
+            FxmlLoader loader = new SpringFxmlLoader(ApplicationCore.getContext());
+            Parent root = null;
+            try {
+                root = (Parent) loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
+                        + File.separator + "movieEditView.fxml", MovieEditViewController.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Stage stage = new Stage();
+            stage.setTitle(ViewConstants.MOVIE_VIEW_WINDOW_TITLE);
+            stage.setScene(new Scene(root, 700, 700));
+            stage.setResizable(false);
+            stage.show();
+
+/*
             FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + AppConstants.VIEWS_FOLDER_NAME
                     + File.separator + "movieEditView.fxml"));
             MovieEditViewController controller = new MovieEditViewController(mainTable.getSelectionModel().getSelectedItem());
@@ -163,6 +180,7 @@ public class MainViewController {
             } catch (IOException ex) {
                 Logger.getLogger(MovieEditViewController.class.getName()).log(Level.SEVERE, null, ex);
             }
+            */
         });
     }
 
