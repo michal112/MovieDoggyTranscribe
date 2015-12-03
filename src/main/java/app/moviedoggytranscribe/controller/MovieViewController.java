@@ -76,8 +76,4 @@ public class MovieViewController implements Controller {
         statuses.setItems(statusesObservableList);
     }
 
-    @Override
-    public void setData(Object data) {
-
-    }
 }

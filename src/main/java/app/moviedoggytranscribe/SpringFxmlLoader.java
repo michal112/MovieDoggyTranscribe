@@ -1,7 +1,7 @@
 package app.moviedoggytranscribe;
 
 import app.moviedoggytranscribe.controller.Controller;
-import app.moviedoggytranscribe.controller.MovieEditViewController;
+import app.moviedoggytranscribe.controller.DataController;
 import javafx.fxml.FXMLLoader;
 import org.springframework.context.ApplicationContext;
 
@@ -24,29 +24,28 @@ public class SpringFxmlLoader {
         return LOADER;
     }
 
-    @SuppressWarnings("unchecked")
     public <T extends Controller> FxmlElement load(String resourcePath, Class<T> controllerClass) {
+        return load(resourcePath, controllerClass, null);
+    }
+
+    public <T extends Controller> FxmlElement load(String resourcePath, Class<T> controllerClass, Object data) {
         try {
             T controller = context.getBean(controllerClass);
 
             FXMLLoader loader = new FXMLLoader(controllerClass.getResource(resourcePath));
             loader.setController(controller);
+
+            if (data != null && DataController.class.isAssignableFrom(controllerClass)) {
+                ((DataController) controller).setData(data);
+            }
+
             loader.setRoot(loader.load());
 
             return new FxmlElement(loader.getController(), loader.getRoot());
         } catch (IOException e) {
             e.printStackTrace();
-            Logger.getAnonymousLogger().severe(e.getMessage());
             return null;
         }
-    }
-
-    public <T extends Controller> FxmlElement load(String resourcePath, Class<T> controllerClass, Object data) {
-        FxmlElement fxmlElement = load(resourcePath, controllerClass);
-
-        fxmlElement.getController().setData(data);
-
-        return fxmlElement;
     }
 
 }

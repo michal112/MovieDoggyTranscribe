@@ -12,6 +12,8 @@ import app.moviedoggytranscribe.model.entity.Movie;
 import app.moviedoggytranscribe.model.entity.Status;
 import app.moviedoggytranscribe.model.entity.Watcher;
 import app.moviedoggytranscribe.service.Service;
+import app.moviedoggytranscribe.service.SimpleMovieService;
+import app.moviedoggytranscribe.service.SimpleMovieWatcherService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -24,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -58,13 +61,10 @@ public class MainViewController implements Controller {
     @Autowired
     private Mapper<Movie, MovieData> movieDataMapper;
     @Autowired
-    private Service<Movie, NoSuchMovieException> movieService;
+    private SimpleMovieService movieService;
 
     @FXML
     private Button addMovie;
-
-    @Override
-    public void setData(Object data) {}
 
     @PostConstruct
     public void init() {
@@ -159,7 +159,7 @@ public class MainViewController implements Controller {
             }
 
             SpringFxmlLoader loader = ApplicationCore.getLoader();
-            FxmlElement<MovieEditViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
+            FxmlElement<AnchorPane, MovieEditViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                     + File.separator + "movieEditView.fxml", MovieEditViewController.class,
                     mainTable.getSelectionModel().getSelectedItem());
 

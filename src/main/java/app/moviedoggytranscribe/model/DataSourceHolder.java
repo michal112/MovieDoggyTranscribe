@@ -6,6 +6,8 @@ import app.moviedoggytranscribe.exception.NoSuchStatusException;
 import app.moviedoggytranscribe.exception.NoSuchWatcherException;
 import app.moviedoggytranscribe.model.entity.*;
 import app.moviedoggytranscribe.service.Service;
+import app.moviedoggytranscribe.service.SimpleMovieService;
+import app.moviedoggytranscribe.service.SimpleMovieWatcherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +18,7 @@ import java.util.Observable;
 public class DataSourceHolder extends Observable {
 
     @Autowired
-    private Service<Movie, NoSuchMovieException> movieService;
+    private SimpleMovieService movieService;
     @Autowired
     private Service<Status, NoSuchStatusException> statusService;
     @Autowired
@@ -24,7 +26,7 @@ public class DataSourceHolder extends Observable {
     @Autowired
     private Service<MovieStatus, NoSuchConnectionException> movieStatusService;
     @Autowired
-    private Service<MovieWatcher, NoSuchConnectionException> movieWatcherService;
+    private SimpleMovieWatcherService movieWatcherService;
 
     private DataSourceType dataSourceType;
 

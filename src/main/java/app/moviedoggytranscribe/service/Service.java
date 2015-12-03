@@ -3,9 +3,7 @@ package app.moviedoggytranscribe.service;
 import app.moviedoggytranscribe.exception.NoSuchEntityException;
 import app.moviedoggytranscribe.model.dao.Dao;
 import app.moviedoggytranscribe.model.entity.Entity;
-import app.moviedoggytranscribe.model.entity.Status;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Observer;
 

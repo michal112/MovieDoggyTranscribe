@@ -1,31 +1,28 @@
 package app.moviedoggytranscribe.controller;
 
-import app.moviedoggytranscribe.SpringFxmlLoader;
-import app.moviedoggytranscribe.exception.NoSuchWatcherException;
 import app.moviedoggytranscribe.model.data.MovieData;
 import app.moviedoggytranscribe.model.entity.Status;
 import app.moviedoggytranscribe.model.entity.Watcher;
-import app.moviedoggytranscribe.service.Service;
+import app.moviedoggytranscribe.service.SimpleMovieWatcherService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.URL;
+import javax.annotation.PostConstruct;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 @Component
-public class MovieEditViewController implements Controller {
+public class MovieEditViewController implements DataController {
+
     @Autowired
-    private Service<Watcher, NoSuchWatcherException> watcherService;
+    private SimpleMovieWatcherService movieWatcherService;
 
     @FXML
     private ImageView imageView;
@@ -55,18 +52,27 @@ public class MovieEditViewController implements Controller {
 
     private MovieData movieData;
 
-    private ObservableList<String> watchersObservableList = FXCollections.observableArrayList();
-    private ObservableList<String> statusesObservableList = FXCollections.observableArrayList();
+    private ObservableList<String> watchersObservableList;
+    private ObservableList<String> statusesObservableList;
+
+    @PostConstruct
+    public void init() {
+        watchersObservableList = FXCollections.observableArrayList();
+        statusesObservableList = FXCollections.observableArrayList();
+    }
 
     public void setMovieData(MovieData movieData) {
         this.movieData = movieData;
     }
 
-    public MovieEditViewController() {}
-
+    @Override
     public void setData(Object data) {
         setMovieData((MovieData) data);
+    }
 
+    @FXML
+    @Override
+    public void initialize() {
         title.setText(movieData.getMovie().getTitle());
         type.setText(movieData.getMovie().getGenre());
         imageView.setImage(new Image(movieData.getMovie().getImageUrl()));
@@ -97,11 +103,7 @@ public class MovieEditViewController implements Controller {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK){
                     Watcher watcher = movieData.getWatchers().get(watchers.getSelectionModel().getSelectedIndex());
-                    try {
-                        watcherService.delete(watcher.getId());
-                    } catch (NoSuchWatcherException e) {
-                        e.printStackTrace();
-                    }
+                    movieWatcherService.deleteByWatcherId(watcher.getId());
 
                     watchersObservableList.clear();
                     insertWatchersToListView();

@@ -3,21 +3,21 @@ package app.moviedoggytranscribe;
 import app.moviedoggytranscribe.controller.Controller;
 import javafx.scene.Parent;
 
-public class FxmlElement<T extends Controller> {
+public class FxmlElement<R extends Parent, C extends Controller> {
 
-    private final T controller;
+    private final C controller;
 
-    private final Parent root;
+    private final R root;
 
-    public T getController() {
+    public C getController() {
         return controller;
     }
 
-    public Parent getRoot() {
+    public R getRoot() {
         return root;
     }
 
-    public FxmlElement(T controller, Parent root) {
+    public FxmlElement(C controller, R root) {
         this.controller = controller;
         this.root = root;
     }

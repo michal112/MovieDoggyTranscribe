@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class MovieWatcherDao implements Dao<MovieWatcher> {
+public class MovieWatcherDao implements SimpleMovieWatcherDao {
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
@@ -55,6 +55,12 @@ public class MovieWatcherDao implements Dao<MovieWatcher> {
     @Transactional
     public void update(MovieWatcher movieWatcher) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    @Transactional
+    public void deleteByWatcherId(Integer watcherId) {
+        jdbcTemplate.update(AppConstants.DELETE_MOVIE_WATCHER_BY_WATCHER_ID, watcherId);
     }
 
 }
