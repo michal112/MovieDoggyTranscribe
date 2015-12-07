@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 public class MainView extends Application {
 
@@ -20,10 +19,8 @@ public class MainView extends Application {
         SpringFxmlLoader loader = ApplicationCore.getLoader();
         FxmlElement<VBox, MainViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                 + File.separator + ViewConstants.MAIN_VIEW_FILE_NAME, MainViewController.class);
+
         primaryStage.setTitle(ViewConstants.MAIN_VIEW_TITLE);
-        if(fxmlElement.getRoot() == null) {
-            Logger.getAnonymousLogger().severe("rwef");
-        }
         primaryStage.setScene(new Scene(fxmlElement.getRoot(), ViewConstants.APP_WINDOW_WIDTH, ViewConstants.APP_WINDOW_HEIGHT));
         primaryStage.setResizable(false);
         primaryStage.show();

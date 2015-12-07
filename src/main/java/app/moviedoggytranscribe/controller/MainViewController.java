@@ -11,31 +11,22 @@ import app.moviedoggytranscribe.model.data.MovieData;
 import app.moviedoggytranscribe.model.entity.Movie;
 import app.moviedoggytranscribe.model.entity.Status;
 import app.moviedoggytranscribe.model.entity.Watcher;
-import app.moviedoggytranscribe.service.Service;
 import app.moviedoggytranscribe.service.SimpleMovieService;
-import app.moviedoggytranscribe.service.SimpleMovieWatcherService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @org.springframework.stereotype.Component
@@ -72,6 +63,7 @@ public class MainViewController implements Controller {
     }
 
     @FXML
+    @Override
     public void initialize() {
         initializeTableView();
 
@@ -102,27 +94,22 @@ public class MainViewController implements Controller {
 
         // mouseEvent - double click on row -> open movie details
 
-        mainTable.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
-
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                            + File.separator + "movieView.fxml"));
-                    MovieViewController controller = new MovieViewController(mainTable.getSelectionModel().getSelectedItem());
-                    loader.setController(controller);
-                    Parent root;
-                    try {
-                        root = (Parent) loader.load();
-                        Scene scene = new Scene(root, 700, 600);
-                        Stage stage = new Stage();
-                        stage.setTitle(ViewConstants.MOVIE_VIEW_WINDOW_TITLE);
-                        stage.setScene(scene);
-                        stage.show();
-                    } catch (IOException ex) {
-                        Logger.getLogger(MovieViewController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+        mainTable.setOnMousePressed((event) -> {
+            if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+                MovieData selectionMovie = mainTable.getSelectionModel().getSelectedItem();
+                if(selectionMovie == null) {
+                    return;
                 }
+
+                SpringFxmlLoader loader = ApplicationCore.getLoader();
+                FxmlElement<AnchorPane, MainViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
+                     + File.separator + "movieView.fxml", MovieViewController.class, selectionMovie);
+
+                Scene scene = new Scene(fxmlElement.getRoot(), 700, 600);
+                Stage stage = new Stage();
+                stage.setTitle(ViewConstants.MOVIE_VIEW_WINDOW_TITLE);
+                stage.setScene(scene);
+                stage.show();
             }
         });
 
@@ -133,21 +120,22 @@ public class MainViewController implements Controller {
             if(selectionMovie == null) {
                 return;
             }
-                try {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Usuń film");
-                    alert.setHeaderText("Czy chcesz usunąć film z bazy danych ?");
 
-                    Optional<ButtonType> result = alert.showAndWait();
-                    if (result.get() == ButtonType.OK){
-                        movieService.delete(selectionMovie.getMovie().getId());
-                        movieDataList.clear();
-                        List<MovieData> movieDatas = movieDataMapper.mapToData(movieService.getAll());
-                        movieDataList.addAll(movieDatas);
-                    }
-                } catch (NoSuchMovieException e) {
-                    e.printStackTrace();
+            try {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Usuń film");
+                alert.setHeaderText("Czy chcesz usunąć film z bazy danych ?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK){
+                    movieService.delete(selectionMovie.getMovie().getId());
+                    movieDataList.clear();
+                    List<MovieData> movieDatas = movieDataMapper.mapToData(movieService.getAll());
+                    movieDataList.addAll(movieDatas);
                 }
+            } catch (NoSuchMovieException e) {
+                Logger.getLogger(MainViewController.class.getCanonicalName()).severe("Film już usunięty z bazy danych");
+            }
         });
 
         // mouseEvent - click on Edit Button
@@ -160,8 +148,7 @@ public class MainViewController implements Controller {
 
             SpringFxmlLoader loader = ApplicationCore.getLoader();
             FxmlElement<AnchorPane, MovieEditViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                    + File.separator + "movieEditView.fxml", MovieEditViewController.class,
-                    mainTable.getSelectionModel().getSelectedItem());
+                + File.separator + "movieEditView.fxml", MovieEditViewController.class, selectionMovie);
 
             Scene scene = new Scene(fxmlElement.getRoot(), 700, 700);
             Stage stage = new Stage();

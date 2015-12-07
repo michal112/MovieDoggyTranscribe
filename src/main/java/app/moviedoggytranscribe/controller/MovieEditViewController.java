@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -92,22 +91,22 @@ public class MovieEditViewController implements DataController {
 
         deleteWatcher.setOnAction(event -> {
             ObservableList<String> selectedItems = watchers.getSelectionModel().getSelectedItems();
-
             if(selectedItems == null) {
                 return;
             }
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Usuń film");
-                alert.setHeaderText("Czy chcesz usunąć oglądającego ten film ?");
 
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK){
-                    Watcher watcher = movieData.getWatchers().get(watchers.getSelectionModel().getSelectedIndex());
-                    movieWatcherService.deleteByWatcherId(watcher.getId());
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Usuń film");
+            alert.setHeaderText("Czy chcesz usunąć oglądającego ten film ?");
 
-                    watchersObservableList.clear();
-                    insertWatchersToListView();
-                }
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK){
+                Watcher watcher = movieData.getWatchers().get(watchers.getSelectionModel().getSelectedIndex());
+                movieWatcherService.deleteByWatcherId(watcher.getId());
+
+                watchersObservableList.clear();
+                insertWatchersToListView();
+            }
         });
 
         addStatus.setOnAction(event -> System.out.println("addStatus"));
@@ -119,13 +118,19 @@ public class MovieEditViewController implements DataController {
     }
 
     private void insertWatchersToListView() {
-        watchersObservableList.addAll(movieData.getWatchers().stream().map(watcher -> watcher.getName() + " "
-                + watcher.getSurname()).collect(Collectors.toList()));
+        if (watchersObservableList.isEmpty()) {
+            watchersObservableList.addAll(movieData.getWatchers().stream().map(watcher -> watcher.getName() + " "
+                    + watcher.getSurname()).collect(Collectors.toList()));
+        }
+
         watchers.setItems(watchersObservableList);
     }
 
     private void insertStatusesToListView() {
-        statusesObservableList.addAll(movieData.getStatuses().stream().map(Status::getName).collect(Collectors.toList()));
+        if (statusesObservableList.isEmpty()) {
+            statusesObservableList.addAll(movieData.getStatuses().stream().map(Status::getName).collect(Collectors.toList()));
+        }
+
         statuses.setItems(statusesObservableList);
     }
 }
