@@ -11,7 +11,7 @@ import app.moviedoggytranscribe.model.data.MovieData;
 import app.moviedoggytranscribe.model.entity.Movie;
 import app.moviedoggytranscribe.model.entity.Status;
 import app.moviedoggytranscribe.model.entity.Watcher;
-import app.moviedoggytranscribe.service.SimpleMovieService;
+import app.moviedoggytranscribe.service.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @org.springframework.stereotype.Component
@@ -46,24 +47,38 @@ public class MainViewController implements Controller {
     private Button editMovie;
     @FXML
     private Button deleteMovie;
-
-    private ObservableList<MovieData> movieDataList;
+    @FXML
+    private Button addMovie;
 
     @Autowired
     private Mapper<Movie, MovieData> movieDataMapper;
     @Autowired
     private SimpleMovieService movieService;
+    @Autowired
+    private SimpleStatusService statusService;
+    @Autowired
+    private SimpleWatcherService watcherService;
+    @Autowired
+    private SimpleMovieStatusService movieStatusService;
+    @Autowired
+    private SimpleMovieWatcherService movieWatcherService;
 
-    @FXML
-    private Button addMovie;
+    private ObservableList<MovieData> movieDataList;
 
     @PostConstruct
     public void init() {
         movieDataList = FXCollections.observableArrayList();
+
+        movieService.addObserver(this);
+        statusService.addObserver(this);
+        watcherService.addObserver(this);
+        movieStatusService.addObserver(this);
+        movieWatcherService.addObserver(this);
     }
 
     @FXML
     @Override
+    @SuppressWarnings("unchecked")
     public void initialize() {
         initializeTableView();
 
@@ -80,8 +95,7 @@ public class MainViewController implements Controller {
                 }
 
                 String lowerCaseFilter = newValue.toLowerCase();
-
-                if (movieData.getMovie().getTitle().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                if (movieData.getMovie().getTitle().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 return false;
@@ -158,7 +172,10 @@ public class MainViewController implements Controller {
         });
     }
 
-    public void initializeTableView() {
+    private void initializeTableView() {
+        if (!movieDataList.isEmpty()) {
+            movieDataList.clear();
+        }
         List<MovieData> movieDatas = movieDataMapper.mapToData(movieService.getAll());
         movieDataList.addAll(movieDatas);
 
@@ -183,7 +200,7 @@ public class MainViewController implements Controller {
                 if (item == null || empty) {
                     setText(null);
                 } else {
-                    String watchers = new String();
+                    String watchers = "";
                     for (Watcher watcher : item) {
                         watchers += watcher.getNick() + " ";
                     }
@@ -200,9 +217,9 @@ public class MainViewController implements Controller {
                 if (item == null || empty) {
                     setText(null);
                 } else {
-                    String statuses = new String();
+                    String statuses = "";
                     for (Status status : item) {
-                        statuses += status.getName() + " ";
+                        statuses += status.getName()+status.getId() + " ";
                     }
                     setText(statuses);
                 }
@@ -210,5 +227,9 @@ public class MainViewController implements Controller {
         });
     }
 
+    @Override
+    public void update() {
+        initializeTableView();
+    }
 
 }

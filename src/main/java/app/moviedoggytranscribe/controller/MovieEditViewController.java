@@ -1,5 +1,6 @@
 package app.moviedoggytranscribe.controller;
 
+import app.moviedoggytranscribe.exception.NoSuchConnectionException;
 import app.moviedoggytranscribe.model.data.MovieData;
 import app.moviedoggytranscribe.model.entity.Status;
 import app.moviedoggytranscribe.model.entity.Watcher;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -58,6 +60,8 @@ public class MovieEditViewController implements DataController {
     public void init() {
         watchersObservableList = FXCollections.observableArrayList();
         statusesObservableList = FXCollections.observableArrayList();
+
+        movieWatcherService.addObserver(this);
     }
 
     public void setMovieData(MovieData movieData) {
@@ -102,10 +106,14 @@ public class MovieEditViewController implements DataController {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK){
                 Watcher watcher = movieData.getWatchers().get(watchers.getSelectionModel().getSelectedIndex());
-                movieWatcherService.deleteByWatcherId(watcher.getId());
+                movieData.getWatchers().remove(watcher);
+                try {
+                    movieWatcherService.deleteByWatcherId(watcher.getId());
+                } catch (NoSuchConnectionException e) {
+                    e.printStackTrace();
+                }
 
-                watchersObservableList.clear();
-                insertWatchersToListView();
+
             }
         });
 
@@ -118,19 +126,32 @@ public class MovieEditViewController implements DataController {
     }
 
     private void insertWatchersToListView() {
-        if (watchersObservableList.isEmpty()) {
-            watchersObservableList.addAll(movieData.getWatchers().stream().map(watcher -> watcher.getName() + " "
-                    + watcher.getSurname()).collect(Collectors.toList()));
-        }
+        clearObservable(watchersObservableList);
+
+        watchersObservableList.addAll(movieData.getWatchers().stream().map(watcher -> watcher.getName()
+                + " " + watcher.getSurname()).collect(Collectors.toList()));
 
         watchers.setItems(watchersObservableList);
     }
 
     private void insertStatusesToListView() {
-        if (statusesObservableList.isEmpty()) {
-            statusesObservableList.addAll(movieData.getStatuses().stream().map(Status::getName).collect(Collectors.toList()));
-        }
+        clearObservable(statusesObservableList);
+
+        statusesObservableList.addAll(movieData.getStatuses().stream().map(Status::getName).collect(Collectors.toList()));
 
         statuses.setItems(statusesObservableList);
     }
+
+    private void clearObservable(ObservableList<String> observableList) {
+        if (!observableList.isEmpty()) {
+            observableList.clear();
+        }
+    }
+
+    @Override
+    public void update() {
+        insertStatusesToListView();
+        insertWatchersToListView();
+    }
+
 }

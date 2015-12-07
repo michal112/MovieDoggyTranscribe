@@ -38,7 +38,7 @@ public class AppConstants {
     public static final String GET_ALL_MOVIE_WATCHER_QUERY = "SELECT * FROM " + MOVIE_WATCHER_TABLE_NAME;
     public static final String DELETE_MOVIE_WATCHER_QUERY = "DELETE FROM " + MOVIE_WATCHER_TABLE_NAME +
             " WHERE " + KEY_COLUMN_NAME +  " = ?";
-    public static final String DELETE_MOVIE_WATCHER_BY_WATCHER_ID = "DELETE FROM" + MOVIE_WATCHER_TABLE_NAME +
+    public static final String DELETE_MOVIE_WATCHER_BY_WATCHER_ID = "DELETE FROM " + MOVIE_WATCHER_TABLE_NAME +
             " WHERE " + WATCHER_KEY_COLUMN_NAME +  " = ?";
 
     public static final String GET_ALL_MOVIE_STASUSES = "SELECT A.* FROM " + STATUS_TABLE_NAME + " AS A" +

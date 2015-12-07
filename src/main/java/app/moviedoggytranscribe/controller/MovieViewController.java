@@ -68,24 +68,34 @@ public class MovieViewController implements DataController {
     }
 
     private void insertWatchersToListView() {
-        if (watchersObservableList.isEmpty()) {
-            watchersObservableList.addAll(movieData.getWatchers().stream().map(watcher -> watcher.getName() + " "
-                    + watcher.getSurname()).collect(Collectors.toList()));
-        }
+        clearObservable(watchersObservableList);
+
+        watchersObservableList.addAll(movieData.getWatchers().stream().map(watcher -> watcher.getName() + " "
+                + watcher.getSurname()).collect(Collectors.toList()));
 
         watchers.setItems(watchersObservableList);
     }
 
     private void insertStatusesToListView() {
-        if (statusesObservableList.isEmpty()) {
-            statusesObservableList.addAll(movieData.getStatuses().stream().map(Status::getName).collect(Collectors.toList()));
-        }
+        clearObservable(statusesObservableList);
+
+        statusesObservableList.addAll(movieData.getStatuses().stream().map(Status::getName).collect(Collectors.toList()));
 
         statuses.setItems(statusesObservableList);
+    }
+
+    private void clearObservable(ObservableList<String> observableList) {
+        if (!observableList.isEmpty()) {
+            observableList.clear();
+        }
     }
 
     @Override
     public void setData(Object data) {
         setMovieData((MovieData) data);
     }
+
+    @Override
+    public void update() {}
+
 }
