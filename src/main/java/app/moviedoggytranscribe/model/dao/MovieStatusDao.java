@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class MovieStatusDao implements Dao<MovieStatus> {
+public class MovieStatusDao implements SimpleMovieStatusDao {
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
@@ -55,6 +55,12 @@ public class MovieStatusDao implements Dao<MovieStatus> {
     @Transactional
     public void update(MovieStatus movieStatus) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    @Transactional
+    public void deleteByStatusId(Integer statusId) {
+        jdbcTemplate.update(AppConstants.DELETE_MOVIE_STATUS_BY_STATUS_ID, statusId);
     }
 
 }

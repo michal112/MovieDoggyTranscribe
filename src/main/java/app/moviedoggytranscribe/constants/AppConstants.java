@@ -6,6 +6,8 @@ public class AppConstants {
     public static final String VIEWS_FOLDER_NAME = "views";
 
     public static final String KEY_COLUMN_NAME = "id";
+    public static final String WATCHER_KEY_COLUMN_NAME = "idWatcher";
+    public static final String STATUS_KEY_COLUMN_NAME = "idStatus";
 
     public static final String STATUS_TABLE_NAME = "status";
     public static final String GET_ALL_STATUSES_QUERY = "SELECT * FROM " + STATUS_TABLE_NAME;
@@ -37,6 +39,8 @@ public class AppConstants {
     public static final String GET_ALL_MOVIE_WATCHER_QUERY = "SELECT * FROM " + MOVIE_WATCHER_TABLE_NAME;
     public static final String DELETE_MOVIE_WATCHER_QUERY = "DELETE FROM " + MOVIE_WATCHER_TABLE_NAME +
             " WHERE " + KEY_COLUMN_NAME +  " = ?";
+    public static final String DELETE_MOVIE_WATCHER_BY_WATCHER_ID = "DELETE FROM " + MOVIE_WATCHER_TABLE_NAME +
+            " WHERE " + WATCHER_KEY_COLUMN_NAME +  " = ?";
 
     public static final String GET_ALL_MOVIE_STASUSES = "SELECT A.* FROM " + STATUS_TABLE_NAME + " AS A" +
             " JOIN " + MOVIE_STATUS_TABLE_NAME + " AS B ON A." + KEY_COLUMN_NAME + " = B.idStatus AND" +
@@ -44,5 +48,8 @@ public class AppConstants {
     public static final String GET_ALL_MOVIE_WATCHERS = "SELECT A.* FROM " + WATCHER_TABLE_NAME + " AS A" +
             " JOIN " + MOVIE_WATCHER_TABLE_NAME + " AS B ON A." + KEY_COLUMN_NAME + " = B.idWatcher AND" +
             " B.idMovie = ?";
+
+    public static final String DELETE_MOVIE_STATUS_BY_STATUS_ID = "DELETE FROM " + MOVIE_STATUS_TABLE_NAME +
+            " WHERE " + STATUS_KEY_COLUMN_NAME + " = ?";
 
 }

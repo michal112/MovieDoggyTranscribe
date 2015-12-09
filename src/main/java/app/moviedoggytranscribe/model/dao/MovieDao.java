@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class MovieDao implements Dao<Movie> {
+public class MovieDao implements SimpleMovieDao {
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
@@ -59,12 +59,14 @@ public class MovieDao implements Dao<Movie> {
                 movie.getGenre(), movie.getYear(), movie.getRating(), movie.getId());
     }
 
+    @Override
     @Transactional
     public List<Status> getStatuses(Integer movieId) {
         return jdbcTemplate.query(AppConstants.GET_ALL_MOVIE_STASUSES, new Integer[]{ movieId },
                 BeanPropertyRowMapper.newInstance(Status.class));
     }
 
+    @Override
     @Transactional
     public List<Watcher> getWatchers(Integer movieId) {
         return jdbcTemplate.query(AppConstants.GET_ALL_MOVIE_WATCHERS, new Integer[]{ movieId },
