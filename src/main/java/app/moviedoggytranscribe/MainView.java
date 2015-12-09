@@ -4,8 +4,8 @@ import app.moviedoggytranscribe.constants.AppConstants;
 import app.moviedoggytranscribe.constants.ViewConstants;
 import app.moviedoggytranscribe.controller.MainViewController;
 import javafx.application.Application;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -14,12 +14,14 @@ import java.io.File;
 public class MainView extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        SpringFxmlLoader loader = new SpringFxmlLoader(ApplicationCore.getContext());
-        Parent root = (Parent) loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
+    @SuppressWarnings("unchecked")
+    public void start(Stage primaryStage)  {
+        SpringFxmlLoader loader = ApplicationCore.getLoader();
+        FxmlElement<VBox, MainViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                 + File.separator + ViewConstants.MAIN_VIEW_FILE_NAME, MainViewController.class);
+
         primaryStage.setTitle(ViewConstants.MAIN_VIEW_TITLE);
-        primaryStage.setScene(new Scene(root, ViewConstants.APP_WINDOW_WIDTH, ViewConstants.APP_WINDOW_HEIGHT));
+        primaryStage.setScene(new Scene(fxmlElement.getRoot(), ViewConstants.APP_WINDOW_WIDTH, ViewConstants.APP_WINDOW_HEIGHT));
         primaryStage.setResizable(false);
         primaryStage.show();
     }

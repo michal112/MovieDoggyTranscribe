@@ -1,5 +1,6 @@
 package app.moviedoggytranscribe.service;
 
+import app.moviedoggytranscribe.controller.ControllerObserver;
 import app.moviedoggytranscribe.exception.NoSuchEntityException;
 import app.moviedoggytranscribe.exception.factory.ExceptionFactory;
 import app.moviedoggytranscribe.model.dao.Dao;
@@ -13,16 +14,20 @@ import java.util.Observable;
 import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
-public abstract class AbstractService<T extends Entity, E extends NoSuchEntityException> implements Service<T, E> {
+public abstract class AbstractService<T extends Entity, E extends NoSuchEntityException>
+        implements Service<T, E> {
 
     @Autowired
     private Dao<T> dao;
     @Autowired
     private ExceptionFactory<E> exceptionFactory;
 
-    public List<T> entities;
+    private List<ControllerObserver> observers;
+
+    protected List<T> entities;
 
     protected AbstractService() {
+        this.observers = new ArrayList<>();
         this.entities = new ArrayList<>();
     }
 
@@ -61,6 +66,7 @@ public abstract class AbstractService<T extends Entity, E extends NoSuchEntityEx
 
     @Override
     public void delete(Integer id) throws E {
+        initEntities();
         entities.remove(get(id));
         dao.delete(id);
     }
@@ -93,6 +99,16 @@ public abstract class AbstractService<T extends Entity, E extends NoSuchEntityEx
         if (this.entities.isEmpty()) {
             this.entities = dao.getAll();
         }
+    }
+
+    @Override
+    public void addObserver(ControllerObserver observer) {
+        this.observers.add(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        this.observers.forEach(ControllerObserver::update);
     }
 
 }

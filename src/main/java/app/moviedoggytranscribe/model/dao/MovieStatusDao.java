@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class MovieStatusDao implements Dao<MovieStatus> {
+public class MovieStatusDao implements SimpleMovieStatusDao {
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
