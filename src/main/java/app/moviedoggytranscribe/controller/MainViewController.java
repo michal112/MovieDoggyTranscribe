@@ -219,7 +219,8 @@ public class MainViewController implements Controller {
                 } else {
                     String statuses = "";
                     for (Status status : item) {
-                        statuses += status.getName()+status.getId() + " ";
+                        statuses += status.getName() + ", ";
+
                     }
                     setText(statuses);
                 }

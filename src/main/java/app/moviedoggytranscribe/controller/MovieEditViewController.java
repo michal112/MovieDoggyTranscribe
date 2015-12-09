@@ -1,11 +1,16 @@
 package app.moviedoggytranscribe.controller;
 
 import app.moviedoggytranscribe.exception.NoSuchConnectionException;
+import app.moviedoggytranscribe.exception.NoSuchStatusException;
+import app.moviedoggytranscribe.exception.NoSuchWatcherException;
 import app.moviedoggytranscribe.model.data.MovieData;
+import app.moviedoggytranscribe.model.entity.MovieWatcher;
 import app.moviedoggytranscribe.model.entity.Status;
 import app.moviedoggytranscribe.model.entity.Watcher;
 import app.moviedoggytranscribe.service.SimpleMovieStatusService;
 import app.moviedoggytranscribe.service.SimpleMovieWatcherService;
+import app.moviedoggytranscribe.service.SimpleStatusService;
+import app.moviedoggytranscribe.service.SimpleWatcherService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -30,6 +35,12 @@ public class MovieEditViewController implements DataController {
 
     @Autowired
     private SimpleMovieStatusService movieStatusService;
+
+    @Autowired
+    private SimpleStatusService statusService;
+
+    @Autowired
+    private SimpleWatcherService watcherService;
 
     @FXML
     private ImageView imageView;
@@ -69,6 +80,8 @@ public class MovieEditViewController implements DataController {
 
         movieWatcherService.addObserver(this);
         movieStatusService.addObserver(this);
+        watcherService.addObserver(this);
+        statusService.addObserver(this);
     }
 
     public void setMovieData(MovieData movieData) {
@@ -105,30 +118,50 @@ public class MovieEditViewController implements DataController {
 
         addWatcher.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
-            choices.addAll(watchersObservableList);
+            try {
+                choices.addAll(watcherService.getAllExistWatchers());
+            } catch (NoSuchWatcherException e) {
+                e.printStackTrace();
+            }
 
-            ChoiceDialog<String> dialog = new ChoiceDialog<>("b", choices);
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
             dialog.setTitle("Dodaj oglądającego");
             dialog.setHeaderText("Dodaj osobę, która oglądała z Tobą film.");
             dialog.setContentText("Osoba:");
 
             Optional<String> result = dialog.showAndWait();
-            result.ifPresent(letter -> System.out.println("Your choice: " + letter));
+
+            if(watchersObservableList.contains(result.get())) {
+                System.out.println("JUZ JEST DODANY");
+            } else {
+                // dodajemy watchera do movie
+                try {
+                    Integer trolololo = watcherService.getWatcherByNameAndSurname(result.get()).getId();
+                    movieWatcherService.add(new MovieWatcher(movieData.getMovie().getId(), trolololo));
+                    // trzeba odswiezyc
+                } catch (NoSuchWatcherException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
         // add Status
 
         addStatus.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
-            choices.addAll(statusesObservableList);
+            try {
+                choices.addAll(statusService.getAllExistStatuses());
+            } catch (NoSuchStatusException e) {
+                e.printStackTrace();
+            }
 
-            ChoiceDialog<String> dialog = new ChoiceDialog<>("b", choices);
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
             dialog.setTitle("Dodaj status filmu");
             dialog.setHeaderText("Dodaj aktualny status filmu.");
             dialog.setContentText("Status:");
 
             Optional<String> result = dialog.showAndWait();
-            result.ifPresent(letter -> System.out.println("Your choice: " + letter));
+            System.out.println(result.get());
         });
 
         // delete Watcher
