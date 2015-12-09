@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -99,8 +101,35 @@ public class MovieEditViewController implements DataController {
         insertWatchersToListView();
         insertStatusesToListView();
 
-        addWatcher.setOnAction(event -> System.out.println("addWatcher"));
+        // add Watcher
 
+        addWatcher.setOnAction(event -> {
+            List<String> choices = new ArrayList<>();
+            choices.addAll(watchersObservableList);
+
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("b", choices);
+            dialog.setTitle("Dodaj oglądającego");
+            dialog.setHeaderText("Dodaj osobę, która oglądała z Tobą film.");
+            dialog.setContentText("Osoba:");
+
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(letter -> System.out.println("Your choice: " + letter));
+        });
+
+        // add Status
+
+        addStatus.setOnAction(event -> {
+            List<String> choices = new ArrayList<>();
+            choices.addAll(statusesObservableList);
+
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("b", choices);
+            dialog.setTitle("Dodaj status filmu");
+            dialog.setHeaderText("Dodaj aktualny status filmu.");
+            dialog.setContentText("Status:");
+
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(letter -> System.out.println("Your choice: " + letter));
+        });
 
         // delete Watcher
 
@@ -125,8 +154,6 @@ public class MovieEditViewController implements DataController {
                 }
             }
         });
-
-        addStatus.setOnAction(event -> System.out.println("addStatus"));
 
         // delete Status
 
@@ -181,5 +208,4 @@ public class MovieEditViewController implements DataController {
         insertStatusesToListView();
         insertWatchersToListView();
     }
-
 }
