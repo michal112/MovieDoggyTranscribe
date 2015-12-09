@@ -17,17 +17,4 @@ public class MovieWatcherService extends AbstractService<MovieWatcher, NoSuchCon
         notifyObservers();
     }
 
-    public Integer add(MovieWatcher watcher) {
-        initEntities();
-        try {
-            entities.add(get(watcher.getId()));
-        } catch (NoSuchConnectionException e) {
-            e.printStackTrace();
-        }
-        ((SimpleMovieWatcherDao) getDao()).add(watcher);
-
-        notifyObservers();
-        return watcher.getIdWatcher();
-    }
-
 }

@@ -45,8 +45,9 @@ public class WatcherDao implements SimpleWatcherDao {
 
     @Override
     @Transactional
-    public Watcher getWatcherByNameAndSurname(String nick) {
-        return (Watcher) jdbcTemplate.queryForObject(AppConstants.GET_WATCHER_BY_NICK, new String[]{ nick }, new BeanPropertyRowMapper(Watcher.class));
+    public Watcher getWatcherByNick(String nick) {
+        return jdbcTemplate.queryForObject(AppConstants.GET_WATCHER_BY_NICK,
+                new String[]{ nick }, BeanPropertyRowMapper.newInstance(Watcher.class));
     }
 
     @Override

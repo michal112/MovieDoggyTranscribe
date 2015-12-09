@@ -23,10 +23,8 @@ public class WatcherService extends AbstractService<Watcher, NoSuchWatcherExcept
     }
 
     @Override
-    public Watcher getWatcherByNameAndSurname(String nick) throws NoSuchWatcherException {
-        Watcher watcher = ((SimpleWatcherDao) getDao()).getWatcherByNameAndSurname(nick);
-        return watcher;
+    public Watcher getWatcherByNick(String nick) throws NoSuchWatcherException {
+        return ((SimpleWatcherDao) getDao()).getWatcherByNick(nick);
     }
-
 
 }

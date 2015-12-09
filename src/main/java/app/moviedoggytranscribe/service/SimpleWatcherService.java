@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface SimpleWatcherService extends Service<Watcher, NoSuchWatcherException> {
     List<String> getAllExistWatchers() throws NoSuchWatcherException;
-    Watcher getWatcherByNameAndSurname(String nick) throws NoSuchWatcherException;
+    Watcher getWatcherByNick(String nick) throws NoSuchWatcherException;
 }

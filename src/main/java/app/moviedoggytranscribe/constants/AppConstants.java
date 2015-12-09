@@ -34,8 +34,7 @@ public class AppConstants {
             " JOIN " + MOVIE_STATUS_TABLE_NAME + " AS B ON A." + KEY_COLUMN_NAME + " = B.idStatus AND" +
             " B.idMovie = ?";
 
-    public static final String GET_WATCHER_BY_NICK = "SELECT " + KEY_COLUMN_NAME + " FROM " + WATCHER_TABLE_NAME +
-            " WHERE nick = ?";
+    public static final String GET_WATCHER_BY_NICK = "SELECT * FROM " + WATCHER_TABLE_NAME + " WHERE nick = ?";
 
     // update
 

@@ -136,7 +136,8 @@ public class MovieEditViewController implements DataController {
             } else {
                 // dodajemy watchera do movie
                 try {
-                    Integer trolololo = watcherService.getWatcherByNameAndSurname(result.get()).getId();
+                    Integer trolololo = watcherService.getWatcherByNick(result.get()).getId();
+                    MovieWatcher movieWatcher = new MovieWatcher(movieData.getMovie().getId(), trolololo);
                     movieWatcherService.add(new MovieWatcher(movieData.getMovie().getId(), trolololo));
                     // trzeba odswiezyc
                 } catch (NoSuchWatcherException e) {
