@@ -1,8 +1,6 @@
 package app.moviedoggytranscribe.service;
 
 import app.moviedoggytranscribe.exception.NoSuchMovieException;
-import app.moviedoggytranscribe.model.dao.Dao;
-import app.moviedoggytranscribe.model.dao.MovieDao;
 import app.moviedoggytranscribe.model.dao.SimpleMovieDao;
 import app.moviedoggytranscribe.model.entity.Movie;
 import app.moviedoggytranscribe.model.entity.Status;

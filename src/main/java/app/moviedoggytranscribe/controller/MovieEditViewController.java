@@ -1,23 +1,28 @@
 package app.moviedoggytranscribe.controller;
 
 import app.moviedoggytranscribe.exception.NoSuchConnectionException;
-import app.moviedoggytranscribe.exception.NoSuchStatusException;
-import app.moviedoggytranscribe.exception.NoSuchWatcherException;
+import app.moviedoggytranscribe.mapper.Mapper;
+import app.moviedoggytranscribe.model.data.Data;
 import app.moviedoggytranscribe.model.data.MovieData;
+import app.moviedoggytranscribe.model.data.StatusData;
+import app.moviedoggytranscribe.model.data.WatcherData;
+import app.moviedoggytranscribe.model.entity.MovieStatus;
 import app.moviedoggytranscribe.model.entity.MovieWatcher;
 import app.moviedoggytranscribe.model.entity.Status;
 import app.moviedoggytranscribe.model.entity.Watcher;
-import app.moviedoggytranscribe.service.SimpleMovieStatusService;
-import app.moviedoggytranscribe.service.SimpleMovieWatcherService;
-import app.moviedoggytranscribe.service.SimpleStatusService;
-import app.moviedoggytranscribe.service.SimpleWatcherService;
+import app.moviedoggytranscribe.service.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,14 +30,22 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Component
 public class MovieEditViewController implements DataController {
 
+    private static final Logger LOG = Logger.getLogger(MovieEditViewController.class.getCanonicalName());
+
+    @Autowired
+    private Mapper<Watcher, WatcherData> watcherDataMapper;
+    @Autowired
+    private Mapper<Status, StatusData> statusDataMapper;
     @Autowired
     private SimpleMovieWatcherService movieWatcherService;
-
+    @Autowired
+    private SimpleMovieService movieService;
     @Autowired
     private SimpleMovieStatusService movieStatusService;
 
@@ -55,9 +68,9 @@ public class MovieEditViewController implements DataController {
     @FXML
     private TextArea describe;
     @FXML
-    private ListView<String> watchers;
+    private ListView<WatcherData> watchers;
     @FXML
-    private ListView<String> statuses;
+    private ListView<StatusData> statuses;
 
     @FXML
     private Button addWatcher;
@@ -70,18 +83,19 @@ public class MovieEditViewController implements DataController {
 
     private MovieData movieData;
 
-    private ObservableList<String> watchersObservableList;
-    private ObservableList<String> statusesObservableList;
+    private ObservableList<WatcherData> watcherDataList;
+    private ObservableList<StatusData> statusesDataList;
 
     @PostConstruct
     public void init() {
-        watchersObservableList = FXCollections.observableArrayList();
-        statusesObservableList = FXCollections.observableArrayList();
+        watcherDataList = FXCollections.observableArrayList();
+        statusesDataList = FXCollections.observableArrayList();
 
         movieWatcherService.addObserver(this);
         movieStatusService.addObserver(this);
         watcherService.addObserver(this);
         statusService.addObserver(this);
+        movieService.addObserver(this);
     }
 
     public void setMovieData(MovieData movieData) {
@@ -117,74 +131,82 @@ public class MovieEditViewController implements DataController {
         // add Watcher
 
         addWatcher.setOnAction(event -> {
-            List<String> choices = new ArrayList<>();
-            try {
-                choices.addAll(watcherService.getAllExistWatchers());
-            } catch (NoSuchWatcherException e) {
-                e.printStackTrace();
-            }
+            List<WatcherData> choices = new ArrayList<>();
+            List<Integer> movieWatchers = watcherDataList.stream().map(
+                watcherData -> watcherData.getWatcher().getId()).collect(Collectors.toList());
 
-            ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
+            choices.addAll(watcherDataMapper.mapToData(watcherService.getAll()).stream().filter(watcherData ->
+                !movieWatchers.contains(watcherData.getWatcher().getId())).collect(Collectors.toList()));
+
+            ChoiceDialog<WatcherData> dialog = new ChoiceDialog<>(choices.get(0), choices);
             dialog.setTitle("Dodaj oglądającego");
             dialog.setHeaderText("Dodaj osobę, która oglądała z Tobą film.");
             dialog.setContentText("Osoba:");
 
-            Optional<String> result = dialog.showAndWait();
+            Optional<WatcherData> result = dialog.showAndWait();
 
-            if(watchersObservableList.contains(result.get())) {
-                System.out.println("JUZ JEST DODANY");
-            } else {
-                // dodajemy watchera do movie
-                try {
-                    Integer trolololo = watcherService.getWatcherByNick(result.get()).getId();
-                    MovieWatcher movieWatcher = new MovieWatcher(movieData.getMovie().getId(), trolololo);
-                    movieWatcherService.add(new MovieWatcher(movieData.getMovie().getId(), trolololo));
-                    // trzeba odswiezyc
-                } catch (NoSuchWatcherException e) {
-                    e.printStackTrace();
-                }
-            }
+            Watcher watcher = result.get().getWatcher();
+
+            Integer watcherId = watcher.getId();
+            Integer movieId = movieData.getMovie().getId();
+
+            movieData.getWatchers().add(watcher);
+
+            movieWatcherService.add(new MovieWatcher(movieId, watcherId));
         });
 
         // add Status
 
         addStatus.setOnAction(event -> {
-            List<String> choices = new ArrayList<>();
-            try {
-                choices.addAll(statusService.getAllExistStatuses());
-            } catch (NoSuchStatusException e) {
-                e.printStackTrace();
-            }
+            List<StatusData> choices = new ArrayList<>();
+            List<Integer> movieStatuses = statusesDataList.stream().map(
+                    statusData -> statusData.getStatus().getId()).collect(Collectors.toList());
 
-            ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
+            choices.addAll(statusDataMapper.mapToData(statusService.getAll()).stream().filter(statusData ->
+                    !movieStatuses.contains(statusData.getStatus().getId())).collect(Collectors.toList()));
+
+            ChoiceDialog<StatusData> dialog = new ChoiceDialog<>(choices.get(0), choices);
             dialog.setTitle("Dodaj status filmu");
             dialog.setHeaderText("Dodaj aktualny status filmu.");
             dialog.setContentText("Status:");
 
-            Optional<String> result = dialog.showAndWait();
-            System.out.println(result.get());
+            Optional<StatusData> result = dialog.showAndWait();
+
+            Status status = result.get().getStatus();
+
+            Integer statusId = status.getId();
+            Integer movieId = movieData.getMovie().getId();
+
+            movieData.getStatuses().add(status);
+
+            movieStatusService.add(new MovieStatus(movieId, statusId));
         });
 
         // delete Watcher
 
         deleteWatcher.setOnAction(event -> {
-            ObservableList<String> selectedItems = watchers.getSelectionModel().getSelectedItems();
+            ObservableList<WatcherData> selectedItems = watchers.getSelectionModel().getSelectedItems();
             if(selectedItems == null) {
                 return;
             }
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Usuń oglądającego film");
-            alert.setHeaderText("Czy chcesz usunąć oglądającego ten film ?");
+            alert.setHeaderText("Czy chcesz usunąć oglądającego ten film?");
 
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK){
-                Watcher watcher = movieData.getWatchers().get(watchers.getSelectionModel().getSelectedIndex());
-                movieData.getWatchers().remove(watcher);
+
+            if (result.get() == ButtonType.OK) {
+                Watcher watcher = !selectedItems.isEmpty() ? selectedItems.get(0).getWatcher() : null;
+                if (watcher == null) {
+                    return;
+                }
+
                 try {
-                    movieWatcherService.deleteByWatcherId(watcher.getId());
+                    movieData.getWatchers().remove(watcher);
+                    movieWatcherService.deleteByMovieIdAndWatcherId(movieData.getMovie().getId(), watcher.getId());
                 } catch (NoSuchConnectionException e) {
-                    e.printStackTrace();
+                    LOG.severe("No connection between movie and watcher " + e.getMessage());
                 }
             }
         });
@@ -192,46 +214,88 @@ public class MovieEditViewController implements DataController {
         // delete Status
 
         deleteStatus.setOnAction(event -> {
-            ObservableList<String> selectedItems = statuses.getSelectionModel().getSelectedItems();
+            ObservableList<StatusData> selectedItems = statuses.getSelectionModel().getSelectedItems();
             if(selectedItems == null) {
                 return;
             }
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Usuń status filmu");
-            alert.setHeaderText("Czy chcesz usunąć status tego filmu ?");
+            alert.setHeaderText("Czy chcesz usunąć status tego filmu?");
 
             Optional<ButtonType> result = alert.showAndWait();
+
             if(result.get() == ButtonType.OK) {
-                Status status = movieData.getStatuses().get(statuses.getSelectionModel().getSelectedIndex());
-                movieData.getStatuses().remove(status);
+                Status status = !selectedItems.isEmpty() ? selectedItems.get(0).getStatus() : null;
+                if (status == null) {
+                    return;
+                }
+
                 try {
-                    movieStatusService.deleteByStatusId(status.getId());
+                    movieData.getStatuses().remove(status);
+                    movieStatusService.deleteByMovieIdAndStatusId(movieData.getMovie().getId(), status.getId());
                 } catch (NoSuchConnectionException e) {
-                    e.printStackTrace();
+                    LOG.severe("No connection between movie and status " + e.getMessage());
                 }
             }
         });
     }
 
     private void insertWatchersToListView() {
-        clearObservable(watchersObservableList);
+        clearObservable(watcherDataList);
 
-        watchersObservableList.addAll(movieData.getWatchers().stream().map(watcher -> watcher.getName()
-                + " " + watcher.getSurname()).collect(Collectors.toList()));
+        watcherDataList.addAll(watcherDataMapper.mapToData(movieData.getWatchers()));
 
-        watchers.setItems(watchersObservableList);
+        watchers.setCellFactory(new Callback<ListView<WatcherData>, ListCell<WatcherData>>() {
+            @Override
+            public ListCell<WatcherData> call(ListView<WatcherData> param) {
+                return new ListCell<WatcherData>() {
+                    @Override
+                    protected void updateItem(WatcherData item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText(null);
+                        } else {
+                            Watcher watcher = item.getWatcher();
+                            setText(watcher.getName() + " " + watcher.getSurname());
+                        }
+                    }
+                };
+            }
+        });
+
+        watchers.setItems(watcherDataList);
     }
 
     private void insertStatusesToListView() {
-        clearObservable(statusesObservableList);
+        clearObservable(statusesDataList);
 
-        statusesObservableList.addAll(movieData.getStatuses().stream().map(Status::getName).collect(Collectors.toList()));
+        statusesDataList.addAll(statusDataMapper.mapToData(movieData.getStatuses()));
 
-        statuses.setItems(statusesObservableList);
+        statuses.setCellFactory(new Callback<ListView<StatusData>, ListCell<StatusData>>() {
+            @Override
+            public ListCell<StatusData> call(ListView<StatusData> param) {
+                return new ListCell<StatusData>() {
+                    @Override
+                    protected void updateItem(StatusData item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText(null);
+                        } else {
+                            Status status = item.getStatus();
+                            
+                            setStyle("-fx-background-color:" + status.getColour());
+                            setText(status.getName());
+                        }
+                    }
+                };
+            }
+        });
+
+        statuses.setItems(statusesDataList);
     }
 
-    private void clearObservable(ObservableList<String> observableList) {
+    private <T extends Data> void clearObservable(ObservableList<T> observableList) {
         if (!observableList.isEmpty()) {
             observableList.clear();
         }
@@ -242,4 +306,5 @@ public class MovieEditViewController implements DataController {
         insertStatusesToListView();
         insertWatchersToListView();
     }
+
 }

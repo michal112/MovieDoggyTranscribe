@@ -5,6 +5,6 @@ import app.moviedoggytranscribe.model.entity.MovieStatus;
 
 public interface SimpleMovieStatusService extends Service<MovieStatus, NoSuchConnectionException> {
 
-    void deleteByStatusId(Integer statusId) throws NoSuchConnectionException;
+    void deleteByMovieIdAndStatusId(Integer movieId, Integer statusId) throws NoSuchConnectionException;
 
 }

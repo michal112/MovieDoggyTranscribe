@@ -59,8 +59,9 @@ public class MovieStatusDao implements SimpleMovieStatusDao {
 
     @Override
     @Transactional
-    public void deleteByStatusId(Integer statusId) {
-        jdbcTemplate.update(AppConstants.DELETE_MOVIE_STATUS_BY_STATUS_ID, statusId);
+    public MovieStatus getByMovieIdAndStatusId(Integer movieId, Integer statusId) {
+        return jdbcTemplate.queryForObject(AppConstants.GET_MOVIE_STATUS_BY_MOVIE_ID_AND_STATUS_ID, new Integer[]{
+                movieId, statusId}, BeanPropertyRowMapper.newInstance(MovieStatus.class));
     }
 
 }

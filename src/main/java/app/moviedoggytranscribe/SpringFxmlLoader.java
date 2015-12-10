@@ -43,7 +43,7 @@ public class SpringFxmlLoader extends FXMLLoader{
 
             return new FxmlElement(loader.getController(), loader.getRoot());
         } catch (IOException e) {
-            Logger.getAnonymousLogger().severe("Błąd przy ładowaniu pliku .fxml");
+            Logger.getAnonymousLogger().severe("An error occurred while loading .fxml file");
 
             return null;
         }

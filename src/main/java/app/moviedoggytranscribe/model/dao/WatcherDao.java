@@ -45,13 +45,6 @@ public class WatcherDao implements SimpleWatcherDao {
 
     @Override
     @Transactional
-    public Watcher getWatcherByNick(String nick) {
-        return jdbcTemplate.queryForObject(AppConstants.GET_WATCHER_BY_NICK,
-                new String[]{ nick }, BeanPropertyRowMapper.newInstance(Watcher.class));
-    }
-
-    @Override
-    @Transactional
     public void delete(Integer id) {
         jdbcTemplate.update(AppConstants.DELETE_WATCHER_QUERY, id);
     }

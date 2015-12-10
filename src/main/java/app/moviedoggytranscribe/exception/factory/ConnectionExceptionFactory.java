@@ -12,17 +12,12 @@ public class ConnectionExceptionFactory implements ExceptionFactory<NoSuchConnec
 
     @Override
     public NoSuchConnectionException getNoSuchEntityException(Integer id) {
-        return new NoSuchConnectionException("połączenie o id " + id + "," +
-                " nie istnieje (" + entityClass.getCanonicalName() + ")");
+        return new NoSuchConnectionException("connection with id " + id + "," +
+                " not exist (" + entityClass.getCanonicalName() + ")");
     }
 
     @Override
-    public Class getEntityClass() {
-        return entityClass;
-    }
-
-    @Override
-    public void setEntityClass(Class entityClass) {
+    public void setServiceClass(Class entityClass) {
         this.entityClass = entityClass;
     }
 

@@ -59,8 +59,9 @@ public class MovieWatcherDao implements SimpleMovieWatcherDao {
 
     @Override
     @Transactional
-    public void deleteByWatcherId(Integer watcherId) {
-        jdbcTemplate.update(AppConstants.DELETE_MOVIE_WATCHER_BY_WATCHER_ID, watcherId);
+    public MovieWatcher getByMovieIdAndWatcherId(Integer movieId, Integer watcherId) {
+        return jdbcTemplate.queryForObject(AppConstants.GET_MOVIE_WATCHER_BY_MOVIE_ID_AND_WATCHER_ID, new Integer[]{
+                movieId, watcherId }, BeanPropertyRowMapper.newInstance(MovieWatcher.class));
     }
 
 }

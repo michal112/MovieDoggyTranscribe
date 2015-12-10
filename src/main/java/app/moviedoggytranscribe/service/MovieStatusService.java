@@ -8,12 +8,10 @@ import app.moviedoggytranscribe.model.entity.MovieStatus;
 public class MovieStatusService extends AbstractService<MovieStatus, NoSuchConnectionException>
         implements SimpleMovieStatusService {
 
-        @Override
-        public void deleteByStatusId(Integer statusId) throws NoSuchConnectionException {
-                initEntities();
-                entities.remove(get(statusId));
-                ((SimpleMovieStatusDao) getDao()).deleteByStatusId(statusId);
+    @Override
+    public void deleteByMovieIdAndStatusId(Integer movieId, Integer statusId) throws NoSuchConnectionException {
+        MovieStatus movieStatus = ((SimpleMovieStatusDao) getDao()).getByMovieIdAndStatusId(movieId, statusId);
+        delete(movieStatus.getId());
+    }
 
-                notifyObservers();
-        }
 }
