@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class StatusDao implements Dao<Status> {
+public class StatusDao implements SimpleStatusDao {
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;

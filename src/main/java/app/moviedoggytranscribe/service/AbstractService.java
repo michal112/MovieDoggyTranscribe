@@ -1,5 +1,6 @@
 package app.moviedoggytranscribe.service;
 
+import app.moviedoggytranscribe.controller.ControllerObserver;
 import app.moviedoggytranscribe.exception.NoSuchEntityException;
 import app.moviedoggytranscribe.exception.factory.ExceptionFactory;
 import app.moviedoggytranscribe.model.dao.Dao;
@@ -13,22 +14,26 @@ import java.util.Observable;
 import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
-public abstract class AbstractService<T extends Entity, E extends NoSuchEntityException> implements Service<T, E> {
+public abstract class AbstractService<T extends Entity, E extends NoSuchEntityException>
+        implements Service<T, E> {
 
     @Autowired
     private Dao<T> dao;
     @Autowired
     private ExceptionFactory<E> exceptionFactory;
 
-    public List<T> entities;
+    private List<ControllerObserver> observers;
+
+    protected List<T> rows;
 
     protected AbstractService() {
-        this.entities = new ArrayList<>();
+        this.observers = new ArrayList<>();
+        this.rows = new ArrayList<>();
     }
 
     @PostConstruct
     public void init() {
-        exceptionFactory.setEntityClass(getClass());
+        exceptionFactory.setServiceClass(getClass());
     }
 
     @Override
@@ -38,15 +43,15 @@ public abstract class AbstractService<T extends Entity, E extends NoSuchEntityEx
 
     @Override
     public List<T> getAll() {
-        initEntities();
-        return this.entities;
+        initEntity();
+        return this.rows;
     }
 
     @Override
     public T get(Integer id) throws E {
-        initEntities();
-        if (entities.stream().anyMatch(entity -> entity.getId().equals(id))) {
-            return entities.stream().filter(entity -> entity.getId().equals(id)).collect(Collectors.toList()).get(0);
+        initEntity();
+        if (rows.stream().anyMatch(entity -> entity.getId().equals(id))) {
+            return rows.stream().filter(entity -> entity.getId().equals(id)).collect(Collectors.toList()).get(0);
         } else {
             throw exceptionFactory.getNoSuchEntityException(id);
         }
@@ -54,26 +59,35 @@ public abstract class AbstractService<T extends Entity, E extends NoSuchEntityEx
 
     @Override
     public Integer add(T entity) {
+        initEntity();
         Integer entityId = dao.add(entity);
-        entities.add(entity);
+        rows.add(entity);
+
+        notifyObservers();
+
         return entityId;
     }
 
     @Override
     public void delete(Integer id) throws E {
-        entities.remove(get(id));
+        initEntity();
+        rows.remove(get(id));
         dao.delete(id);
+
+        notifyObservers();
     }
 
     @Override
     public void update(T entity) throws E {
-        initEntities();
-        if (entities.stream().anyMatch(e -> e.getId().equals(entity.getId()))) {
-            Entity en = entities.stream().filter(e -> e.getId().equals(entity.getId()))
+        initEntity();
+        if (rows.stream().anyMatch(e -> e.getId().equals(entity.getId()))) {
+            Entity en = rows.stream().filter(e -> e.getId().equals(entity.getId()))
                     .collect(Collectors.toList()).get(0);
-            entities.remove(en);
-            entities.add(entity);
+            rows.remove(en);
+            rows.add(entity);
             dao.update(entity);
+
+            notifyObservers();
         } else {
             throw exceptionFactory.getNoSuchEntityException(entity.getId());
         }
@@ -81,7 +95,7 @@ public abstract class AbstractService<T extends Entity, E extends NoSuchEntityEx
 
     @Override
     public void clearEntities() {
-        this.entities.clear();
+        this.rows.clear();
     }
 
     @Override
@@ -89,10 +103,20 @@ public abstract class AbstractService<T extends Entity, E extends NoSuchEntityEx
         clearEntities();
     }
 
-    protected void initEntities() {
-        if (this.entities.isEmpty()) {
-            this.entities = dao.getAll();
+    protected void initEntity() {
+        if (this.rows.isEmpty()) {
+            this.rows = dao.getAll();
         }
+    }
+
+    @Override
+    public void addObserver(ControllerObserver observer) {
+        this.observers.add(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        this.observers.forEach(ControllerObserver::update);
     }
 
 }

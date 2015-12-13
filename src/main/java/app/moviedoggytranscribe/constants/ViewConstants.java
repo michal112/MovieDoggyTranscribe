@@ -4,7 +4,7 @@ public class ViewConstants {
 
     public static final String MAIN_VIEW_FILE_NAME = "mainView.fxml";
     public static final String MAIN_VIEW_TITLE = "Movie Doggy Transcribe - PSIARSKI ROZPIS";
-    public static final int APP_WINDOW_WIDTH = 856;
+    public static final int APP_WINDOW_WIDTH = 956;
     public static final int APP_WINDOW_HEIGHT = 554;
 
     public static final int MAIN_VIEW_TABLE_HEIGHT = 460;
@@ -29,7 +29,7 @@ public class ViewConstants {
     public static final int MAIN_VIEW_SEARCH_FIELD_WIDTH = 670;
     public static final int MAIN_VIEW_SEARCH_FIELD_HEIGHT = 34;
 
-    public static final String MOVIE_VIEW_WINDOW_TITLE = "Movie Doggy Transcribe - PSIARSKI ROZPIS / MOVIE";
+    public static final String MOVIE_VIEW_WINDOW_TITLE = "PODGLĄD FILMU";
 
     public static final String MOVIE_VIEW_TITLE = "Nazwa filmu: ";
     public static final String MOVIE_VIEW_DESCRIPTION = "Opis filmu: ";
