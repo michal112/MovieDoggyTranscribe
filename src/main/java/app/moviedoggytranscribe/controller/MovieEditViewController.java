@@ -48,10 +48,8 @@ public class MovieEditViewController implements DataController {
     private SimpleMovieService movieService;
     @Autowired
     private SimpleMovieStatusService movieStatusService;
-
     @Autowired
     private SimpleStatusService statusService;
-
     @Autowired
     private SimpleWatcherService watcherService;
 
