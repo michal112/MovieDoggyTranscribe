@@ -23,7 +23,7 @@ INSERT INTO "watcher" VALUES(4,'DK','Dawid','Koscielski');
 INSERT INTO "watcher" VALUES(5,'PW','Paweł','Wieszczeczynski');
 INSERT INTO "watcher" VALUES(6,'JP','Joanna','Pajak');
 INSERT INTO "watcher" VALUES(7,'DJ','Dominika','Jankowska');
-INSERT INTO "watcher" VALUES(8,'Mag','Magdalena','Jendryczka');
+INSERT INTO "watcher" VALUES(8,'MGJ','Magdalena','Jendryczka');
 CREATE TABLE movie (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, imageUrl TEXT, movieUrl TEXT, genre TEXT, year TEXT, rating TEXT);
 INSERT INTO "movie" VALUES(1,'Ojciec chrzestny','Opowieść o nowojorskiej rodzinie mafijnej','http://1.fwcdn.pl/po/10/89/1089/7196615.3.jpg','http://www.filmweb.pl/Ojciec.Chrzestny','Dramat, Gangsterski','1972','8.7');
 INSERT INTO "movie" VALUES(2,'Zielona mila','Emerytowany strażnik więzienny opowiada przyjaciółce o niezwykłym mężczyźnie, którego skazano na śmierć za zabójstwo dwóch 9-letnich dziewczynek.','http://1.fwcdn.pl/po/08/62/862/7517878.3.jpg','http://www.filmweb.pl/Zielona.Mila','Dramat','1999','8.6');

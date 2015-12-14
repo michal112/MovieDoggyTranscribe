@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import app.moviedoggytranscribe.constants.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/Styles.css">
+<VBox xmlns:fx="http://javafx.com/fxml">
 
     <prefWidth><ViewConstants fx:constant="APP_WINDOW_WIDTH"/></prefWidth>
     <prefHeight><ViewConstants fx:constant="APP_WINDOW_HEIGHT"/></prefHeight>
@@ -42,36 +42,6 @@
                             <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_FIELD_HEIGHT"/></prefHeight>
                         </TextField>
                  </GridPane>
-            </children>
-            <children>
-                <GridPane alignment="CENTER">
-                    <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
-                    <prefWidth><ViewConstants fx:constant="MAIN_VIEW_SEARCH_LABEL_WIDTH"/></prefWidth>
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints vgrow="SOMETIMES"/>
-                    </rowConstraints>
-                    <Label alignment="BASELINE_RIGHT">
-                        <prefWidth><ViewConstants fx:constant="MAIN_VIEW_SEARCH_LABEL_WIDTH"/></prefWidth>
-                        <text><ViewConstants fx:constant="FILTER"/></text>
-                    </Label>
-                </GridPane>
-            </children>
-            <children>
-                <GridPane>
-                    <prefWidth><ViewConstants fx:constant="MAIN_VIEW_SEARCH_FIELD_WIDTH"/></prefWidth>
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints vgrow="SOMETIMES"/>
-                    </rowConstraints>
-                    <ChoiceBox fx:id="choiceBox">
-                        <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_FIELD_HEIGHT"/></prefHeight>
-                    </ChoiceBox>
-                </GridPane>
             </children>
         </HBox>
     </children>

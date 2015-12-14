@@ -8,10 +8,13 @@ import app.moviedoggytranscribe.constants.ViewConstants;
 import app.moviedoggytranscribe.exception.NoSuchMovieException;
 import app.moviedoggytranscribe.mapper.Mapper;
 import app.moviedoggytranscribe.model.data.MovieData;
+import app.moviedoggytranscribe.model.data.StatusData;
 import app.moviedoggytranscribe.model.entity.Movie;
 import app.moviedoggytranscribe.model.entity.Status;
 import app.moviedoggytranscribe.model.entity.Watcher;
 import app.moviedoggytranscribe.service.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -26,9 +29,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Component
 public class MainViewController implements Controller {
@@ -44,6 +49,8 @@ public class MainViewController implements Controller {
     @FXML
     private TextField searchField;
     @FXML
+    private ChoiceBox<StatusData> choiceBox;
+    @FXML
     private Button editMovie;
     @FXML
     private Button deleteMovie;
@@ -52,6 +59,8 @@ public class MainViewController implements Controller {
 
     @Autowired
     private Mapper<Movie, MovieData> movieDataMapper;
+    @Autowired
+    private Mapper<Status, StatusData> statusDataMapper;
     @Autowired
     private SimpleMovieService movieService;
     @Autowired
@@ -64,10 +73,12 @@ public class MainViewController implements Controller {
     private SimpleMovieWatcherService movieWatcherService;
 
     private ObservableList<MovieData> movieDataList;
+    private ObservableList<StatusData> statusDataObservableList;
 
     @PostConstruct
     public void init() {
         movieDataList = FXCollections.observableArrayList();
+        statusDataObservableList = FXCollections.observableArrayList();
 
         movieService.addObserver(this);
         statusService.addObserver(this);
@@ -81,6 +92,31 @@ public class MainViewController implements Controller {
     @SuppressWarnings("unchecked")
     public void initialize() {
         initializeTableView();
+
+        // status filter
+
+        choiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                mainTable.setItems(movieDataList);
+                statusesColumn.setCellValueFactory(cellData -> cellData.getValue().statusesProperty());
+                FilteredList<MovieData> filteredList = new FilteredList<MovieData>(movieDataList, p -> true);
+
+                filteredList.setPredicate(movieData -> {
+
+                   for (Status status : movieData.getStatuses()) {
+                       if (status.getName().equals(statusDataObservableList.get(observable.getValue().intValue()).getStatus().getName())) {
+                            return true;
+                       }
+                   }
+                    return false;
+                });
+
+                SortedList<MovieData> sortedList = new SortedList<MovieData>(filteredList);
+                sortedList.comparatorProperty().bind(mainTable.comparatorProperty());
+                mainTable.setItems(sortedList);
+            }
+        });
 
         // search engine
 
@@ -173,6 +209,9 @@ public class MainViewController implements Controller {
     }
 
     private void initializeTableView() {
+        statusDataObservableList.addAll(statusDataMapper.mapToData(statusService.getAll()).stream().collect(Collectors.toList()));
+        choiceBox.setItems(statusDataObservableList);
+
         if (!movieDataList.isEmpty()) {
             movieDataList.clear();
         }
@@ -220,7 +259,6 @@ public class MainViewController implements Controller {
                     String statuses = "";
                     for (Status status : item) {
                         statuses += status.getName() + ", ";
-
                     }
                     setText(statuses);
                 }
