@@ -93,16 +93,15 @@ public class MainViewController implements Controller {
     public void initialize() {
         initializeTable();
 
-
-
         FilteredList<MovieData> filteredMovieDataList = new FilteredList<>(movieDataList, p -> true);
 
         statusChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (filteredMovieDataList.getPredicate() != null) {
-                Predicate oldPredicate = filteredMovieDataList.getPredicate();
-                getStatusPredicate(observable.getValue());
+                filteredMovieDataList.setPredicate(filteredMovieDataList.getPredicate()
+                        .and(getStatusPredicate(observable.getValue())));
+            } else {
+                filteredMovieDataList.setPredicate(getStatusPredicate(observable.getValue()));
             }
-            filteredMovieDataList.setPredicate();
         });
 
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
