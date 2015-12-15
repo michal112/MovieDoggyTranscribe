@@ -206,6 +206,20 @@ public class MainViewController implements Controller {
             stage.setScene(scene);
             stage.show();
         });
+
+        // mouseEvent - click on Add Button
+
+        addMovie.setOnAction((event) -> {
+            SpringFxmlLoader loader = ApplicationCore.getLoader();
+            FxmlElement<AnchorPane, FilmwebViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
+                    + File.separator + "filmweb.fxml", FilmwebViewController.class);
+
+            Scene scene = new Scene(fxmlElement.getRoot(), 700, 700);
+            Stage stage = new Stage();
+            stage.setTitle(ViewConstants.MOVIE_VIEW_WINDOW_TITLE);
+            stage.setScene(scene);
+            stage.show();
+        });
     }
 
     private void initializeTableView() {
