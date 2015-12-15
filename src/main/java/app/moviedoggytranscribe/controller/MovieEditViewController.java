@@ -24,6 +24,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -34,6 +35,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Component
+@Scope(value = "prototype")
 public class MovieEditViewController implements DataController {
 
     private static final Logger LOG = Logger.getLogger(MovieEditViewController.class.getCanonicalName());
