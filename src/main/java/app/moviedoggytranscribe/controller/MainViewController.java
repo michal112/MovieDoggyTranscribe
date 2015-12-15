@@ -8,10 +8,14 @@ import app.moviedoggytranscribe.constants.ViewConstants;
 import app.moviedoggytranscribe.exception.NoSuchMovieException;
 import app.moviedoggytranscribe.mapper.Mapper;
 import app.moviedoggytranscribe.model.data.MovieData;
+import app.moviedoggytranscribe.model.data.StatusData;
 import app.moviedoggytranscribe.model.entity.Movie;
 import app.moviedoggytranscribe.model.entity.Status;
 import app.moviedoggytranscribe.model.entity.Watcher;
 import app.moviedoggytranscribe.service.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -28,6 +32,7 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 @org.springframework.stereotype.Component
@@ -44,6 +49,8 @@ public class MainViewController implements Controller {
     @FXML
     private TextField searchField;
     @FXML
+    private ChoiceBox<StatusData> statusChoiceBox;
+    @FXML
     private Button editMovie;
     @FXML
     private Button deleteMovie;
@@ -52,6 +59,8 @@ public class MainViewController implements Controller {
 
     @Autowired
     private Mapper<Movie, MovieData> movieDataMapper;
+    @Autowired
+    private Mapper<Status, StatusData> statusDataMapper;
     @Autowired
     private SimpleMovieService movieService;
     @Autowired
@@ -64,10 +73,12 @@ public class MainViewController implements Controller {
     private SimpleMovieWatcherService movieWatcherService;
 
     private ObservableList<MovieData> movieDataList;
+    private ObservableList<StatusData> statusDataList;
 
     @PostConstruct
     public void init() {
         movieDataList = FXCollections.observableArrayList();
+        statusDataList = FXCollections.observableArrayList();
 
         movieService.addObserver(this);
         statusService.addObserver(this);
@@ -80,16 +91,22 @@ public class MainViewController implements Controller {
     @Override
     @SuppressWarnings("unchecked")
     public void initialize() {
-        initializeTableView();
+        initializeTable();
 
-        // search engine
 
-        mainTable.setItems(movieDataList);
-        movieColumn.setCellValueFactory(cellData -> cellData.getValue().movieProperty());
-        FilteredList<MovieData> filteredData = new FilteredList<>(movieDataList, p -> true);
+
+        FilteredList<MovieData> filteredMovieDataList = new FilteredList<>(movieDataList, p -> true);
+
+        statusChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (filteredMovieDataList.getPredicate() != null) {
+                Predicate oldPredicate = filteredMovieDataList.getPredicate();
+                getStatusPredicate(observable.getValue());
+            }
+            filteredMovieDataList.setPredicate();
+        });
 
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(movieData -> {
+            filteredMovieDataList.setPredicate(movieData -> {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
@@ -102,9 +119,9 @@ public class MainViewController implements Controller {
             });
         });
 
-        SortedList<MovieData> sortedData = new SortedList<>(filteredData);
-        sortedData.comparatorProperty().bind(mainTable.comparatorProperty());
-        mainTable.setItems(sortedData);
+        SortedList<MovieData> sortedMovieDataList = new SortedList<>(filteredMovieDataList);
+        sortedMovieDataList.comparatorProperty().bind(mainTable.comparatorProperty());
+        mainTable.setItems(sortedMovieDataList);
 
         // mouseEvent - double click on row -> open movie details
 
@@ -172,12 +189,22 @@ public class MainViewController implements Controller {
         });
     }
 
-    private void initializeTableView() {
-        if (!movieDataList.isEmpty()) {
-            movieDataList.clear();
-        }
-        List<MovieData> movieDatas = movieDataMapper.mapToData(movieService.getAll());
-        movieDataList.addAll(movieDatas);
+    private Predicate getStatusPredicate(StatusData statusData) {
+        return movieData -> {
+            for (Status status : ((MovieData) movieData).getStatuses()) {
+                if (status.getId().equals(statusData.getStatus().getId())) {
+                    return true;
+                }
+            }
+            return false;
+        };
+    }
+
+    private void initializeTable() {
+        movieDataList.addAll(movieDataMapper.mapToData(movieService.getAll()));
+
+        statusDataList.addAll(statusDataMapper.mapToData(statusService.getAll()));
+        statusChoiceBox.setItems(statusDataList);
 
         movieColumn.setCellValueFactory(cellData -> cellData.getValue().movieProperty());
         movieColumn.setCellFactory(cell -> new TableCell<MovieData, Movie>() {
@@ -220,17 +247,26 @@ public class MainViewController implements Controller {
                     String statuses = "";
                     for (Status status : item) {
                         statuses += status.getName() + ", ";
-
                     }
                     setText(statuses);
                 }
             }
         });
+
+        mainTable.setItems(movieDataList);
+    }
+
+    private void refreshData() {
+        if (!movieDataList.isEmpty()) {
+            movieDataList.clear();
+        }
+
+        movieDataList.addAll(movieDataMapper.mapToData(movieService.getAll()));
     }
 
     @Override
     public void update() {
-        initializeTableView();
+        refreshData();
     }
 
 }
