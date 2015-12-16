@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 @Component
 @Scope(value = "prototype")
-public class MovieAddViewController implements DataController{
+public class MovieAddViewController implements DataController {
 
     @FXML
     private TableView<Film> mainTable;
@@ -29,7 +29,7 @@ public class MovieAddViewController implements DataController{
     private TableColumn genreColumn;
 
     @FXML
-    private Button addFilmweb;
+    private Button addMovie;
 
     public MovieAddViewController() {
     }
@@ -41,7 +41,7 @@ public class MovieAddViewController implements DataController{
 
     @Override
     public void initialize() {
-        addFilmweb.setOnAction((event) -> {
+        addMovie.setOnAction((event) -> {
             FilmwebApi fa = new FilmwebApi();
             ArrayList<Film> film = fa.getFilmList("Killer");
             System.out.println(film.get(0).getTitle());

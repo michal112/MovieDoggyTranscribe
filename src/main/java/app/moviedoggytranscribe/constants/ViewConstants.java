@@ -9,10 +9,6 @@ public class ViewConstants {
 
     public static final String MAIN_VIEW_TITLE = "Movie Doggy Transcribe - PSIARSKI ROZPIS";
     public static final String MOVIE_VIEW_TITLE = "PODGLĄD FILMU";
-
-    public static final String FILMWEB_VIEW_ADD_MOVIE = "Generuj film";
-    public static final String FILMWEB_VIEW_TABLE_TITLE_COLUMN_NAME = "Tytuł filmu";
-    public static final String FILMWEB_VIEW_TABLE_YEAR_COLUMN_NAME = "Rok produkcji";
-    public static final String FILMWEB_VIEW_TABLE_GENRE_COLUMN_NAME = "Gatunek filmu";
+    public static final String MOVIE_ADD_VIEW_TITLE = "DODAJ NOWY FILM";
 
 }

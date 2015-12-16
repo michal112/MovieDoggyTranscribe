@@ -182,9 +182,9 @@ public class MainViewController implements Controller {
             FxmlElement<AnchorPane, MovieAddViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                     + File.separator + ViewConstants.MOVIE_ADD_VIEW_FILE_NAME, MovieAddViewController.class);
 
-            Scene scene = new Scene(fxmlElement.getRoot(), 700, 700);
+            Scene scene = new Scene(fxmlElement.getRoot(), 600, 400);
             Stage stage = new Stage();
-            stage.setTitle(ViewConstants.MOVIE_VIEW_TITLE);
+            stage.setTitle(ViewConstants.MOVIE_ADD_VIEW_TITLE);
             stage.setScene(scene);
             stage.show();
         });
