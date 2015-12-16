@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -15,7 +16,8 @@ import java.util.ArrayList;
 
 
 @Component
-public class FilmwebViewController implements DataController{
+@Scope(value = "prototype")
+public class MovieAddViewController implements DataController {
 
     @FXML
     private TableView<Film> mainTable;
@@ -27,9 +29,9 @@ public class FilmwebViewController implements DataController{
     private TableColumn genreColumn;
 
     @FXML
-    private Button addFilmweb;
+    private Button addMovie;
 
-    public FilmwebViewController() {
+    public MovieAddViewController() {
     }
 
     @PostConstruct
@@ -39,7 +41,7 @@ public class FilmwebViewController implements DataController{
 
     @Override
     public void initialize() {
-        addFilmweb.setOnAction((event) -> {
+        addMovie.setOnAction((event) -> {
             FilmwebApi fa = new FilmwebApi();
             ArrayList<Film> film = fa.getFilmList("Killer");
             System.out.println(film.get(0).getTitle());
