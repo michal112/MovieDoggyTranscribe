@@ -21,7 +21,7 @@
                   <Label prefHeight="19.0" prefWidth="148.0" text="Wpisz nazwę filmu:" textAlignment="JUSTIFY" wrapText="true" />
                   <TextField fx:id="searchField" alignment="TOP_LEFT" minHeight="22.0" prefHeight="35.0" prefWidth="239.0" GridPane.columnIndex="1" />
                   <Label prefHeight="25.0" prefWidth="150.0" text="Filtruj po statusach:" textAlignment="JUSTIFY" GridPane.columnIndex="2" />
-                  <ComboBox fx:id="statusComboBox" minHeight="28.0" prefHeight="35.0" prefWidth="346.0" GridPane.columnIndex="3" />
+                  <ChoiceBox fx:id="statusChoiceBox" minHeight="28.0" prefHeight="35.0" prefWidth="346.0" GridPane.columnIndex="3" />
                </children>
             </GridPane>
          </children>

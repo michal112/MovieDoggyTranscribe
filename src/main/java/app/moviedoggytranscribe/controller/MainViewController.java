@@ -46,7 +46,7 @@ public class MainViewController implements Controller {
     @FXML
     private TextField searchField;
     @FXML
-    private ComboBox<StatusData> statusComboBox;
+    private ChoiceBox<StatusData> statusChoiceBox;
     @FXML
     private Button editMovie;
     @FXML
@@ -95,13 +95,8 @@ public class MainViewController implements Controller {
 
         FilteredList<MovieData> filteredMovieDataList = new FilteredList<>(movieDataList, statusPredicate.and(titlePredicate));
 
-        statusComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                statusPredicate = movieData -> true;
-                statusComboBox.getSelectionModel().clearSelection();
-            } else {
-                statusPredicate = getStatusPredicate(newValue);
-            }
+        statusChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            statusPredicate = getStatusPredicate(newValue);
             filteredMovieDataList.setPredicate(statusPredicate.and(titlePredicate));
         });
 
@@ -210,6 +205,10 @@ public class MainViewController implements Controller {
 
     private Predicate<MovieData> getStatusPredicate(StatusData statusData) {
         return movieData -> {
+            if (statusData.getStatus().getId() == null) {
+                return true;
+            }
+
             for (Status status : movieData.getStatuses()) {
                 if (status.getId().equals(statusData.getStatus().getId())) {
                     return true;
@@ -222,9 +221,13 @@ public class MainViewController implements Controller {
     private void initializeTable() {
         movieDataList.addAll(movieDataMapper.mapToData(movieService.getAll()));
 
-        statusDataList.add(null);
+        Status defaultStatus = new Status();
+        defaultStatus.setName("Wszystko");
+        StatusData defaultStatusData = new StatusData(defaultStatus);
+        statusDataList.add(defaultStatusData);
         statusDataList.addAll(statusDataMapper.mapToData(statusService.getAll()));
-        statusComboBox.setItems(statusDataList);
+        statusChoiceBox.setItems(statusDataList);
+        statusChoiceBox.setValue(defaultStatusData);
 
         movieColumn.setCellValueFactory(cellData -> cellData.getValue().movieProperty());
         movieColumn.setCellFactory(cell -> new TableCell<MovieData, Movie>() {
