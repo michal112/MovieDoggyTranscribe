@@ -15,13 +15,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -66,7 +62,7 @@ public class MovieEditViewController implements DataController {
     @FXML
     private Label year;
     @FXML
-    private TextArea describe;
+    private TextArea description;
     @FXML
     private ListView<WatcherData> watchers;
     @FXML
@@ -117,13 +113,13 @@ public class MovieEditViewController implements DataController {
         type.setText(movieData.getMovie().getGenre());
         imageView.setImage(new Image(movieData.getMovie().getImageUrl()));
         year.setText("Rok produkcji: " + movieData.getMovie().getYear());
-        describe.setText(movieData.getMovie().getDescription());
+        description.setText(movieData.getMovie().getDescription());
         rating.setText(movieData.getMovie().getRating());
 
-        describe.setEditable(false);
+        description.setEditable(false);
         watchers.setEditable(false);
         statuses.setEditable(false);
-        describe.setWrapText(true);
+        description.setWrapText(true);
 
         insertWatchersToListView();
         insertStatusesToListView();

@@ -75,6 +75,9 @@ public class MainViewController implements Controller {
     private ObservableList<MovieData> movieDataList;
     private ObservableList<StatusData> statusDataList;
 
+    private Predicate<MovieData> statusPredicate = movieData -> true;
+    private Predicate<MovieData> titlePredicate = movieData -> true;
+
     @PostConstruct
     public void init() {
         movieDataList = FXCollections.observableArrayList();
@@ -93,29 +96,20 @@ public class MainViewController implements Controller {
     public void initialize() {
         initializeTable();
 
-        FilteredList<MovieData> filteredMovieDataList = new FilteredList<>(movieDataList, p -> true);
+        FilteredList<MovieData> filteredMovieDataList = new FilteredList<>(movieDataList, statusPredicate.and(titlePredicate));
 
         statusChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (filteredMovieDataList.getPredicate() != null) {
-                filteredMovieDataList.setPredicate(filteredMovieDataList.getPredicate()
-                        .and(getStatusPredicate(observable.getValue())));
+            if (newValue == null) {
+                statusPredicate = movieData -> true;
             } else {
-                filteredMovieDataList.setPredicate(getStatusPredicate(observable.getValue()));
+                statusPredicate = getStatusPredicate(newValue);
             }
+            filteredMovieDataList.setPredicate(statusPredicate.and(titlePredicate));
         });
 
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredMovieDataList.setPredicate(movieData -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-
-                String lowerCaseFilter = newValue.toLowerCase();
-                if (movieData.getMovie().getTitle().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
-            });
+            titlePredicate = getTitlePredicate(newValue);
+            filteredMovieDataList.setPredicate(statusPredicate.and(titlePredicate));
         });
 
         SortedList<MovieData> sortedMovieDataList = new SortedList<>(filteredMovieDataList);
@@ -188,9 +182,23 @@ public class MainViewController implements Controller {
         });
     }
 
-    private Predicate getStatusPredicate(StatusData statusData) {
+    private Predicate<MovieData> getTitlePredicate(String title) {
         return movieData -> {
-            for (Status status : ((MovieData) movieData).getStatuses()) {
+            if (title == null || title.isEmpty()) {
+                return true;
+            }
+
+            String lowerCaseTitle = title.toLowerCase();
+            if (movieData.getMovie().getTitle().toLowerCase().contains(lowerCaseTitle)) {
+                return true;
+            }
+            return false;
+        };
+    }
+
+    private Predicate<MovieData> getStatusPredicate(StatusData statusData) {
+        return movieData -> {
+            for (Status status : movieData.getStatuses()) {
                 if (status.getId().equals(statusData.getStatus().getId())) {
                     return true;
                 }
@@ -202,6 +210,7 @@ public class MainViewController implements Controller {
     private void initializeTable() {
         movieDataList.addAll(movieDataMapper.mapToData(movieService.getAll()));
 
+        statusDataList.add(null);
         statusDataList.addAll(statusDataMapper.mapToData(statusService.getAll()));
         statusChoiceBox.setItems(statusDataList);
 

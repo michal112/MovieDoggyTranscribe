@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.geometry.*?>
@@ -47,7 +46,7 @@
             </Label>
             <VBox prefHeight="235.0" prefWidth="561.0">
                <children>
-                  <Label fx:id="type" text="Typ filmu">
+                  <Label fx:id="type" text="Typ filmu:">
                      <VBox.margin>
                         <Insets left="170.0" />
                      </VBox.margin>
@@ -55,7 +54,7 @@
                         <Insets top="5.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="year" text="Rok produkcji">
+                  <Label fx:id="year" text="Rok produkcji:">
                      <VBox.margin>
                         <Insets left="170.0" />
                      </VBox.margin>
@@ -63,7 +62,7 @@
                         <Insets top="5.0" />
                      </padding>
                   </Label>
-                  <Label text="Opis filmu">
+                  <Label text="Opis filmu:">
                      <VBox.margin>
                         <Insets left="170.0" />
                      </VBox.margin>

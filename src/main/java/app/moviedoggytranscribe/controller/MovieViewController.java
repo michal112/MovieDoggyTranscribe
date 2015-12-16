@@ -10,13 +10,16 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.stream.Collectors;
 
 @Component
+@Scope(value = "prototype")
 public class MovieViewController implements DataController {
+
     @FXML
     private ImageView imageView;
     @FXML
@@ -28,7 +31,7 @@ public class MovieViewController implements DataController {
     @FXML
     private Label year;
     @FXML
-    private TextArea describe;
+    private TextArea description;
     @FXML
     private ListView<String> watchers;
     @FXML
@@ -55,13 +58,13 @@ public class MovieViewController implements DataController {
         type.setText(movieData.getMovie().getGenre());
         imageView.setImage(new Image(movieData.getMovie().getImageUrl()));
         year.setText("Rok produkcji: " + movieData.getMovie().getYear());
-        describe.setText(movieData.getMovie().getDescription());
+        description.setText(movieData.getMovie().getDescription());
         rating.setText(movieData.getMovie().getRating());
 
-        describe.setEditable(false);
+        description.setEditable(false);
         watchers.setEditable(false);
         statuses.setEditable(false);
-        describe.setWrapText(true);
+        description.setWrapText(true);
 
         insertWatchersToListView();
         insertStatusesToListView();
