@@ -93,6 +93,8 @@ public class MainViewController implements Controller {
     public void initialize() {
         initializeTable();
 
+        // filters - title filter and status filter
+
         FilteredList<MovieData> filteredMovieDataList = new FilteredList<>(movieDataList, statusPredicate.and(titlePredicate));
 
         statusChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -120,17 +122,17 @@ public class MainViewController implements Controller {
 
                 SpringFxmlLoader loader = ApplicationCore.getLoader();
                 FxmlElement<AnchorPane, MainViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                     + File.separator + "movieView.fxml", MovieViewController.class, selectionMovie);
+                     + File.separator + ViewConstants.MOVIE_DETAIL_VIEW_FILE_NAME, MovieViewController.class, selectionMovie);
 
                 Scene scene = new Scene(fxmlElement.getRoot(), 700, 600);
                 Stage stage = new Stage();
-                stage.setTitle(ViewConstants.MOVIE_VIEW_WINDOW_TITLE);
+                stage.setTitle(ViewConstants.MOVIE_VIEW_TITLE);
                 stage.setScene(scene);
                 stage.show();
             }
         });
 
-        // mouseEvent - click on Delete Button
+        // mouseEvent - click on delete button
 
         deleteMovie.setOnAction((event) -> {
             MovieData selectionMovie = mainTable.getSelectionModel().getSelectedItem();
@@ -146,12 +148,11 @@ public class MainViewController implements Controller {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK){
                     movieService.delete(selectionMovie.getMovie().getId());
-                    movieDataList.clear();
-                    List<MovieData> movieDatas = movieDataMapper.mapToData(movieService.getAll());
-                    movieDataList.addAll(movieDatas);
+
+                    refreshData();
                 }
             } catch (NoSuchMovieException e) {
-                Logger.getLogger(MainViewController.class.getCanonicalName()).severe("Film już usunięty z bazy danych");
+                Logger.getLogger(MainViewController.class.getCanonicalName()).severe("Movie already deleted");
             }
         });
 
@@ -165,11 +166,11 @@ public class MainViewController implements Controller {
 
             SpringFxmlLoader loader = ApplicationCore.getLoader();
             FxmlElement<AnchorPane, MovieEditViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                + File.separator + "movieEditView.fxml", MovieEditViewController.class, selectionMovie);
+                + File.separator + ViewConstants.MOVIE_EDIT_VIEW_FILE_NAME, MovieEditViewController.class, selectionMovie);
 
             Scene scene = new Scene(fxmlElement.getRoot(), 700, 700);
             Stage stage = new Stage();
-            stage.setTitle(ViewConstants.MOVIE_VIEW_WINDOW_TITLE);
+            stage.setTitle(ViewConstants.MOVIE_VIEW_TITLE);
             stage.setScene(scene);
             stage.show();
         });
@@ -178,12 +179,12 @@ public class MainViewController implements Controller {
 
         addMovie.setOnAction((event) -> {
             SpringFxmlLoader loader = ApplicationCore.getLoader();
-            FxmlElement<AnchorPane, FilmwebViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                    + File.separator + "filmweb.fxml", FilmwebViewController.class);
+            FxmlElement<AnchorPane, MovieAddViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
+                    + File.separator + ViewConstants.MOVIE_ADD_VIEW_FILE_NAME, MovieAddViewController.class);
 
             Scene scene = new Scene(fxmlElement.getRoot(), 700, 700);
             Stage stage = new Stage();
-            stage.setTitle(ViewConstants.MOVIE_VIEW_WINDOW_TITLE);
+            stage.setTitle(ViewConstants.MOVIE_VIEW_TITLE);
             stage.setScene(scene);
             stage.show();
         });
