@@ -13,9 +13,6 @@ import app.moviedoggytranscribe.model.entity.Movie;
 import app.moviedoggytranscribe.model.entity.Status;
 import app.moviedoggytranscribe.model.entity.Watcher;
 import app.moviedoggytranscribe.service.*;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -49,7 +46,7 @@ public class MainViewController implements Controller {
     @FXML
     private TextField searchField;
     @FXML
-    private ChoiceBox<StatusData> statusChoiceBox;
+    private ComboBox<StatusData> statusComboBox;
     @FXML
     private Button editMovie;
     @FXML
@@ -98,9 +95,10 @@ public class MainViewController implements Controller {
 
         FilteredList<MovieData> filteredMovieDataList = new FilteredList<>(movieDataList, statusPredicate.and(titlePredicate));
 
-        statusChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        statusComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {
                 statusPredicate = movieData -> true;
+                statusComboBox.getSelectionModel().clearSelection();
             } else {
                 statusPredicate = getStatusPredicate(newValue);
             }
@@ -212,7 +210,7 @@ public class MainViewController implements Controller {
 
         statusDataList.add(null);
         statusDataList.addAll(statusDataMapper.mapToData(statusService.getAll()));
-        statusChoiceBox.setItems(statusDataList);
+        statusComboBox.setItems(statusDataList);
 
         movieColumn.setCellValueFactory(cellData -> cellData.getValue().movieProperty());
         movieColumn.setCellFactory(cell -> new TableCell<MovieData, Movie>() {
