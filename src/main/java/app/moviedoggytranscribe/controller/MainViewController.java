@@ -53,6 +53,8 @@ public class MainViewController implements Controller {
     private Button deleteMovie;
     @FXML
     private Button addMovie;
+    @FXML
+    private Button adminView;
 
     @Autowired
     private Mapper<Movie, MovieData> movieDataMapper;
@@ -188,6 +190,21 @@ public class MainViewController implements Controller {
             stage.setScene(scene);
             stage.show();
         });
+
+        // mouseEvent - click on Settings Button
+
+        adminView.setOnAction((event) -> {
+            SpringFxmlLoader loader = ApplicationCore.getLoader();
+            FxmlElement<AnchorPane, MovieAddViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
+                    + File.separator + ViewConstants.ADMIN_VIEW_FILE_NAME, AdminViewController.class);
+
+            Scene scene = new Scene(fxmlElement.getRoot(), 600, 400);
+            Stage stage = new Stage();
+            stage.setTitle(ViewConstants.ADMIN_VIEW_TITLE);
+            stage.setScene(scene);
+            stage.show();
+        });
+
     }
 
     private Predicate<MovieData> getTitlePredicate(String title) {

@@ -39,6 +39,7 @@
                 <Button fx:id="addMovie" mnemonicParsing="false" text="Dodaj film" />
                 <Button fx:id="editMovie" mnemonicParsing="false" text="Edytuj film" />
                 <Button fx:id="deleteMovie" mnemonicParsing="false" text="Usuń film" />
+                <Button fx:id="adminView" mnemonicParsing="false" text="USTAWIENIA" />
             </items>
         </ToolBar>
     </children>
