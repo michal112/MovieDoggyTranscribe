@@ -119,4 +119,11 @@ public abstract class AbstractService<T extends Entity, E extends NoSuchEntityEx
         this.observers.forEach(ControllerObserver::update);
     }
 
+    @Override
+    public void removeObserver(ControllerObserver controllerObserver) {
+        if (this.observers.contains(controllerObserver)) {
+            this.observers.remove(controllerObserver);
+        }
+    }
+
 }

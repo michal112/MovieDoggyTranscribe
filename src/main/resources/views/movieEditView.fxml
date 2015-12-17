@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.geometry.*?>
@@ -70,7 +71,7 @@
                         <Insets top="5.0" />
                      </padding>
                   </Label>
-                  <TextArea fx:id="describe" prefHeight="159.0" prefWidth="391.0" style="-fx-border-color: #808080; ">
+                  <TextArea fx:id="description" prefHeight="159.0" prefWidth="391.0" style="-fx-border-color: #808080; ">
                      <VBox.margin>
                         <Insets left="170.0" />
                      </VBox.margin>
