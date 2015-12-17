@@ -40,13 +40,13 @@ public class MovieEditViewController implements DataController {
     @Autowired
     private SimpleMovieWatcherService movieWatcherService;
     @Autowired
-    private SimpleMovieService movieService;
-    @Autowired
     private SimpleMovieStatusService movieStatusService;
     @Autowired
     private SimpleStatusService statusService;
     @Autowired
     private SimpleWatcherService watcherService;
+    @Autowired
+    private SimpleMovieService movieService;
 
     @FXML
     private ImageView imageView;
@@ -86,9 +86,6 @@ public class MovieEditViewController implements DataController {
 
         movieWatcherService.addObserver(this);
         movieStatusService.addObserver(this);
-        watcherService.addObserver(this);
-        statusService.addObserver(this);
-        movieService.addObserver(this);
     }
 
     public void setMovieData(MovieData movieData) {
@@ -96,9 +93,6 @@ public class MovieEditViewController implements DataController {
 
         statusesDataList.addAll(statusDataMapper.mapToData(movieData.getStatuses()));
         watchersDataList.addAll(watcherDataMapper.mapToData(movieData.getWatchers()));
-    }
-
-    public MovieEditViewController() {
     }
 
     @Override
@@ -133,8 +127,6 @@ public class MovieEditViewController implements DataController {
             Integer watcherId = watcher.getId();
             Integer movieId = movieData.getMovie().getId();
 
-            movieData.getWatchers().add(watcher);
-
             movieWatcherService.add(new MovieWatcher(movieId, watcherId));
         });
 
@@ -160,8 +152,6 @@ public class MovieEditViewController implements DataController {
             Integer statusId = status.getId();
             Integer movieId = movieData.getMovie().getId();
 
-            movieData.getStatuses().add(status);
-
             movieStatusService.add(new MovieStatus(movieId, statusId));
         });
 
@@ -186,7 +176,6 @@ public class MovieEditViewController implements DataController {
                 }
 
                 try {
-                    movieData.getWatchers().remove(watcher);
                     movieWatcherService.deleteByMovieIdAndWatcherId(movieData.getMovie().getId(), watcher.getId());
                 } catch (NoSuchConnectionException e) {
                     LOG.severe("No connection between movie and watcher " + e.getMessage());
@@ -215,7 +204,6 @@ public class MovieEditViewController implements DataController {
                 }
 
                 try {
-                    movieData.getStatuses().remove(status);
                     movieStatusService.deleteByMovieIdAndStatusId(movieData.getMovie().getId(), status.getId());
                 } catch (NoSuchConnectionException e) {
                     LOG.severe("No connection between movie and status " + e.getMessage());
@@ -239,6 +227,45 @@ public class MovieEditViewController implements DataController {
         statuses.setEditable(false);
         description.setWrapText(true);
 
+        watchers.setCellFactory(new Callback<ListView<WatcherData>, ListCell<WatcherData>>() {
+            @Override
+            public ListCell<WatcherData> call(ListView<WatcherData> param) {
+                return new ListCell<WatcherData>() {
+                    @Override
+                    protected void updateItem(WatcherData item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText(null);
+                        } else {
+                            Watcher watcher = item.getWatcher();
+                            setText(watcher.getName() + " " + watcher.getSurname());
+                        }
+                    }
+                };
+            }
+        });
+
+        setStatusesListCellFactory();
+
+        statuses.setItems(statusesDataList);
+        watchers.setItems(watchersDataList);
+    }
+
+    private void refreshData() {
+        clearObservable(watchersDataList);
+        clearObservable(statusesDataList);
+
+        setStatusesListCellFactory();
+
+        Movie movie = movieData.getMovie();
+        watchersDataList.addAll(watcherDataMapper.mapToData(movieService.getMovieWatchers(movie)));
+        statusesDataList.addAll(statusDataMapper.mapToData(movieService.getMovieStasuses(movie)));
+
+        watchers.setItems(watchersDataList);
+        statuses.setItems(statusesDataList);
+    }
+
+    private void setStatusesListCellFactory() {
         statuses.setCellFactory(new Callback<ListView<StatusData>, ListCell<StatusData>>() {
             @Override
             public ListCell<StatusData> call(ListView<StatusData> param) {
@@ -277,39 +304,6 @@ public class MovieEditViewController implements DataController {
                 };
             }
         });
-
-        watchers.setCellFactory(new Callback<ListView<WatcherData>, ListCell<WatcherData>>() {
-            @Override
-            public ListCell<WatcherData> call(ListView<WatcherData> param) {
-                return new ListCell<WatcherData>() {
-                    @Override
-                    protected void updateItem(WatcherData item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty) {
-                            setText(null);
-                        } else {
-                            Watcher watcher = item.getWatcher();
-                            setText(watcher.getName() + " " + watcher.getSurname());
-                        }
-                    }
-                };
-            }
-        });
-
-        statuses.setItems(statusesDataList);
-        watchers.setItems(watchersDataList);
-    }
-
-    private void refreshData() {
-        clearObservable(watchersDataList);
-        clearObservable(statusesDataList);
-
-        Movie movie = movieData.getMovie();
-        watchersDataList.addAll(watcherDataMapper.mapToData(movieService.getMovieWatchers(movie)));
-        statusesDataList.addAll(statusDataMapper.mapToData(movieService.getMovieStasuses(movie)));
-
-        watchers.setItems(watchersDataList);
-        statuses.setItems(statusesDataList);
     }
 
     private <T extends Data> void clearObservable(ObservableList<T> observableList) {
