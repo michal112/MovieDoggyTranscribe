@@ -21,7 +21,7 @@ public class MainView extends Application {
                 + File.separator + ViewConstants.MAIN_VIEW_FILE_NAME, MainViewController.class);
 
         primaryStage.setTitle(ViewConstants.MAIN_VIEW_TITLE);
-        primaryStage.setScene(new Scene(fxmlElement.getRoot(), ViewConstants.APP_WINDOW_WIDTH, ViewConstants.APP_WINDOW_HEIGHT));
+        primaryStage.setScene(new Scene(fxmlElement.getRoot(), 1000, 570));
         primaryStage.setResizable(false);
         primaryStage.show();
     }

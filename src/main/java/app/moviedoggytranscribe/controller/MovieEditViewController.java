@@ -6,24 +6,18 @@ import app.moviedoggytranscribe.model.data.Data;
 import app.moviedoggytranscribe.model.data.MovieData;
 import app.moviedoggytranscribe.model.data.StatusData;
 import app.moviedoggytranscribe.model.data.WatcherData;
-import app.moviedoggytranscribe.model.entity.MovieStatus;
-import app.moviedoggytranscribe.model.entity.MovieWatcher;
-import app.moviedoggytranscribe.model.entity.Status;
-import app.moviedoggytranscribe.model.entity.Watcher;
+import app.moviedoggytranscribe.model.entity.*;
 import app.moviedoggytranscribe.service.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -34,6 +28,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Component
+@Scope(value = "prototype")
 public class MovieEditViewController implements DataController {
 
     private static final Logger LOG = Logger.getLogger(MovieEditViewController.class.getCanonicalName());
@@ -45,13 +40,13 @@ public class MovieEditViewController implements DataController {
     @Autowired
     private SimpleMovieWatcherService movieWatcherService;
     @Autowired
-    private SimpleMovieService movieService;
-    @Autowired
     private SimpleMovieStatusService movieStatusService;
     @Autowired
     private SimpleStatusService statusService;
     @Autowired
     private SimpleWatcherService watcherService;
+    @Autowired
+    private SimpleMovieService movieService;
 
     @FXML
     private ImageView imageView;
@@ -64,7 +59,7 @@ public class MovieEditViewController implements DataController {
     @FXML
     private Label year;
     @FXML
-    private TextArea describe;
+    private TextArea description;
     @FXML
     private ListView<WatcherData> watchers;
     @FXML
@@ -81,26 +76,23 @@ public class MovieEditViewController implements DataController {
 
     private MovieData movieData;
 
-    private ObservableList<WatcherData> watcherDataList;
+    private ObservableList<WatcherData> watchersDataList;
     private ObservableList<StatusData> statusesDataList;
 
     @PostConstruct
     public void init() {
-        watcherDataList = FXCollections.observableArrayList();
+        watchersDataList = FXCollections.observableArrayList();
         statusesDataList = FXCollections.observableArrayList();
 
         movieWatcherService.addObserver(this);
         movieStatusService.addObserver(this);
-        watcherService.addObserver(this);
-        statusService.addObserver(this);
-        movieService.addObserver(this);
     }
 
     public void setMovieData(MovieData movieData) {
         this.movieData = movieData;
-    }
 
-    public MovieEditViewController() {
+        statusesDataList.addAll(statusDataMapper.mapToData(movieData.getStatuses()));
+        watchersDataList.addAll(watcherDataMapper.mapToData(movieData.getWatchers()));
     }
 
     @Override
@@ -111,26 +103,13 @@ public class MovieEditViewController implements DataController {
     @FXML
     @Override
     public void initialize() {
-        title.setText(movieData.getMovie().getTitle());
-        type.setText(movieData.getMovie().getGenre());
-        imageView.setImage(new Image(movieData.getMovie().getImageUrl()));
-        year.setText("Rok produkcji: " + movieData.getMovie().getYear());
-        describe.setText(movieData.getMovie().getDescription());
-        rating.setText(movieData.getMovie().getRating());
-
-        describe.setEditable(false);
-        watchers.setEditable(false);
-        statuses.setEditable(false);
-        describe.setWrapText(true);
-
-        insertWatchersToListView();
-        insertStatusesToListView();
+        initializeData();
 
         // add Watcher
 
         addWatcher.setOnAction(event -> {
             List<WatcherData> choices = new ArrayList<>();
-            List<Integer> movieWatchers = watcherDataList.stream().map(
+            List<Integer> movieWatchers = watchersDataList.stream().map(
                 watcherData -> watcherData.getWatcher().getId()).collect(Collectors.toList());
 
             choices.addAll(watcherDataMapper.mapToData(watcherService.getAll()).stream().filter(watcherData ->
@@ -147,8 +126,6 @@ public class MovieEditViewController implements DataController {
 
             Integer watcherId = watcher.getId();
             Integer movieId = movieData.getMovie().getId();
-
-            movieData.getWatchers().add(watcher);
 
             movieWatcherService.add(new MovieWatcher(movieId, watcherId));
         });
@@ -175,8 +152,6 @@ public class MovieEditViewController implements DataController {
             Integer statusId = status.getId();
             Integer movieId = movieData.getMovie().getId();
 
-            movieData.getStatuses().add(status);
-
             movieStatusService.add(new MovieStatus(movieId, statusId));
         });
 
@@ -201,7 +176,6 @@ public class MovieEditViewController implements DataController {
                 }
 
                 try {
-                    movieData.getWatchers().remove(watcher);
                     movieWatcherService.deleteByMovieIdAndWatcherId(movieData.getMovie().getId(), watcher.getId());
                 } catch (NoSuchConnectionException e) {
                     LOG.severe("No connection between movie and watcher " + e.getMessage());
@@ -230,7 +204,6 @@ public class MovieEditViewController implements DataController {
                 }
 
                 try {
-                    movieData.getStatuses().remove(status);
                     movieStatusService.deleteByMovieIdAndStatusId(movieData.getMovie().getId(), status.getId());
                 } catch (NoSuchConnectionException e) {
                     LOG.severe("No connection between movie and status " + e.getMessage());
@@ -239,10 +212,20 @@ public class MovieEditViewController implements DataController {
         });
     }
 
-    private void insertWatchersToListView() {
-        clearObservable(watcherDataList);
+    private void initializeData() {
+        title.setText(movieData.getMovie().getTitle());
+        type.setText(movieData.getMovie().getGenre());
 
-        watcherDataList.addAll(watcherDataMapper.mapToData(movieData.getWatchers()));
+        imageView.setImage(new Image(movieData.getMovie().getImageUrl()));
+
+        year.setText("Rok produkcji: " + movieData.getMovie().getYear());
+        description.setText(movieData.getMovie().getDescription());
+        rating.setText(movieData.getMovie().getRating());
+
+        description.setEditable(false);
+        watchers.setEditable(false);
+        statuses.setEditable(false);
+        description.setWrapText(true);
 
         watchers.setCellFactory(new Callback<ListView<WatcherData>, ListCell<WatcherData>>() {
             @Override
@@ -262,14 +245,27 @@ public class MovieEditViewController implements DataController {
             }
         });
 
-        watchers.setItems(watcherDataList);
+        setStatusesListCellFactory();
+
+        statuses.setItems(statusesDataList);
+        watchers.setItems(watchersDataList);
     }
 
-    private void insertStatusesToListView() {
+    private void refreshData() {
+        clearObservable(watchersDataList);
         clearObservable(statusesDataList);
 
-        statusesDataList.addAll(statusDataMapper.mapToData(movieData.getStatuses()));
+        setStatusesListCellFactory();
 
+        Movie movie = movieData.getMovie();
+        watchersDataList.addAll(watcherDataMapper.mapToData(movieService.getMovieWatchers(movie)));
+        statusesDataList.addAll(statusDataMapper.mapToData(movieService.getMovieStasuses(movie)));
+
+        watchers.setItems(watchersDataList);
+        statuses.setItems(statusesDataList);
+    }
+
+    private void setStatusesListCellFactory() {
         statuses.setCellFactory(new Callback<ListView<StatusData>, ListCell<StatusData>>() {
             @Override
             public ListCell<StatusData> call(ListView<StatusData> param) {
@@ -281,16 +277,33 @@ public class MovieEditViewController implements DataController {
                             setText(null);
                         } else {
                             Status status = item.getStatus();
-                            
-                            setStyle("-fx-background-color:" + status.getColour());
+
+                            switch (status.getColor()) {
+                                case RED:
+                                    setStyle("-fx-background-color: rgba(255, 0, 0, 0.4);");
+                                    break;
+                                case YELLOW:
+                                    setStyle("-fx-background-color: rgba(255, 255, 0, 0.4);");
+                                    break;
+                                case GREEN:
+                                    setStyle("-fx-background-color: rgba(0, 128, 0, 0.4);");
+                                    break;
+                                case BLUE:
+                                    setStyle("-fx-background-color: rgba(0, 0, 255, 0.4);");
+                                    break;
+                                case PURPLE:
+                                    setStyle("-fx-background-color: rgba(128, 0, 128, 0.4);");
+                                    break;
+                                default:
+                                    break;
+                            }
+
                             setText(status.getName());
                         }
                     }
                 };
             }
         });
-
-        statuses.setItems(statusesDataList);
     }
 
     private <T extends Data> void clearObservable(ObservableList<T> observableList) {
@@ -301,8 +314,7 @@ public class MovieEditViewController implements DataController {
 
     @Override
     public void update() {
-        insertStatusesToListView();
-        insertWatchersToListView();
+        refreshData();
     }
 
 }

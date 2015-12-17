@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" stylesheets="@styles/Styles.css" style="-fx-background-color: #626464;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <SplitPane dividerPositions="0.14824120603015076" layoutX="2.0" layoutY="-4.0" orientation="VERTICAL" prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #626264;" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="-4.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <Label layoutX="55.0" layoutY="13.0" style="-fx-font-size: 24;" text="Oglądający" textFill="#eee7e7" AnchorPane.leftAnchor="55.0" AnchorPane.topAnchor="13.0">
+                     <effect>
+                        <Blend />
+                     </effect>
+                  </Label>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="272.0" prefWidth="398.0">
+               <children>
+                  <VBox layoutX="53.0" layoutY="25.0" prefHeight="200.0" prefWidth="288.0" AnchorPane.bottomAnchor="72.0" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="57.0" AnchorPane.topAnchor="25.0">
+                     <children>
+                        <Label text="Imię" textFill="#c3bfbf" underline="true">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <effect>
+                              <Blend />
+                           </effect>
+                        </Label>
+                        <TextField />
+                        <Separator prefWidth="200.0" />
+                        <Label text="Nazwisko" textFill="#c6c2c2" underline="true">
+                           <VBox.margin>
+                              <Insets top="30.0" />
+                           </VBox.margin>
+                           <effect>
+                              <Blend />
+                           </effect>
+                        </Label>
+                        <TextField />
+                        <Separator prefHeight="0.0" prefWidth="288.0" />
+                        <Label text="Nick" textFill="#c9c8c8" underline="true">
+                           <VBox.margin>
+                              <Insets top="30.0" />
+                           </VBox.margin>
+                           <effect>
+                              <Blend />
+                           </effect>
+                        </Label>
+                        <TextField />
+                        <Separator prefWidth="200.0" />
+                     </children>
+                  </VBox>
+                  <HBox layoutX="129.0" layoutY="245.0" spacing="15.0" AnchorPane.bottomAnchor="22.0" AnchorPane.rightAnchor="14.0">
+                     <children>
+                        <Button layoutX="210.0" layoutY="209.0" lineSpacing="15.0" mnemonicParsing="false" text="Dodaj" />
+                        <Button layoutX="282.0" layoutY="209.0" lineSpacing="15.0" mnemonicParsing="false" text="Anuluj" />
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

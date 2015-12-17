@@ -6,5 +6,6 @@ public interface ObservableService {
 
     void addObserver(ControllerObserver controllerObserver);
     void notifyObservers();
+    void removeObserver(ControllerObserver controllerObserver);
 
 }
