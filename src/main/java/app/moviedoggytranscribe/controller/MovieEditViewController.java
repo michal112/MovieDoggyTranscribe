@@ -6,10 +6,7 @@ import app.moviedoggytranscribe.model.data.Data;
 import app.moviedoggytranscribe.model.data.MovieData;
 import app.moviedoggytranscribe.model.data.StatusData;
 import app.moviedoggytranscribe.model.data.WatcherData;
-import app.moviedoggytranscribe.model.entity.MovieStatus;
-import app.moviedoggytranscribe.model.entity.MovieWatcher;
-import app.moviedoggytranscribe.model.entity.Status;
-import app.moviedoggytranscribe.model.entity.Watcher;
+import app.moviedoggytranscribe.model.entity.*;
 import app.moviedoggytranscribe.service.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -79,12 +76,12 @@ public class MovieEditViewController implements DataController {
 
     private MovieData movieData;
 
-    private ObservableList<WatcherData> watcherDataList;
+    private ObservableList<WatcherData> watchersDataList;
     private ObservableList<StatusData> statusesDataList;
 
     @PostConstruct
     public void init() {
-        watcherDataList = FXCollections.observableArrayList();
+        watchersDataList = FXCollections.observableArrayList();
         statusesDataList = FXCollections.observableArrayList();
 
         movieWatcherService.addObserver(this);
@@ -96,6 +93,9 @@ public class MovieEditViewController implements DataController {
 
     public void setMovieData(MovieData movieData) {
         this.movieData = movieData;
+
+        statusesDataList.addAll(statusDataMapper.mapToData(movieData.getStatuses()));
+        watchersDataList.addAll(watcherDataMapper.mapToData(movieData.getWatchers()));
     }
 
     public MovieEditViewController() {
@@ -109,26 +109,13 @@ public class MovieEditViewController implements DataController {
     @FXML
     @Override
     public void initialize() {
-        title.setText(movieData.getMovie().getTitle());
-        type.setText(movieData.getMovie().getGenre());
-        imageView.setImage(new Image(movieData.getMovie().getImageUrl()));
-        year.setText("Rok produkcji: " + movieData.getMovie().getYear());
-        description.setText(movieData.getMovie().getDescription());
-        rating.setText(movieData.getMovie().getRating());
-
-        description.setEditable(false);
-        watchers.setEditable(false);
-        statuses.setEditable(false);
-        description.setWrapText(true);
-
-        insertWatchersToListView();
-        insertStatusesToListView();
+        initializeData();
 
         // add Watcher
 
         addWatcher.setOnAction(event -> {
             List<WatcherData> choices = new ArrayList<>();
-            List<Integer> movieWatchers = watcherDataList.stream().map(
+            List<Integer> movieWatchers = watchersDataList.stream().map(
                 watcherData -> watcherData.getWatcher().getId()).collect(Collectors.toList());
 
             choices.addAll(watcherDataMapper.mapToData(watcherService.getAll()).stream().filter(watcherData ->
@@ -237,10 +224,59 @@ public class MovieEditViewController implements DataController {
         });
     }
 
-    private void insertWatchersToListView() {
-        clearObservable(watcherDataList);
+    private void initializeData() {
+        title.setText(movieData.getMovie().getTitle());
+        type.setText(movieData.getMovie().getGenre());
 
-        watcherDataList.addAll(watcherDataMapper.mapToData(movieData.getWatchers()));
+        imageView.setImage(new Image(movieData.getMovie().getImageUrl()));
+
+        year.setText("Rok produkcji: " + movieData.getMovie().getYear());
+        description.setText(movieData.getMovie().getDescription());
+        rating.setText(movieData.getMovie().getRating());
+
+        description.setEditable(false);
+        watchers.setEditable(false);
+        statuses.setEditable(false);
+        description.setWrapText(true);
+
+        statuses.setCellFactory(new Callback<ListView<StatusData>, ListCell<StatusData>>() {
+            @Override
+            public ListCell<StatusData> call(ListView<StatusData> param) {
+                return new ListCell<StatusData>() {
+                    @Override
+                    protected void updateItem(StatusData item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText(null);
+                        } else {
+                            Status status = item.getStatus();
+
+                            switch (status.getColor()) {
+                                case RED:
+                                    setStyle("-fx-background-color: rgba(255, 0, 0, 0.4);");
+                                    break;
+                                case YELLOW:
+                                    setStyle("-fx-background-color: rgba(255, 255, 0, 0.4);");
+                                    break;
+                                case GREEN:
+                                    setStyle("-fx-background-color: rgba(0, 128, 0, 0.4);");
+                                    break;
+                                case BLUE:
+                                    setStyle("-fx-background-color: rgba(0, 0, 255, 0.4);");
+                                    break;
+                                case PURPLE:
+                                    setStyle("-fx-background-color: rgba(128, 0, 128, 0.4);");
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            setText(status.getName());
+                        }
+                    }
+                };
+            }
+        });
 
         watchers.setCellFactory(new Callback<ListView<WatcherData>, ListCell<WatcherData>>() {
             @Override
@@ -260,34 +296,19 @@ public class MovieEditViewController implements DataController {
             }
         });
 
-        watchers.setItems(watcherDataList);
+        statuses.setItems(statusesDataList);
+        watchers.setItems(watchersDataList);
     }
 
-    private void insertStatusesToListView() {
+    private void refreshData() {
+        clearObservable(watchersDataList);
         clearObservable(statusesDataList);
 
-        statusesDataList.addAll(statusDataMapper.mapToData(movieData.getStatuses()));
+        Movie movie = movieData.getMovie();
+        watchersDataList.addAll(watcherDataMapper.mapToData(movieService.getMovieWatchers(movie)));
+        statusesDataList.addAll(statusDataMapper.mapToData(movieService.getMovieStasuses(movie)));
 
-        statuses.setCellFactory(new Callback<ListView<StatusData>, ListCell<StatusData>>() {
-            @Override
-            public ListCell<StatusData> call(ListView<StatusData> param) {
-                return new ListCell<StatusData>() {
-                    @Override
-                    protected void updateItem(StatusData item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty) {
-                            setText(null);
-                        } else {
-                            Status status = item.getStatus();
-                            
-                            setStyle("-fx-background-color:" + status.getColour());
-                            setText(status.getName());
-                        }
-                    }
-                };
-            }
-        });
-
+        watchers.setItems(watchersDataList);
         statuses.setItems(statusesDataList);
     }
 
@@ -299,8 +320,7 @@ public class MovieEditViewController implements DataController {
 
     @Override
     public void update() {
-        insertStatusesToListView();
-        insertWatchersToListView();
+        refreshData();
     }
 
 }
