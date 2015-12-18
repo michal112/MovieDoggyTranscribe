@@ -50,7 +50,17 @@ public class MovieAddViewController implements DataController {
     }
 
     @Override
+    public void addObservables() {
+
+    }
+
+    @Override
     public void update() {
+    }
+
+    @Override
+    public void removeObservables() {
+
     }
 
     @Override

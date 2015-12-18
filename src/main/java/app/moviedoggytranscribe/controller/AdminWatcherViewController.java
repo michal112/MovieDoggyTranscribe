@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope(value = "prototype")
-public class AdminWatcherViewController implements DataController{
+public class AdminWatcherViewController implements DataController {
     @Override
     public void setData(Object data) {
 
@@ -17,7 +17,22 @@ public class AdminWatcherViewController implements DataController{
     }
 
     @Override
+    public void init() {
+
+    }
+
+    @Override
+    public void addObservables() {
+
+    }
+
+    @Override
     public void update() {
+
+    }
+
+    @Override
+    public void removeObservables() {
 
     }
 }
