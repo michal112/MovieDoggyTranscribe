@@ -118,7 +118,7 @@ public class MainViewController implements ControllerObserver {
                 }
 
                 SpringFxmlLoader loader = ApplicationCore.getLoader();
-                FxmlElement<AnchorPane, MainViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
+                FxmlElement<AnchorPane, MovieViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                      + File.separator + ViewConstants.MOVIE_DETAIL_VIEW_FILE_NAME, MovieViewController.class, selectedMovie);
 
                 ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_VIEW_TITLE, 600, 700);
@@ -171,7 +171,7 @@ public class MainViewController implements ControllerObserver {
             FxmlElement<AnchorPane, MovieAddViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                     + File.separator + ViewConstants.MOVIE_ADD_VIEW_FILE_NAME, MovieAddViewController.class);
 
-            ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_ADD_VIEW_TITLE, 400, 600);
+            ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_ADD_VIEW_TITLE, 400, 620);
         });
 
         // mouseEvent - click on Settings Button
