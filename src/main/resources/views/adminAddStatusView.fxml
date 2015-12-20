@@ -33,7 +33,7 @@
                               <Blend />
                            </effect>
                         </Label>
-                        <TextField />
+                        <TextField fx:id="name" />
                         <Separator prefWidth="200.0" />
                         <Label text="Symbol / Oznaczenie" textFill="#c6c2c2" underline="true">
                            <VBox.margin>
@@ -43,13 +43,13 @@
                               <Blend />
                            </effect>
                         </Label>
-                        <ColorPicker promptText="Kolor" />
+                        <ColorPicker fx:id="color" promptText="Kolor" />
                      </children>
                   </VBox>
                   <HBox layoutX="129.0" layoutY="245.0" spacing="15.0" AnchorPane.bottomAnchor="22.0" AnchorPane.rightAnchor="14.0">
                      <children>
-                        <Button layoutX="210.0" layoutY="209.0" lineSpacing="15.0" mnemonicParsing="false" text="Dodaj" />
-                        <Button layoutX="282.0" layoutY="209.0" lineSpacing="15.0" mnemonicParsing="false" text="Anuluj" />
+                        <Button fx:id="addStatus" layoutX="210.0" layoutY="209.0" lineSpacing="15.0" mnemonicParsing="false" text="Dodaj" />
+                        <Button fx:id="cancelStatus" layoutX="282.0" layoutY="209.0" lineSpacing="15.0" mnemonicParsing="false" text="Anuluj" />
                      </children>
                   </HBox>
                </children>

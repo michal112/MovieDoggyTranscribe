@@ -123,6 +123,12 @@
     -fx-text-background-color: #FFFFFF;
 }
 
+.table-view:focused .table-row-cell:filled:selected {
+   -fx-background-insets: 0.0, 0.0 0.0 0.0 0.0;
+   -fx-text-fill: -fx-selection-bar-text;
+   -fx-table-cell-border-color: #FFFFFF;
+}
+
 .table-column {
   -fx-alignment: CENTER-LEFT;
 }

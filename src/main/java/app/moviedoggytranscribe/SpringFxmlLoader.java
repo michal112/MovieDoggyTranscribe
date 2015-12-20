@@ -10,18 +10,18 @@ import java.util.logging.Logger;
 
 public class SpringFxmlLoader extends FXMLLoader{
 
-    private final static SpringFxmlLoader LOADER = new SpringFxmlLoader();
+    private static final SpringFxmlLoader springFxmlLoader = new SpringFxmlLoader();
 
-    private ApplicationContext context;
+    private static ApplicationContext context;
 
     private SpringFxmlLoader() {}
 
     public void setApplicationContext(ApplicationContext context) {
-        this.context = context;
+        SpringFxmlLoader.context = context;
     }
 
     public static SpringFxmlLoader getInstance()  {
-        return LOADER;
+        return springFxmlLoader;
     }
 
     public <T extends Controller> FxmlElement load(String resourcePath, Class<T> controllerClass) {
