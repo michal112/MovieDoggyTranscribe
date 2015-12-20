@@ -272,7 +272,17 @@ public class AdminViewController implements DataController {
     }
 
     @Override
+    public void addObservables() {
+
+    }
+
+    @Override
     public void update() {
         refreshData();
+    }
+
+    @Override
+    public void removeObservables() {
+
     }
 }

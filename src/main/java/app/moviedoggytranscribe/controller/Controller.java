@@ -1,7 +1,8 @@
 package app.moviedoggytranscribe.controller;
 
-public interface Controller extends ControllerObserver {
+public interface Controller {
 
     void initialize();
+    void init();
 
 }

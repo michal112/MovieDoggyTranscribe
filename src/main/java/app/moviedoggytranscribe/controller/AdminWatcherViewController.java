@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.swing.border.Border;
 import java.util.NoSuchElementException;
 
 @Component
@@ -37,6 +36,7 @@ public class AdminWatcherViewController implements DataController{
     public void init() {
         watcherService.addObserver(this);
     }
+
     @Override
     public void setData(Object data) {
 
@@ -76,6 +76,16 @@ public class AdminWatcherViewController implements DataController{
     }
 
     @Override
+    public void addObservables() {
+
+    }
+
+    @Override
     public void update() {
+    }
+
+    @Override
+    public void removeObservables() {
+
     }
 }
