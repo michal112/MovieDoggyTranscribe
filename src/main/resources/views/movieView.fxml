@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: #626464;" stylesheets="@styles/Styles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <GridPane layoutX="1.0" layoutY="58.0" prefHeight="530.0" prefWidth="600.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="562.0" minWidth="10.0" prefWidth="561.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="424.0" minWidth="10.0" prefWidth="39.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="249.0" minHeight="10.0" prefHeight="249.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="200.0" minHeight="10.0" prefHeight="153.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="128.0" minHeight="0.0" prefHeight="124.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ImageView fx:id="imageView" fitHeight="190.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+               <GridPane.margin>
+                  <Insets left="20.0" />
+               </GridPane.margin>
+               <image>
+                  <Image url="@z13887137Q,Zapraszamy-na-kolejna-odslone-Obrazkow-Tygodnia--J.jpg" />
+               </image>
+               <effect>
+                  <InnerShadow choke="0.35" color="#514949" height="54.39" radius="25.177500000000002" width="48.32" />
+               </effect>
+            </ImageView>
+            <Label text="Oglądający:" GridPane.rowIndex="1" GridPane.valignment="TOP">
+               <GridPane.margin>
+                  <Insets left="15.0" top="5.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Statusy:" GridPane.rowIndex="2" GridPane.valignment="TOP">
+               <GridPane.margin>
+                  <Insets left="15.0" />
+               </GridPane.margin>
+            </Label>
+            <VBox prefHeight="235.0" prefWidth="561.0">
+               <children>
+                  <Label fx:id="type" text="Typ filmu:">
+                     <VBox.margin>
+                        <Insets left="170.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="year" text="Rok produkcji:">
+                     <VBox.margin>
+                        <Insets left="170.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+                  <Label text="Opis filmu:">
+                     <VBox.margin>
+                        <Insets left="170.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                  </Label>
+                  <TextArea fx:id="description" prefHeight="159.0" prefWidth="391.0" style="-fx-border-color: #808080; ">
+                     <VBox.margin>
+                        <Insets left="170.0" />
+                     </VBox.margin>
+                  </TextArea>
+               </children>
+            </VBox>
+            <ListView fx:id="watchers" prefHeight="115.0" prefWidth="465.0" style="-fx-border-color: #808080;" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="15.0" top="25.0" />
+               </GridPane.margin>
+            </ListView>
+            <ListView fx:id="statuses" prefHeight="128.0" prefWidth="452.0" style="-fx-border-color: #808080;" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="10.0" left="15.0" top="20.0" />
+               </GridPane.margin>
+            </ListView>
+            <Pane prefHeight="248.0" prefWidth="173.0" GridPane.columnIndex="1" />
+         </children>
+      </GridPane>
+      <Label fx:id="title" layoutX="26.0" layoutY="-6.0" prefHeight="64.0" prefWidth="674.0" style="-fx-font-size: 23; -fx-font-weight: bold;" text="TYTUŁ FILMU" wrapText="true" AnchorPane.bottomAnchor="517.0" AnchorPane.leftAnchor="26.0" AnchorPane.topAnchor="-6.0">
+         <font>
+            <Font size="45.0" />
+         </font>
+         <padding>
+            <Insets top="5.0" />
+         </padding>
+      </Label>
+      <Label fx:id="rating" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="8.0" layoutX="589.0" layoutY="118.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="115.0" prefWidth="76.0" style="-fx-font-size: 33; -fx-text-fill: yellow;" text="10.0" textAlignment="CENTER">
+         <font>
+            <Font size="73.0" />
+         </font>
+         <effect>
+            <Glow />
+         </effect>
+      </Label>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ebf6ff4a" height="134.0" layoutX="582.0" layoutY="108.0" stroke="#545151" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeMiterLimit="50.0" strokeType="INSIDE" width="89.0" />
+   </children>
+</AnchorPane>

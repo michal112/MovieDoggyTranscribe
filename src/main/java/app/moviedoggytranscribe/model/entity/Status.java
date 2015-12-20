@@ -32,11 +32,10 @@ public class Status implements Entity {
     }
 
     public String getColour() {
-        return colour;
+        return this.colour;
     }
 
     public void setColour(String colour) {
         this.colour = colour;
     }
-
 }

@@ -1,88 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import app.moviedoggytranscribe.constants.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml">
-
-    <prefWidth><ViewConstants fx:constant="APP_WINDOW_WIDTH"/></prefWidth>
-    <prefHeight><ViewConstants fx:constant="APP_WINDOW_HEIGHT"/></prefHeight>
-
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="585.0" prefWidth="1000.0" stylesheets="@styles/Styles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <HBox>
-            <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
-            <prefWidth><ViewConstants fx:constant="APP_WINDOW_WIDTH"/></prefWidth>
-            <children>
-                <GridPane alignment="CENTER">
-                    <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_HEIGHT"/></prefHeight>
-                    <prefWidth><ViewConstants fx:constant="MAIN_VIEW_SEARCH_LABEL_WIDTH"/></prefWidth>
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                       <RowConstraints vgrow="SOMETIMES"/>
-                    </rowConstraints>
-                    <Label alignment="CENTER">
-                        <prefWidth><ViewConstants fx:constant="MAIN_VIEW_SEARCH_LABEL_WIDTH"/></prefWidth>
-                        <text><ViewConstants fx:constant="MAIN_VIEW_SEARCH_LABEL"/></text>
-                    </Label>
-                </GridPane>
-            </children>
-            <children>
-                <GridPane>
-                    <prefWidth><ViewConstants fx:constant="MAIN_VIEW_SEARCH_FIELD_WIDTH"/></prefWidth>
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints vgrow="SOMETIMES"/>
-                    </rowConstraints>
-                        <TextField fx:id="searchField">
-                            <prefHeight><ViewConstants fx:constant="MAIN_VIEW_SEARCH_FIELD_HEIGHT"/></prefHeight>
-                        </TextField>
-                 </GridPane>
-            </children>
+        <HBox prefHeight="59.0" prefWidth="1000.0">
+         <children>
+            <GridPane alignment="CENTER" prefHeight="59.0" prefWidth="1000.0">
+              <columnConstraints>
+                <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="182.0" />
+                <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="245.0" />
+                  <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+                  <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="373.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label prefHeight="19.0" prefWidth="148.0" text="Wpisz nazwę filmu:" textAlignment="JUSTIFY" wrapText="true" />
+                  <TextField fx:id="searchField" minHeight="22.0" prefHeight="35.0" prefWidth="239.0" GridPane.columnIndex="1" />
+                  <Label prefHeight="25.0" prefWidth="150.0" text="Filtruj po statusach:" textAlignment="JUSTIFY" GridPane.columnIndex="2" />
+                  <ChoiceBox fx:id="statusChoiceBox" minHeight="28.0" prefHeight="35.0" prefWidth="346.0" GridPane.columnIndex="3" />
+               </children>
+            </GridPane>
+         </children>
         </HBox>
-    </children>
-
-    <children>
-        <TableView fx:id="mainTable">
-            <prefWidth><ViewConstants fx:constant="MAIN_VIEW_TABLE_WIDTH"/></prefWidth>
-            <prefHeight><ViewConstants fx:constant="MAIN_VIEW_TABLE_HEIGHT"/></prefHeight>
-            <columns>
-                <TableColumn fx:id="movieColumn">
-                    <prefWidth><ViewConstants fx:constant="MAIN_VIEW_TABLE_MOVIE_COLUMN_WIDTH"/></prefWidth>
-                    <text><ViewConstants fx:constant="MAIN_VIEW_TABLE_MOVIE_COLUMN_NAME"/></text>
-                </TableColumn>
-                <TableColumn fx:id="watchersColumn">
-                    <prefWidth><ViewConstants fx:constant="MAIN_VIEW_TABLE_WATCHER_COLUMN_WIDTH"/></prefWidth>
-                    <text><ViewConstants fx:constant="MAIN_VIEW_TABLE_WATCHER_COLUMN_NAME"/></text>
-                </TableColumn>
-                <TableColumn fx:id="statusesColumn">
-                    <prefWidth><ViewConstants fx:constant="MAIN_VIEW_TABLE_STATUS_COLUMN_WIDTH"/></prefWidth>
-                    <text><ViewConstants fx:constant="MAIN_VIEW_TABLE_STATUS_COLUMN_NAME"/></text>
-                </TableColumn>
-            </columns>
-        </TableView>
-    </children>
-
-    <children>
-        <ToolBar>
-            <prefWidth><ViewConstants fx:constant="APP_WINDOW_WIDTH"/></prefWidth>
-            <prefWidth><ViewConstants fx:constant="MAIN_VIEW_TOOLBAR_HEIGHT"/></prefWidth>
+      <TableView fx:id="mainTable" prefHeight="479.0" prefWidth="1000.0" stylesheets="@styles/Styles.css">
+        <columns>
+          <TableColumn fx:id="movieColumn" prefWidth="342.0" text="Nazwa filmu" />
+          <TableColumn fx:id="watchersColumn" prefWidth="278.0" text="Oglądający" />
+            <TableColumn fx:id="statusesColumn" prefWidth="378.0" text="Status" />
+        </columns>
+      </TableView>
+        <ToolBar prefHeight="47.0" prefWidth="1000.0">
             <items>
-                <Button fx:id="addMovie" mnemonicParsing="false">
-                    <text><ViewConstants fx:constant="MAIN_VIEW_ADD_MOVIE"/></text>
-                </Button>
-                <Button fx:id="editMovie" mnemonicParsing="false">
-                    <text><ViewConstants fx:constant="MAIN_VIEW_EDIT_MOVIE"/></text>
-                </Button>
-                <Button fx:id="deleteMovie" mnemonicParsing="false">
-                    <text><ViewConstants fx:constant="MAIN_VIEW_DELETE_MOVIE"/></text>
-                </Button>
+                <Button fx:id="addMovie" mnemonicParsing="false" text="Dodaj film" />
+                <Button fx:id="editMovie" mnemonicParsing="false" text="Edytuj film" />
+                <Button fx:id="deleteMovie" mnemonicParsing="false" text="Usuń film" />
+                <Button fx:id="adminView" mnemonicParsing="false" text="USTAWIENIA" />
             </items>
         </ToolBar>
     </children>
-
 </VBox>
