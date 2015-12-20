@@ -43,6 +43,6 @@ INSERT INTO "movie_watcher" VALUES(6,2,6);
 INSERT INTO "movie_watcher" VALUES(7,2,7);
 INSERT INTO "movie_watcher" VALUES(8,2,8);
 DELETE FROM sqlite_sequence;
-INSERT INTO "sqlite_sequence" VALUES('movie_status',5);
-INSERT INTO "sqlite_sequence" VALUES('movie_watcher',8);
+INSERT INTO "sqlite_sequence" VALUES('movie_status',1);
+INSERT INTO "sqlite_sequence" VALUES('movie_watcher',2);
 COMMIT;

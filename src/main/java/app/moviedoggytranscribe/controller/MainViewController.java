@@ -22,6 +22,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -102,11 +105,13 @@ public class MainViewController implements Controller {
         statusChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             statusPredicate = getStatusPredicate(newValue);
             filteredMovieDataList.setPredicate(statusPredicate.and(titlePredicate));
+            update();
         });
 
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             titlePredicate = getTitlePredicate(newValue);
             filteredMovieDataList.setPredicate(statusPredicate.and(titlePredicate));
+            update();
         });
 
         SortedList<MovieData> sortedMovieDataList = new SortedList<>(filteredMovieDataList);
@@ -151,7 +156,7 @@ public class MainViewController implements Controller {
                 if (result.get() == ButtonType.OK){
                     movieService.delete(selectionMovie.getMovie().getId());
 
-                    refreshData();
+                    update();
                 }
             } catch (NoSuchMovieException e) {
                 Logger.getLogger(MainViewController.class.getCanonicalName()).severe("Movie already deleted");
@@ -198,7 +203,7 @@ public class MainViewController implements Controller {
             FxmlElement<AnchorPane, MovieAddViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                     + File.separator + ViewConstants.ADMIN_VIEW_FILE_NAME, AdminViewController.class);
 
-            Scene scene = new Scene(fxmlElement.getRoot(), 600, 400);
+            Scene scene = new Scene(fxmlElement.getRoot(), 600, 800);
             Stage stage = new Stage();
             stage.setTitle(ViewConstants.ADMIN_VIEW_TITLE);
             stage.setScene(scene);
@@ -285,11 +290,15 @@ public class MainViewController implements Controller {
                 if (item == null || empty) {
                     setText(null);
                 } else {
-                    String statuses = "";
+                    HBox vBox = new HBox();
                     for (Status status : item) {
-                        statuses += status.getName() + ", ";
+                        Circle circle = new Circle(15, 15, 15);
+                        Paint fill = Paint.valueOf(status.getColour());
+                        circle.setFill(fill);
+                        vBox.setSpacing(10);
+                        vBox.getChildren().add(circle);
                     }
-                    setText(statuses);
+                    setGraphic(vBox);
                 }
             }
         });
@@ -303,11 +312,11 @@ public class MainViewController implements Controller {
         }
 
         movieDataList.addAll(movieDataMapper.mapToData(movieService.getAll()));
+        mainTable.refresh();
     }
 
     @Override
     public void update() {
         refreshData();
     }
-
 }

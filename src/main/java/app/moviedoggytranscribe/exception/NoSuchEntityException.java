@@ -1,6 +1,6 @@
 package app.moviedoggytranscribe.exception;
 
-public abstract class NoSuchEntityException extends Exception {
+public class NoSuchEntityException extends Exception {
 
     private final String message;
 

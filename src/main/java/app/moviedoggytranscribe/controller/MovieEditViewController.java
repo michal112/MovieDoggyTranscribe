@@ -12,9 +12,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Paint;
 import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -276,29 +281,14 @@ public class MovieEditViewController implements DataController {
                         if (item == null || empty) {
                             setText(null);
                         } else {
-                            Status status = item.getStatus();
-
-                            switch (status.getColor()) {
-                                case RED:
-                                    setStyle("-fx-background-color: rgba(255, 0, 0, 0.4);");
-                                    break;
-                                case YELLOW:
-                                    setStyle("-fx-background-color: rgba(255, 255, 0, 0.4);");
-                                    break;
-                                case GREEN:
-                                    setStyle("-fx-background-color: rgba(0, 128, 0, 0.4);");
-                                    break;
-                                case BLUE:
-                                    setStyle("-fx-background-color: rgba(0, 0, 255, 0.4);");
-                                    break;
-                                case PURPLE:
-                                    setStyle("-fx-background-color: rgba(128, 0, 128, 0.4);");
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            setText(status.getName());
+                            setText(item.getStatus().getName());
+                            Paint fill = Paint.valueOf(item.getStatus().getColour());
+                            setTextFill(fill);
+                            BackgroundFill backgroundFill = new BackgroundFill(fill,
+                                    CornerRadii.EMPTY,
+                                    Insets.EMPTY);
+                            Background background = new Background(backgroundFill);
+                            setBackground(background);
                         }
                     }
                 };
