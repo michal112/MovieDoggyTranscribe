@@ -19,17 +19,16 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TextField prefHeight="35.0" prefWidth="145.0" GridPane.columnIndex="1" />
+                  <TextField fx:id="movieTitle" prefHeight="35.0" prefWidth="145.0" GridPane.columnIndex="1" />
                   <Label prefHeight="19.0" prefWidth="152.0" text="Wpisz nazwę filmu:" textAlignment="JUSTIFY" />
                   <Label prefHeight="19.0" prefWidth="153.0" text="Rok produkcji filmu:" GridPane.columnIndex="2" />
-                  <ChoiceBox prefHeight="35.0" prefWidth="106.0" GridPane.columnIndex="3" />
+                  <ChoiceBox fx:id="yearChoiceBox" prefHeight="35.0" prefWidth="106.0" GridPane.columnIndex="3" />
                </children>
             </GridPane>
             <TableView fx:id="mainTable" prefHeight="281.0" prefWidth="600.0">
               <columns>
-                <TableColumn fx:id="titleColumn" prefWidth="323.0" text="Tytuł filmu" />
-                <TableColumn fx:id="yearColumn" prefWidth="130.0" text="Rok produkcji" />
-                  <TableColumn fx:id="genreColumn" prefWidth="146.0" text="Gatunek filmu" />
+                <TableColumn fx:id="titleColumn" prefWidth="439.0" text="Tytuł filmu" />
+                <TableColumn fx:id="yearColumn" prefWidth="180.0" text="Rok produkcji" />
               </columns>
             </TableView>
             <GridPane prefHeight="58.0" prefWidth="600.0">
