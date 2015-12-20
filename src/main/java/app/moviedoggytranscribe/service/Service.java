@@ -7,7 +7,7 @@ import app.moviedoggytranscribe.model.entity.Entity;
 import java.util.List;
 import java.util.Observer;
 
-public interface Service<T extends Entity, E extends NoSuchEntityException> extends Observer, ObservableService {
+public interface Service<T extends Entity, E extends NoSuchEntityException> extends Observer, ServiceObservable {
 
     void clearEntities();
     List<T> getAll();

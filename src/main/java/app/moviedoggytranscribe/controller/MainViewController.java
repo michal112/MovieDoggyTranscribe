@@ -18,11 +18,9 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -33,7 +31,9 @@ import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 @org.springframework.stereotype.Component
-public class MainViewController implements Controller {
+public class MainViewController implements ControllerObserver {
+
+    private static final Logger LOG = Logger.getLogger(MainViewController.class.getCanonicalName());
 
     @FXML
     private TableView<MovieData> mainTable;
@@ -65,8 +65,6 @@ public class MainViewController implements Controller {
     @Autowired
     private SimpleStatusService statusService;
     @Autowired
-    private SimpleWatcherService watcherService;
-    @Autowired
     private SimpleMovieStatusService movieStatusService;
     @Autowired
     private SimpleMovieWatcherService movieWatcherService;
@@ -78,15 +76,12 @@ public class MainViewController implements Controller {
     private Predicate<MovieData> titlePredicate = movieData -> true;
 
     @PostConstruct
+    @Override
     public void init() {
         movieDataList = FXCollections.observableArrayList();
         statusDataList = FXCollections.observableArrayList();
 
-        movieService.addObserver(this);
-        statusService.addObserver(this);
-        watcherService.addObserver(this);
-        movieStatusService.addObserver(this);
-        movieWatcherService.addObserver(this);
+        addObservables();
     }
 
     @FXML
@@ -117,64 +112,56 @@ public class MainViewController implements Controller {
 
         mainTable.setOnMousePressed((event) -> {
             if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
-                MovieData selectionMovie = mainTable.getSelectionModel().getSelectedItem();
-                if(selectionMovie == null) {
+                MovieData selectedMovie = mainTable.getSelectionModel().getSelectedItem();
+                if(selectedMovie == null) {
                     return;
                 }
 
                 SpringFxmlLoader loader = ApplicationCore.getLoader();
-                FxmlElement<AnchorPane, MainViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                     + File.separator + ViewConstants.MOVIE_DETAIL_VIEW_FILE_NAME, MovieViewController.class, selectionMovie);
+                FxmlElement<AnchorPane, MovieViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
+                     + File.separator + ViewConstants.MOVIE_DETAIL_VIEW_FILE_NAME, MovieViewController.class, selectedMovie);
 
-                Scene scene = new Scene(fxmlElement.getRoot(), 700, 600);
-                Stage stage = new Stage();
-                stage.setTitle(ViewConstants.MOVIE_VIEW_TITLE);
-                stage.setScene(scene);
-                stage.show();
+                ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_VIEW_TITLE, 600, 700);
             }
         });
 
         // mouseEvent - click on delete button
 
         deleteMovie.setOnAction((event) -> {
-            MovieData selectionMovie = mainTable.getSelectionModel().getSelectedItem();
-            if(selectionMovie == null) {
+            MovieData selectedMovie = mainTable.getSelectionModel().getSelectedItem();
+            if(selectedMovie == null) {
                 return;
             }
 
             try {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Usuń film");
-                alert.setHeaderText("Czy chcesz usunąć film z bazy danych ?");
+                alert.setHeaderText("Czy chcesz usunąć film z bazy danych?");
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK){
-                    movieService.delete(selectionMovie.getMovie().getId());
+                    movieService.delete(selectedMovie.getMovie().getId());
 
                     refreshData();
                 }
             } catch (NoSuchMovieException e) {
-                Logger.getLogger(MainViewController.class.getCanonicalName()).severe("Movie already deleted");
+                LOG.severe("Movie already deleted");
             }
         });
 
         // mouseEvent - click on Edit Button
 
         editMovie.setOnAction((event) -> {
-            MovieData selectionMovie = mainTable.getSelectionModel().getSelectedItem();
-            if(selectionMovie == null) {
+            MovieData selectedMovie = mainTable.getSelectionModel().getSelectedItem();
+            if(selectedMovie == null) {
                 return;
             }
 
             SpringFxmlLoader loader = ApplicationCore.getLoader();
             FxmlElement<AnchorPane, MovieEditViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                + File.separator + ViewConstants.MOVIE_EDIT_VIEW_FILE_NAME, MovieEditViewController.class, selectionMovie);
+                + File.separator + ViewConstants.MOVIE_EDIT_VIEW_FILE_NAME, MovieEditViewController.class, selectedMovie);
 
-            Scene scene = new Scene(fxmlElement.getRoot(), 700, 700);
-            Stage stage = new Stage();
-            stage.setTitle(ViewConstants.MOVIE_VIEW_TITLE);
-            stage.setScene(scene);
-            stage.show();
+            ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_VIEW_TITLE, 700, 700);
         });
 
         // mouseEvent - click on Add Button
@@ -184,11 +171,7 @@ public class MainViewController implements Controller {
             FxmlElement<AnchorPane, MovieAddViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                     + File.separator + ViewConstants.MOVIE_ADD_VIEW_FILE_NAME, MovieAddViewController.class);
 
-            Scene scene = new Scene(fxmlElement.getRoot(), 600, 400);
-            Stage stage = new Stage();
-            stage.setTitle(ViewConstants.MOVIE_ADD_VIEW_TITLE);
-            stage.setScene(scene);
-            stage.show();
+            ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_ADD_VIEW_TITLE, 400, 620);
         });
 
         // mouseEvent - click on Settings Button
@@ -198,11 +181,7 @@ public class MainViewController implements Controller {
             FxmlElement<AnchorPane, MovieAddViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                     + File.separator + ViewConstants.ADMIN_VIEW_FILE_NAME, AdminViewController.class);
 
-            Scene scene = new Scene(fxmlElement.getRoot(), 600, 400);
-            Stage stage = new Stage();
-            stage.setTitle(ViewConstants.ADMIN_VIEW_TITLE);
-            stage.setScene(scene);
-            stage.show();
+            ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.ADMIN_VIEW_TITLE, 400, 600);
         });
 
     }
@@ -244,6 +223,7 @@ public class MainViewController implements Controller {
         StatusData defaultStatusData = new StatusData(defaultStatus);
         statusDataList.add(defaultStatusData);
         statusDataList.addAll(statusDataMapper.mapToData(statusService.getAll()));
+
         statusChoiceBox.setItems(statusDataList);
         statusChoiceBox.setValue(defaultStatusData);
 
@@ -272,7 +252,7 @@ public class MainViewController implements Controller {
                     for (Watcher watcher : item) {
                         watchers += watcher.getNick() + " ";
                     }
-                    setText(watchers);
+                    setText(watchers.substring(0, watchers.length() - 1));
                 }
             }
         });
@@ -289,25 +269,43 @@ public class MainViewController implements Controller {
                     for (Status status : item) {
                         statuses += status.getName() + ", ";
                     }
-                    setText(statuses);
+                    setText(statuses.substring(0, statuses.length() - 1));
                 }
             }
         });
 
         mainTable.setItems(movieDataList);
+        mainTable.getSelectionModel().select(0);
     }
 
     private void refreshData() {
+        int selectedRow = mainTable.getSelectionModel().getSelectedIndex();
+
         if (!movieDataList.isEmpty()) {
             movieDataList.clear();
         }
 
         movieDataList.addAll(movieDataMapper.mapToData(movieService.getAll()));
+        mainTable.getSelectionModel().select(selectedRow);
+    }
+
+    @Override
+    public void addObservables() {
+        movieService.addObserver(this);
+        movieStatusService.addObserver(this);
+        movieWatcherService.addObserver(this);
     }
 
     @Override
     public void update() {
         refreshData();
+    }
+
+    @Override
+    public void removeObservables() {
+        movieService.removeObserver(this);
+        movieStatusService.removeObserver(this);
+        movieWatcherService.removeObserver(this);
     }
 
 }

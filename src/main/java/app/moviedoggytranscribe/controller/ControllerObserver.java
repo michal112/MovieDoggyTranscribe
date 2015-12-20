@@ -1,7 +1,9 @@
 package app.moviedoggytranscribe.controller;
 
-public interface ControllerObserver {
+public interface ControllerObserver extends Controller {
 
+    void addObservables();
     void update();
+    void removeObservables();
 
 }
