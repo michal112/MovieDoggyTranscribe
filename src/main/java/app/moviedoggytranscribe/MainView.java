@@ -4,7 +4,6 @@ import app.moviedoggytranscribe.constants.AppConstants;
 import app.moviedoggytranscribe.constants.ViewConstants;
 import app.moviedoggytranscribe.controller.MainViewController;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -20,15 +19,12 @@ public class MainView extends Application {
         FxmlElement<VBox, MainViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                 + File.separator + ViewConstants.MAIN_VIEW_FILE_NAME, MainViewController.class);
 
-        primaryStage.setTitle(ViewConstants.MAIN_VIEW_TITLE);
-        primaryStage.setScene(new Scene(fxmlElement.getRoot(), ViewConstants.APP_WINDOW_WIDTH, ViewConstants.APP_WINDOW_HEIGHT));
-        primaryStage.setResizable(false);
-        primaryStage.show();
+        ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MAIN_VIEW_TITLE, 570, 1000);
     }
 
 
     public static void main(String[] args) {
-        ApplicationCore.setContext(new ClassPathXmlApplicationContext(AppConstants.APPLICATION_CONTEXT_XML));
+        ApplicationCore.getInstance().setContext(new ClassPathXmlApplicationContext(AppConstants.APPLICATION_CONTEXT_XML));
 
         launch(args);
     }

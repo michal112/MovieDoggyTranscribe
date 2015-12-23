@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="700.0" style="-fx-background-color: #626464;" stylesheets="@styles/Styles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="700.0" style="-fx-background-color: #626464;" stylesheets="@styles/Styles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <GridPane layoutX="1.0" layoutY="58.0" prefHeight="639.0" prefWidth="600.0">
         <columnConstraints>
@@ -47,7 +47,7 @@
             </Label>
             <VBox prefHeight="235.0" prefWidth="561.0">
                <children>
-                  <Label fx:id="type" text="Typ filmu">
+                  <Label fx:id="type" text="Typ filmu:">
                      <VBox.margin>
                         <Insets left="170.0" />
                      </VBox.margin>
@@ -55,7 +55,7 @@
                         <Insets top="5.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="year" text="Rok produkcji">
+                  <Label fx:id="year" text="Rok produkcji:">
                      <VBox.margin>
                         <Insets left="170.0" />
                      </VBox.margin>
@@ -63,7 +63,7 @@
                         <Insets top="5.0" />
                      </padding>
                   </Label>
-                  <Label text="Opis filmu">
+                  <Label text="Opis filmu:">
                      <VBox.margin>
                         <Insets left="170.0" />
                      </VBox.margin>
@@ -71,7 +71,7 @@
                         <Insets top="5.0" />
                      </padding>
                   </Label>
-                  <TextArea fx:id="describe" prefHeight="159.0" prefWidth="391.0" style="-fx-border-color: #808080; ">
+                  <TextArea fx:id="description" prefHeight="159.0" prefWidth="391.0" style="-fx-border-color: #808080; ">
                      <VBox.margin>
                         <Insets left="170.0" />
                      </VBox.margin>

@@ -32,11 +32,39 @@ public class Status implements Entity {
     }
 
     public String getColour() {
-        return colour;
+        return this.colour;
     }
 
     public void setColour(String colour) {
         this.colour = colour;
+    }
+
+    public Color getColor() {
+        return getColor(this.colour);
+    }
+
+    public enum Color {
+        RED("red"), YELLOW("yellow"), GREEN("green"), BLUE("blue"), PURPLE("purple");
+
+        private String color;
+
+        Color(String color) {
+            this.color = color;
+        }
+
+        public String getColor() {
+            return color;
+        }
+    }
+
+    private static Color getColor(String colour) {
+        for (Color color : Color.values()) {
+            if (color.getColor().equals(colour)) {
+                return color;
+            }
+        }
+
+        return null;
     }
 
 }

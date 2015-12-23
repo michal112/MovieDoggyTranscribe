@@ -8,20 +8,20 @@ import org.springframework.context.ApplicationContext;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-public class SpringFxmlLoader {
+public class SpringFxmlLoader extends FXMLLoader{
 
-    private final static SpringFxmlLoader LOADER = new SpringFxmlLoader();
+    private static final SpringFxmlLoader springFxmlLoader = new SpringFxmlLoader();
 
-    private ApplicationContext context;
+    private static ApplicationContext context;
 
     private SpringFxmlLoader() {}
 
     public void setApplicationContext(ApplicationContext context) {
-        this.context = context;
+        SpringFxmlLoader.context = context;
     }
 
     public static SpringFxmlLoader getInstance()  {
-        return LOADER;
+        return springFxmlLoader;
     }
 
     public <T extends Controller> FxmlElement load(String resourcePath, Class<T> controllerClass) {
@@ -42,11 +42,10 @@ public class SpringFxmlLoader {
             loader.setRoot(loader.load());
 
             return new FxmlElement(loader.getController(), loader.getRoot());
-        } catch (IOException e) {
-            Logger.getAnonymousLogger().severe("Błąd przy ładowaniu pliku .fxml");
+        } catch (IOException e) {e.printStackTrace();
+            Logger.getAnonymousLogger().severe("An error occurred while loading .fxml file");
 
             return null;
         }
     }
-
 }

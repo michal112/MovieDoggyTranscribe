@@ -57,4 +57,11 @@ public class MovieStatusDao implements SimpleMovieStatusDao {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    @Transactional
+    public MovieStatus getByMovieIdAndStatusId(Integer movieId, Integer statusId) {
+        return jdbcTemplate.queryForObject(AppConstants.GET_MOVIE_STATUS_BY_MOVIE_ID_AND_STATUS_ID, new Integer[]{
+                movieId, statusId}, BeanPropertyRowMapper.newInstance(MovieStatus.class));
+    }
+
 }

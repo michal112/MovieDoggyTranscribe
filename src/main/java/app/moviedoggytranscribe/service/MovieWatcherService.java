@@ -9,9 +9,9 @@ public class MovieWatcherService extends AbstractService<MovieWatcher, NoSuchCon
         implements SimpleMovieWatcherService {
 
     @Override
-    public void deleteByWatcherId(Integer watcherId) throws NoSuchConnectionException {
-        entities.remove(get(watcherId));
-        ((SimpleMovieWatcherDao) getDao()).deleteByWatcherId(watcherId);
+    public void deleteByMovieIdAndWatcherId(Integer movieId, Integer watcherId) throws NoSuchConnectionException {
+        MovieWatcher movieWatcher = ((SimpleMovieWatcherDao) getDao()).getByMovieIdAndWatcherId(movieId, watcherId);
+        delete(movieWatcher.getId());
     }
 
 }
