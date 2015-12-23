@@ -1,15 +1,23 @@
 package app.moviedoggytranscribe.controller;
 
+import app.moviedoggytranscribe.mapper.FilmMapper;
+import app.moviedoggytranscribe.mapper.Mapper;
 import app.moviedoggytranscribe.model.data.FilmData;
 import app.moviedoggytranscribe.model.data.YearData;
+import info.talacha.filmweb.api.FilmWebApi;
+import info.talacha.filmweb.api.UrlParameter;
+import info.talacha.filmweb.models.Film;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Scope(value = "prototype")
@@ -24,18 +32,28 @@ public class MovieAddViewController implements Controller {
     @FXML
     private TextField movieTitle;
     @FXML
-    private ChoiceBox<YearData> yearChoiceBox;
+    private ChoiceBox<YearData> startYearChoiceBox;
+    @FXML
+    private ChoiceBox<YearData> endYearChoiceBox;
     @FXML
     private Button addMovie;
 
+    @Autowired
+    private FilmMapper filmMapper;
+
+    private Integer startYear = null;
+    private Integer endYear = null;
+
     private ObservableList<FilmData> filmDataList;
-    private ObservableList<YearData> yearDataList;
+    private ObservableList<YearData> startYearDataList;
+    private ObservableList<YearData> endYearDataList;
 
     @PostConstruct
     @Override
     public void init() {
         filmDataList = FXCollections.observableArrayList();
-        yearDataList = FXCollections.observableArrayList();
+        startYearDataList = FXCollections.observableArrayList();
+        endYearDataList = FXCollections.observableArrayList();
     }
 
     @FXML
@@ -43,22 +61,48 @@ public class MovieAddViewController implements Controller {
     @SuppressWarnings("unchecked")
     public void initialize() {
         initializeTable();
+
+        startYearChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            startYear = newValue.getYear();
+        });
+
+        endYearChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            endYear = newValue.getYear();
+        });
+
+        movieTitle.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 2) {
+                FilmWebApi filmWebApi = new FilmWebApi();
+                List<UrlParameter> urlParameterList = new ArrayList<>();
+
+                if (endYear != null) {
+                    UrlParameter endYearParamater = UrlParameter.END_YEAR;
+                    endYearParamater.setValue(endYear.toString());
+                    urlParameterList.add(endYearParamater);
+                }
+
+                if (startYear != null) {
+                    UrlParameter startYearParameter = UrlParameter.START_YEAR;
+                    startYearParameter.setValue(startYear.toString());
+                    urlParameterList.add(startYearParameter);
+                }
+
+                if (!filmDataList.isEmpty()) {
+                    filmDataList.clear();
+                }
+                
+                filmDataList.addAll(filmMapper.mapToData(filmWebApi.getFilmList(newValue, urlParameterList)));
+            }
+        });
+
+
     }
 
     private void initializeTable() {
         mainTable.setItems(filmDataList);
 
-        YearData defaultYear = new YearData();
-        defaultYear.setYear(null);
-        yearDataList.add(defaultYear);
-        for (int i = 2020; i > 1887; i--) {
-            YearData yearData = new YearData();
-            yearData.setYear(i);
-            yearDataList.add(yearData);
-        }
-
-        yearChoiceBox.setItems(yearDataList);
-        yearChoiceBox.setValue(defaultYear);
+        initChoiceBox(startYearDataList, startYearChoiceBox);
+        initChoiceBox(endYearDataList, endYearChoiceBox);
 
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         titleColumn.setCellFactory(cell -> new TableCell<FilmData, String>() {
@@ -85,6 +129,20 @@ public class MovieAddViewController implements Controller {
                 }
             }
         });
+    }
+
+    private void initChoiceBox(ObservableList<YearData> list, ChoiceBox<YearData> choiceBox) {
+        YearData defaultYear = new YearData();
+        defaultYear.setYear(null);
+        list.add(defaultYear);
+        for (int i = 2020; i > 1887; i--) {
+            YearData yearData = new YearData();
+            yearData.setYear(i);
+            list.add(yearData);
+        }
+
+        choiceBox.setItems(list);
+        choiceBox.setValue(defaultYear);
     }
 
 }

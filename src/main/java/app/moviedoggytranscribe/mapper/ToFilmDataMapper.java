@@ -18,7 +18,6 @@ public class ToFilmDataMapper implements FilmMapper {
             FilmData filmData = new FilmData();
             filmData.setFilm(film);
             filmData.setTitle(film.getTitle());
-            filmData.setGenre(film.getGenre());
             filmData.setYear(film.getYear());
             filmDataList.add(filmData);
         }
