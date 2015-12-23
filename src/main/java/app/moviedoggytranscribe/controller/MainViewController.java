@@ -245,7 +245,7 @@ public class MainViewController implements ControllerObserver {
             @Override
             protected void updateItem(List<Watcher> item, boolean empty) {
                 super.updateItem(item, empty);
-                if (item == null || empty) {
+                if (item == null || item.isEmpty() || empty) {
                     setText(null);
                 } else {
                     String watchers = "";
@@ -262,7 +262,7 @@ public class MainViewController implements ControllerObserver {
             @Override
             protected void updateItem(List<Status> item, boolean empty) {
                 super.updateItem(item, empty);
-                if (item == null || empty) {
+                if (item == null || item.isEmpty() || empty) {
                     setText(null);
                 } else {
                     String statuses = "";

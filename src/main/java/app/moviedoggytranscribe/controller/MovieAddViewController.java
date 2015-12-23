@@ -4,6 +4,8 @@ import app.moviedoggytranscribe.mapper.FilmMapper;
 import app.moviedoggytranscribe.mapper.Mapper;
 import app.moviedoggytranscribe.model.data.FilmData;
 import app.moviedoggytranscribe.model.data.YearData;
+import app.moviedoggytranscribe.model.entity.Movie;
+import app.moviedoggytranscribe.service.SimpleMovieService;
 import info.talacha.filmweb.api.FilmWebApi;
 import info.talacha.filmweb.api.UrlParameter;
 import info.talacha.filmweb.models.Film;
@@ -11,11 +13,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,9 +44,13 @@ public class MovieAddViewController implements Controller {
 
     @Autowired
     private FilmMapper filmMapper;
+    @Autowired
+    private SimpleMovieService simpleMovieService;
 
     private Integer startYear = null;
     private Integer endYear = null;
+
+    private FilmWebApi filmWebApi;
 
     private ObservableList<FilmData> filmDataList;
     private ObservableList<YearData> startYearDataList;
@@ -54,6 +62,8 @@ public class MovieAddViewController implements Controller {
         filmDataList = FXCollections.observableArrayList();
         startYearDataList = FXCollections.observableArrayList();
         endYearDataList = FXCollections.observableArrayList();
+
+        filmWebApi = new FilmWebApi();
     }
 
     @FXML
@@ -72,13 +82,12 @@ public class MovieAddViewController implements Controller {
 
         movieTitle.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 2) {
-                FilmWebApi filmWebApi = new FilmWebApi();
                 List<UrlParameter> urlParameterList = new ArrayList<>();
 
                 if (endYear != null) {
-                    UrlParameter endYearParamater = UrlParameter.END_YEAR;
-                    endYearParamater.setValue(endYear.toString());
-                    urlParameterList.add(endYearParamater);
+                    UrlParameter endYearParameter = UrlParameter.END_YEAR;
+                    endYearParameter.setValue(endYear.toString());
+                    urlParameterList.add(endYearParameter);
                 }
 
                 if (startYear != null) {
@@ -92,7 +101,25 @@ public class MovieAddViewController implements Controller {
                 }
                 
                 filmDataList.addAll(filmMapper.mapToData(filmWebApi.getFilmList(newValue, urlParameterList)));
+                mainTable.getSelectionModel().select(0);
             }
+        });
+
+        addMovie.setOnAction((event) -> {
+            FilmData selectedFilm = mainTable.getSelectionModel().getSelectedItem();
+
+            if (selectedFilm == null) {
+                return;
+            }
+
+            Film film = filmWebApi.getFilmData(selectedFilm.getFilm());
+
+            simpleMovieService.add(new Movie(film.getTitle(), film.getDescription(), film.getCoverUrl().toString(),
+                    film.getFilmUrl().toString(), film.getGenre(), String.valueOf(film.getYear()),
+                    BigDecimal.valueOf(film.getRate()).setScale(2, BigDecimal.ROUND_HALF_UP).toString()));
+
+            Stage stage = (Stage) addMovie.getScene().getWindow();
+            stage.close();
         });
 
 
