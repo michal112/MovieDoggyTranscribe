@@ -78,6 +78,8 @@ public class MainViewController implements ControllerObserver {
     private Predicate<MovieData> statusPredicate = movieData -> true;
     private Predicate<MovieData> titlePredicate = movieData -> true;
 
+    private List<StatusData> statuses;
+
     @PostConstruct
     @Override
     public void init() {
@@ -85,6 +87,7 @@ public class MainViewController implements ControllerObserver {
         statusDataList = FXCollections.observableArrayList();
 
         addObservables();
+        statuses = statusDataMapper.mapToData(statusService.getAll());
     }
 
     @FXML
@@ -95,23 +98,7 @@ public class MainViewController implements ControllerObserver {
 
         // filters - title filter and status filter
 
-        FilteredList<MovieData> filteredMovieDataList = new FilteredList<>(movieDataList, statusPredicate.and(titlePredicate));
-
-        statusChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            statusPredicate = getStatusPredicate(newValue);
-            filteredMovieDataList.setPredicate(statusPredicate.and(titlePredicate));
-            update();
-        });
-
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            titlePredicate = getTitlePredicate(newValue);
-            filteredMovieDataList.setPredicate(statusPredicate.and(titlePredicate));
-            update();
-        });
-
-        SortedList<MovieData> sortedMovieDataList = new SortedList<>(filteredMovieDataList);
-        sortedMovieDataList.comparatorProperty().bind(mainTable.comparatorProperty());
-        mainTable.setItems(sortedMovieDataList);
+        initFilters();
 
         // mouseEvent - double click on row -> open movie details
 
@@ -191,6 +178,26 @@ public class MainViewController implements ControllerObserver {
 
     }
 
+    private void initFilters() {
+        FilteredList<MovieData> filteredMovieDataList = new FilteredList<>(movieDataList, statusPredicate.and(titlePredicate));
+
+        statusChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+            statusPredicate = newValue != null ? getStatusPredicate(newValue) : p -> true;
+            filteredMovieDataList.setPredicate(statusPredicate.and(titlePredicate));
+            setStatusesColumnCellFactory();
+        });
+
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            titlePredicate = getTitlePredicate(newValue);
+            filteredMovieDataList.setPredicate(statusPredicate.and(titlePredicate));
+        });
+
+        SortedList<MovieData> sortedMovieDataList = new SortedList<>(filteredMovieDataList);
+        sortedMovieDataList.comparatorProperty().bind(mainTable.comparatorProperty());
+        mainTable.setItems(sortedMovieDataList);
+    }
+
     private Predicate<MovieData> getTitlePredicate(String title) {
         return movieData -> {
             if (title == null || title.isEmpty()) {
@@ -223,14 +230,7 @@ public class MainViewController implements ControllerObserver {
     private void initializeTable() {
         movieDataList.addAll(movieDataMapper.mapToData(movieService.getAll()));
 
-        Status defaultStatus = new Status();
-        defaultStatus.setName("Wszystko");
-        StatusData defaultStatusData = new StatusData(defaultStatus);
-        statusDataList.add(defaultStatusData);
-        statusDataList.addAll(statusDataMapper.mapToData(statusService.getAll()));
-
-        statusChoiceBox.setItems(statusDataList);
-        statusChoiceBox.setValue(defaultStatusData);
+        initStatusChoiceBox();
 
         movieColumn.setCellValueFactory(cellData -> cellData.getValue().movieProperty());
         movieColumn.setCellFactory(cell -> new TableCell<MovieData, Movie>() {
@@ -263,6 +263,13 @@ public class MainViewController implements ControllerObserver {
         });
 
         statusesColumn.setCellValueFactory(cellData -> cellData.getValue().statusesProperty());
+        setStatusesColumnCellFactory();
+
+        mainTable.setItems(movieDataList);
+        mainTable.getSelectionModel().select(0);
+    }
+
+    private void setStatusesColumnCellFactory() {
         statusesColumn.setCellFactory(cell -> new TableCell<MovieData, List<Status>>() {
             @Override
             protected void updateItem(List<Status> item, boolean empty) {
@@ -282,25 +289,41 @@ public class MainViewController implements ControllerObserver {
                 }
             }
         });
+    }
 
-        mainTable.setItems(movieDataList);
-        mainTable.getSelectionModel().select(0);
+    private void initStatusChoiceBox() {
+        if (!statusDataList.isEmpty()) {
+            statusDataList.clear();
+        }
+
+        Status defaultStatus = new Status();
+        defaultStatus.setName("Wszystko");
+        StatusData defaultStatusData = new StatusData(defaultStatus);
+        statusDataList.add(defaultStatusData);
+        statusDataList.addAll(statuses);
+
+        statusChoiceBox.setItems(statusDataList);
+        statusChoiceBox.setValue(defaultStatusData);
     }
 
     private void refreshData() {
-        int selectedRow = mainTable.getSelectionModel().getSelectedIndex();
-
         if (!movieDataList.isEmpty()) {
             movieDataList.clear();
         }
 
         movieDataList.addAll(movieDataMapper.mapToData(movieService.getAll()));
-        mainTable.refresh();
-        mainTable.getSelectionModel().select(selectedRow);
+        mainTable.setItems(movieDataList);
+        mainTable.getSelectionModel().select(0);
+
+        statuses = statusDataMapper.mapToData(statusService.getAll());
+        initStatusChoiceBox();
+
+        initFilters();
     }
 
     @Override
     public void addObservables() {
+        statusService.addObserver(this);
         movieService.addObserver(this);
         movieStatusService.addObserver(this);
         movieWatcherService.addObserver(this);
@@ -311,9 +334,9 @@ public class MainViewController implements ControllerObserver {
         refreshData();
     }
 
-
     @Override
     public void removeObservables() {
+        statusService.removeObserver(this);
         movieService.removeObserver(this);
         movieStatusService.removeObserver(this);
         movieWatcherService.removeObserver(this);
