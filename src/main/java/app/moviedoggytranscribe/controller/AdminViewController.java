@@ -5,14 +5,11 @@ import app.moviedoggytranscribe.FxmlElement;
 import app.moviedoggytranscribe.SpringFxmlLoader;
 import app.moviedoggytranscribe.constants.AppConstants;
 import app.moviedoggytranscribe.constants.ViewConstants;
-import app.moviedoggytranscribe.exception.NoSuchMovieException;
 import app.moviedoggytranscribe.exception.NoSuchStatusException;
 import app.moviedoggytranscribe.exception.NoSuchWatcherException;
 import app.moviedoggytranscribe.mapper.Mapper;
-import app.moviedoggytranscribe.model.data.MovieData;
 import app.moviedoggytranscribe.model.data.StatusData;
 import app.moviedoggytranscribe.model.data.WatcherData;
-import app.moviedoggytranscribe.model.entity.Movie;
 import app.moviedoggytranscribe.model.entity.Status;
 import app.moviedoggytranscribe.model.entity.Watcher;
 import app.moviedoggytranscribe.service.SimpleStatusService;
@@ -21,15 +18,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -42,7 +36,7 @@ import java.util.logging.Logger;
 
 @Component
 @Scope(value = "prototype")
-public class AdminViewController implements DataController {
+public class AdminViewController implements ControllerObserver {
     @FXML
     private Button addWatcher;
     @FXML
@@ -79,38 +73,27 @@ public class AdminViewController implements DataController {
     private ObservableList<WatcherData> watcherDataList;
     private ObservableList<StatusData> statusDataList;
 
-    @Override
-    public void setData(Object data) {
-
-    }
-
     @PostConstruct
     public void init() {
         watcherDataList = FXCollections.observableArrayList();
         statusDataList = FXCollections.observableArrayList();
 
-        statusService.addObserver(this);
-        watcherService.addObserver(this);
+        addObservables();
     }
 
     @FXML
     @Override
     @SuppressWarnings("unchecked")
     public void initialize() {
-        initializeWatcherTableView();
-        initializeStatusTableView();
+        initializeTables();
 
         // mouseEvent - click on AddWatcher button
         addWatcher.setOnAction((event) -> {
             SpringFxmlLoader loader = ApplicationCore.getLoader();
-            FxmlElement<AnchorPane, MovieAddViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
+            FxmlElement<AnchorPane, AdminWatcherViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                     + File.separator + ViewConstants.ADMIN_VIEW_ADD_WATCHER_FILE_NAME, AdminWatcherViewController.class);
 
-            Scene scene = new Scene(fxmlElement.getRoot(), 600, 400);
-            Stage stage = new Stage();
-            stage.setTitle(ViewConstants.ADMIN_WATCHERS_VIEW_TITLE);
-            stage.setScene(scene);
-            stage.show();
+            ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.ADMIN_WATCHERS_VIEW_TITLE, 400, 400);
         });
 
         // mouseEvent - click on DeleteWatcher button
@@ -122,31 +105,24 @@ public class AdminViewController implements DataController {
             }
 
             try {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Usuń oglądającego");
-                alert.setHeaderText("Czy chcesz usunąć oglądającego z bazy danych ?");
+                Optional<ButtonType> result = displayAlert("Usuń oglądającego", "Czy chcesz usunąć oglądającego z bazy danych?");
 
-                Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK){
                     watcherService.delete(selectionWatcher.getWatcher().getId());
-                    update();
                 }
             } catch (NoSuchWatcherException e) {
                 Logger.getLogger(MainViewController.class.getCanonicalName()).severe("Watcher already deleted");
             }
         });
 
+
         // mouseEvent - click on AddStatus button
         addStatus.setOnAction((event) -> {
             SpringFxmlLoader loader = ApplicationCore.getLoader();
-            FxmlElement<AnchorPane, MovieAddViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
+            FxmlElement<AnchorPane, AdminStatusViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                     + File.separator + ViewConstants.ADMIN_VIEW_ADD_STATUS_FILE_NAME, AdminStatusViewController.class);
 
-            Scene scene = new Scene(fxmlElement.getRoot(), 600, 400);
-            Stage stage = new Stage();
-            stage.setTitle(ViewConstants.ADMIN_STATUSES_VIEW_TITLE);
-            stage.setScene(scene);
-            stage.show();
+            ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.ADMIN_STATUSES_VIEW_TITLE, 400, 400);
         });
 
         // mouseEvent - click on DeleteStatus button
@@ -158,14 +134,10 @@ public class AdminViewController implements DataController {
             }
 
             try {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Usuń status");
-                alert.setHeaderText("Czy chcesz usunąć status z bazy danych ?");
+                Optional<ButtonType> result = displayAlert("Usuń status", "Czy chcesz usunąć status z bazy danych?");
 
-                Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK){
                     statusService.delete(selectionStatus.getStatus().getId());
-                    update();
                 }
             } catch (NoSuchStatusException e) {
                 Logger.getLogger(MainViewController.class.getCanonicalName()).severe("Status already deleted");
@@ -173,7 +145,15 @@ public class AdminViewController implements DataController {
         });
     }
 
-    private void initializeWatcherTableView() {
+    private void initializeTables() {
+        initializeWatchersTable();
+        initializeStatusesTable();
+
+        mainWatcherTable.getSelectionModel().select(0);
+        mainStatusTable.getSelectionModel().select(0);
+    }
+
+    private void initializeWatchersTable() {
         watcherDataList.addAll(watcherDataMapper.mapToData(watcherService.getAll()));
 
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().watcherProperty());
@@ -218,7 +198,7 @@ public class AdminViewController implements DataController {
         mainWatcherTable.setItems(watcherDataList);
     }
 
-    private void initializeStatusTableView() {
+    private void initializeStatusesTable() {
         statusDataList.addAll(statusDataMapper.mapToData(statusService.getAll()));
 
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
@@ -269,11 +249,22 @@ public class AdminViewController implements DataController {
 
         mainWatcherTable.refresh();
         mainStatusTable.refresh();
+        mainWatcherTable.getSelectionModel().select(0);
+        mainStatusTable.getSelectionModel().select(0);
+    }
+
+    public Optional<ButtonType> displayAlert(String title, String header){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+
+        return alert.showAndWait();
     }
 
     @Override
     public void addObservables() {
-
+        statusService.addObserver(this);
+        watcherService.addObserver(this);
     }
 
     @Override
@@ -283,6 +274,8 @@ public class AdminViewController implements DataController {
 
     @Override
     public void removeObservables() {
-
+        statusService.removeObserver(this);
+        watcherService.removeObserver(this);
     }
+
 }

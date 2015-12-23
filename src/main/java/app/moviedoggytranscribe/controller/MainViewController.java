@@ -113,7 +113,7 @@ public class MainViewController implements ControllerObserver {
                 FxmlElement<AnchorPane, MovieViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                      + File.separator + ViewConstants.MOVIE_DETAIL_VIEW_FILE_NAME, MovieViewController.class, selectedMovie);
 
-                ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_VIEW_TITLE, 600, 700);
+                ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_VIEW_TITLE, 595, 679);
             }
         });
 
@@ -153,7 +153,7 @@ public class MainViewController implements ControllerObserver {
             FxmlElement<AnchorPane, MovieEditViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                 + File.separator + ViewConstants.MOVIE_EDIT_VIEW_FILE_NAME, MovieEditViewController.class, selectedMovie);
 
-            ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_VIEW_TITLE, 700, 700);
+            ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_VIEW_TITLE, 700, 689);
         });
 
         // mouseEvent - click on Add Button
@@ -163,7 +163,7 @@ public class MainViewController implements ControllerObserver {
             FxmlElement<AnchorPane, MovieAddViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                     + File.separator + ViewConstants.MOVIE_ADD_VIEW_FILE_NAME, MovieAddViewController.class);
 
-            ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_ADD_VIEW_TITLE, 400, 810);
+            ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_ADD_VIEW_TITLE, 396, 810);
         });
 
         // mouseEvent - click on Settings Button
@@ -173,7 +173,7 @@ public class MainViewController implements ControllerObserver {
             FxmlElement<AnchorPane, MovieAddViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
                     + File.separator + ViewConstants.ADMIN_VIEW_FILE_NAME, AdminViewController.class);
 
-            ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.ADMIN_VIEW_TITLE, 900, 600); ////
+            ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.ADMIN_VIEW_TITLE, 750, 600);
         });
 
     }
@@ -191,6 +191,7 @@ public class MainViewController implements ControllerObserver {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             titlePredicate = getTitlePredicate(newValue);
             filteredMovieDataList.setPredicate(statusPredicate.and(titlePredicate));
+            setStatusesColumnCellFactory();
         });
 
         SortedList<MovieData> sortedMovieDataList = new SortedList<>(filteredMovieDataList);

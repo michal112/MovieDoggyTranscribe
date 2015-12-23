@@ -5,11 +5,8 @@ CREATE TABLE "status" (
     "name" TEXT,
     "colour" TEXT
 );
-INSERT INTO "status" VALUES(1,'Mam na dysku - do obejrzenia','yellow');
-INSERT INTO "status" VALUES(2,'Mniej znane filmy - już dostępne w internecie','green');
-INSERT INTO "status" VALUES(3,'Znane filmy kinowe','blue');
-INSERT INTO "status" VALUES(4,'Filmy warte uwagi - dopiero się pojawią w kinie/internecie','purple');
-INSERT INTO "status" VALUES(5,'Obejrzane','red');
+INSERT INTO "status" VALUES(1,'Mam na dysku - do obejrzenia','0x4d1a4dff');
+INSERT INTO "status" VALUES(2,'Mniej znane filmy - już dostępne w internecie','0xff9966');
 CREATE TABLE "watcher" (
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "nick" TEXT,

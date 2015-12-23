@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="700.0" style="-fx-background-color: #626464;" stylesheets="@styles/Styles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="689.0" style="-fx-background-color: #626464;" stylesheets="@styles/Styles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <GridPane layoutX="1.0" layoutY="58.0" prefHeight="639.0" prefWidth="600.0">
         <columnConstraints>
@@ -24,7 +24,7 @@
             <RowConstraints maxHeight="140.0" minHeight="0.0" prefHeight="27.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fx:id="imageView" fitHeight="190.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imageView" fitHeight="193.0" fitWidth="133.0" pickOnBounds="true" preserveRatio="true">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
@@ -127,7 +127,7 @@
             <Insets top="5.0" />
          </padding>
       </Label>
-      <Label fx:id="rating" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="8.0" layoutX="589.0" layoutY="118.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="115.0" prefWidth="76.0" style="-fx-font-size: 33; -fx-text-fill: yellow;" text="10.0" textAlignment="CENTER">
+      <Label fx:id="rating" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="8.0" layoutX="583.0" layoutY="130.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="153.0" prefWidth="89.0" style="-fx-font-size: 33; -fx-text-fill: yellow;" text="10.0" textAlignment="CENTER">
          <font>
             <Font size="73.0" />
          </font>
@@ -135,6 +135,6 @@
             <Glow />
          </effect>
       </Label>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ebf6ff4a" height="134.0" layoutX="582.0" layoutY="108.0" stroke="#545151" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeMiterLimit="50.0" strokeType="INSIDE" width="89.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ebf6ff4a" height="159.0" layoutX="583.0" layoutY="130.0" stroke="#545151" strokeLineCap="ROUND" strokeLineJoin="BEVEL" strokeMiterLimit="50.0" strokeType="INSIDE" width="89.0" />
    </children>
 </AnchorPane>

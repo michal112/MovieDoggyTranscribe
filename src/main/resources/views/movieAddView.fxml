@@ -4,14 +4,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="810.0" style="-fx-background-color: #626464;" stylesheets="@styles/Styles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="396.0" prefWidth="810.0" style="-fx-background-color: #626464;" stylesheets="@styles/Styles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox layoutX="-1.0" layoutY="-5.0" prefHeight="400.0" prefWidth="810.0">
+      <VBox prefHeight="396.0" prefWidth="810.0">
          <children>
-            <GridPane prefHeight="64.0" prefWidth="620.0">
+            <GridPane prefHeight="54.0" prefWidth="620.0">
               <columnConstraints>
                 <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" maxWidth="294.0" minWidth="0.0" prefWidth="179.0" />
-                <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="SOMETIMES" maxWidth="468.0" minWidth="10.0" prefWidth="140.0" />
+                <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="SOMETIMES" maxWidth="468.0" minWidth="10.0" prefWidth="140.0" />
                   <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" maxWidth="468.0" minWidth="10.0" prefWidth="182.0" />
                   <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="SOMETIMES" maxWidth="468.0" minWidth="10.0" prefWidth="32.0" />
                   <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="SOMETIMES" maxWidth="468.0" minWidth="10.0" prefWidth="113.0" />
@@ -22,22 +22,22 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TextField fx:id="movieTitle" prefHeight="35.0" prefWidth="145.0" GridPane.columnIndex="1" />
+                  <TextField fx:id="movieTitle" maxHeight="35.0" minHeight="32.0" prefHeight="32.0" prefWidth="140.0" GridPane.columnIndex="1" />
                   <Label prefHeight="19.0" prefWidth="148.0" text="Wpisz nazwę filmu:" textAlignment="JUSTIFY" />
                   <Label prefHeight="19.0" prefWidth="153.0" text="Rok produkcji filmu" GridPane.columnIndex="2" />
                   <ChoiceBox fx:id="startYearChoiceBox" prefHeight="35.0" prefWidth="111.0" GridPane.columnIndex="4" />
                   <Label text="OD:" GridPane.columnIndex="3" />
                   <Label text="DO:" GridPane.columnIndex="5" />
-                  <ChoiceBox fx:id="endYearChoiceBox"  prefHeight="35.0" prefWidth="111.0" GridPane.columnIndex="6" />
+                  <ChoiceBox fx:id="endYearChoiceBox" prefHeight="35.0" prefWidth="111.0" GridPane.columnIndex="6" />
                </children>
             </GridPane>
-            <TableView fx:id="mainTable" prefHeight="279.0" prefWidth="763.0">
+            <TableView fx:id="mainTable" prefHeight="288.0" prefWidth="763.0">
               <columns>
                 <TableColumn fx:id="titleColumn" prefWidth="439.0" text="Tytuł filmu" />
                 <TableColumn fx:id="yearColumn" prefWidth="180.0" text="Rok produkcji" />
               </columns>
             </TableView>
-            <GridPane prefHeight="58.0" prefWidth="600.0">
+            <GridPane prefHeight="54.0" prefWidth="600.0">
               <columnConstraints>
                 <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
@@ -45,7 +45,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="addMovie" mnemonicParsing="false" prefHeight="26.0" prefWidth="122.0" text="Dodaj film" />
+                  <Button fx:id="addMovie" mnemonicParsing="false" prefHeight="26.0" prefWidth="120.0" text="Dodaj film" />
                </children>
             </GridPane>
          </children>
