@@ -9,7 +9,6 @@ public class FilmData implements Data {
     private ObjectProperty<Film> film = new SimpleObjectProperty<>();
     private ObjectProperty<String> title = new SimpleObjectProperty<>();
     private ObjectProperty<Integer> year = new SimpleObjectProperty<>();
-    private ObjectProperty<String> genre = new SimpleObjectProperty<>();
 
     public Film getFilm() {
         return film.get();
@@ -45,18 +44,6 @@ public class FilmData implements Data {
 
     public void setYear(Integer year) {
         this.year.set(year);
-    }
-
-    public String getGenre() {
-        return genre.get();
-    }
-
-    public ObjectProperty<String> genreProperty() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre.set(genre);
     }
 
 }

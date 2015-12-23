@@ -12,11 +12,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.NoSuchElementException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Scope(value = "prototype")
-public class AdminWatcherViewController implements DataController{
+public class AdminWatcherViewController implements ControllerObserver {
 
     @FXML
     private TextField name;
@@ -32,14 +33,13 @@ public class AdminWatcherViewController implements DataController{
     @Autowired
     private WatcherService watcherService;
 
+    private List<Watcher> watchers;
+
     @PostConstruct
     public void init() {
-        watcherService.addObserver(this);
-    }
+        watchers = watcherService.getAll();
 
-    @Override
-    public void setData(Object data) {
-
+        addObservables();
     }
 
     @Override
@@ -49,24 +49,29 @@ public class AdminWatcherViewController implements DataController{
 
         addWatcher.setOnAction((event) -> {
 
-            if(name.getText().isEmpty() || surname.getText().isEmpty() || nick.getText().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("BŁĄD");
-                alert.setHeaderText("Przed zapisaniem wypełnij wszystkie pola!");
-                alert.showAndWait();
-
-                throw new NoSuchElementException("Puste miejsca");
-            } else {
-                Watcher watcher = new Watcher();
-                watcher.setName(name.getText());
-                watcher.setSurname(surname.getText());
-                watcher.setNick(nick.getText());
-
-                watcherService.add(watcher);
-
-                Stage stage = (Stage) addWatcher.getScene().getWindow();
-                stage.close();
+            if (name.getText().isEmpty()) {
+                showAlert("Przed zapisaniem wypełnij wszystkie pola!", "Brak imienia użytkownika");
+                return;
+            } else if (surname.getText().isEmpty()) {
+                showAlert("Przed zapisaniem wypełnij wszystkie pola!", "Brak nazwiska użytkownika");
+                return;
+            } else if (nick.getText().isEmpty()) {
+                showAlert("Przed zapisaniem wypełnij wszystkie pola!", "Brak wybranego nicku dla użytkownika");
+                return;
+            } else if (watchers.stream().map(watcher -> watcher.getNick()).collect(Collectors.toList()).contains(nick.getText())) {
+                showAlert("Nieprawidłowy nick dodawanego użytkownika!", "Podany nick już istnieje");
+                return;
             }
+
+            Watcher watcher = new Watcher();
+            watcher.setName(name.getText());
+            watcher.setSurname(surname.getText());
+            watcher.setNick(nick.getText());
+
+            watcherService.add(watcher);
+
+            Stage stage = (Stage) addWatcher.getScene().getWindow();
+            stage.close();
         });
 
         cancelWatcher.setOnAction((event) -> {
@@ -75,17 +80,27 @@ public class AdminWatcherViewController implements DataController{
         });
     }
 
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("BŁĄD");
+        alert.setHeaderText(title);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
     @Override
     public void addObservables() {
-
+        watcherService.addObserver(this);
     }
 
     @Override
     public void update() {
+        watchers = watcherService.getAll();
     }
 
     @Override
     public void removeObservables() {
-
+        watcherService.removeObserver(this);
     }
+
 }
