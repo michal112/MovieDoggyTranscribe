@@ -1,7 +1,7 @@
 package app.moviedoggytranscribe.controller;
 
 import app.moviedoggytranscribe.model.entity.Status;
-import app.moviedoggytranscribe.service.StatusService;
+import app.moviedoggytranscribe.service.SimpleStatusService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -13,11 +13,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.NoSuchElementException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Scope(value = "prototype")
-public class AdminStatusViewController implements DataController {
+public class AdminStatusViewController implements ControllerObserver {
 
     @FXML
     private TextField name;
@@ -29,15 +30,15 @@ public class AdminStatusViewController implements DataController {
     private Button cancelStatus;
 
     @Autowired
-    private StatusService statusService;
+    private SimpleStatusService simpleStatusService;
+
+    private List<Status> statuses;
 
     @PostConstruct
     public void init() {
-        statusService.addObserver(this);
-    }
+        statuses = simpleStatusService.getAll();
 
-    @Override
-    public void setData(Object data) {
+        addObservables();
     }
 
     @Override
@@ -47,20 +48,22 @@ public class AdminStatusViewController implements DataController {
 
         addStatus.setOnAction((event) -> {
 
-            if(name.getText().isEmpty() || color.getValue() == null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("BŁĄD");
-                alert.setHeaderText("Przed zapisaniem wypełnij wszystkie pola!");
-                alert.showAndWait();
-
-                throw new NoSuchElementException();
+            if (name.getText().isEmpty()) {
+                showAlert("Przed zapisaniem wypełnij wszystkie pola!", "Brak nazwy statusu");
+                return;
+            } else if (statuses.stream().map(status -> status.getName()).collect(Collectors.toList()).contains(name.getText())) {
+                showAlert("Nieprawidłowa nazwa statusu!", "Status o tej nazwie już istnieje");
+                return;
+            } else if (statuses.stream().map(status -> status.getColour()).collect(Collectors.toList()).contains(color.getValue().toString())) {
+                showAlert("Nieprawidłowy kolor statusu!", "Status o wybranym kolorze już istnieje");
+                return;
             }
 
             Status status = new Status();
             status.setName(name.getText());
             status.setColour(color.getValue().toString());
 
-            statusService.add(status);
+            simpleStatusService.add(status);
 
             Stage stage = (Stage) addStatus.getScene().getWindow();
             stage.close();
@@ -74,17 +77,27 @@ public class AdminStatusViewController implements DataController {
         });
     }
 
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("BŁĄD");
+        alert.setHeaderText(title);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
     @Override
     public void addObservables() {
-
+        simpleStatusService.addObserver(this);
     }
 
     @Override
     public void update() {
+        statuses = simpleStatusService.getAll();
     }
 
     @Override
     public void removeObservables() {
-
+        simpleStatusService.removeObserver(this);
     }
+
 }

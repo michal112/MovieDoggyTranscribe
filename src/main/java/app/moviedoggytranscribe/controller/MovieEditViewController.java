@@ -216,7 +216,7 @@ public class MovieEditViewController implements DataController {
         description.setText(movie.getDescription());
         rating.setText(movie.getRating());
 
-        description.setEditable(false);
+        description.setEditable(true);
         watchers.setEditable(false);
         statuses.setEditable(false);
         description.setWrapText(true);
