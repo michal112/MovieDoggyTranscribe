@@ -1,7 +1,6 @@
 package app.moviedoggytranscribe.controller;
 
 import app.moviedoggytranscribe.mapper.FilmMapper;
-import app.moviedoggytranscribe.mapper.Mapper;
 import app.moviedoggytranscribe.model.data.FilmData;
 import app.moviedoggytranscribe.model.data.YearData;
 import app.moviedoggytranscribe.model.entity.Movie;
@@ -22,10 +21,12 @@ import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Component
 @Scope(value = "prototype")
-public class MovieAddViewController implements Controller {
+public class MovieAddViewController implements ControllerObserver {
 
     @FXML
     private TableView<FilmData> mainTable;
@@ -56,6 +57,8 @@ public class MovieAddViewController implements Controller {
     private ObservableList<YearData> startYearDataList;
     private ObservableList<YearData> endYearDataList;
 
+    private List<Movie> movies;
+
     @PostConstruct
     @Override
     public void init() {
@@ -64,11 +67,11 @@ public class MovieAddViewController implements Controller {
         endYearDataList = FXCollections.observableArrayList();
 
         filmWebApi = new FilmWebApi();
+        movies = simpleMovieService.getAll();
     }
 
     @FXML
     @Override
-    @SuppressWarnings("unchecked")
     public void initialize() {
         initializeTable();
 
@@ -114,6 +117,16 @@ public class MovieAddViewController implements Controller {
 
             Film film = filmWebApi.getFilmData(selectedFilm.getFilm());
 
+            if (movies.stream().map(movie -> movie.getTitle()).collect(Collectors.toList()).contains(film.getTitle())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("BŁĄD");
+                alert.setHeaderText("Błąd podczas dodawania filmu");
+                alert.setContentText("Film o danym tytule już istnieje");
+                alert.showAndWait();
+
+                return;
+            }
+
             simpleMovieService.add(new Movie(film.getTitle(), film.getDescription(), film.getCoverUrl().toString(),
                     film.getFilmUrl().toString(), film.getGenre(), String.valueOf(film.getYear()),
                     BigDecimal.valueOf(film.getRate()).setScale(2, BigDecimal.ROUND_HALF_UP).toString()));
@@ -121,8 +134,6 @@ public class MovieAddViewController implements Controller {
             Stage stage = (Stage) addMovie.getScene().getWindow();
             stage.close();
         });
-
-
     }
 
     private void initializeTable() {
@@ -170,6 +181,21 @@ public class MovieAddViewController implements Controller {
 
         choiceBox.setItems(list);
         choiceBox.setValue(defaultYear);
+    }
+
+    @Override
+    public void addObservables() {
+        simpleMovieService.addObserver(this);
+    }
+
+    @Override
+    public void update() {
+        movies = simpleMovieService.getAll();
+    }
+
+    @Override
+    public void removeObservables() {
+        simpleMovieService.removeObserver(this);
     }
 
 }
