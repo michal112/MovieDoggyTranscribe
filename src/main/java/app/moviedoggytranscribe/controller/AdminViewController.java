@@ -29,7 +29,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -90,8 +89,8 @@ public class AdminViewController implements ControllerObserver {
         // mouseEvent - click on AddWatcher button
         addWatcher.setOnAction((event) -> {
             SpringFxmlLoader loader = ApplicationCore.getLoader();
-            FxmlElement<AnchorPane, AdminWatcherViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                    + File.separator + ViewConstants.ADMIN_VIEW_ADD_WATCHER_FILE_NAME, AdminWatcherViewController.class);
+            FxmlElement<AnchorPane, AdminWatcherViewController> fxmlElement = loader.load(
+                    ViewConstants.ADMIN_VIEW_ADD_WATCHER_FILE_NAME, AdminWatcherViewController.class);
 
             ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.ADMIN_WATCHERS_VIEW_TITLE, 400, 400);
         });
@@ -119,8 +118,8 @@ public class AdminViewController implements ControllerObserver {
         // mouseEvent - click on AddStatus button
         addStatus.setOnAction((event) -> {
             SpringFxmlLoader loader = ApplicationCore.getLoader();
-            FxmlElement<AnchorPane, AdminStatusViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                    + File.separator + ViewConstants.ADMIN_VIEW_ADD_STATUS_FILE_NAME, AdminStatusViewController.class);
+            FxmlElement<AnchorPane, AdminStatusViewController> fxmlElement = loader.load(
+                    ViewConstants.ADMIN_VIEW_ADD_STATUS_FILE_NAME, AdminStatusViewController.class);
 
             ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.ADMIN_STATUSES_VIEW_TITLE, 400, 400);
         });

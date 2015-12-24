@@ -1,11 +1,14 @@
 package app.moviedoggytranscribe;
 
+import app.moviedoggytranscribe.constants.AppConstants;
 import app.moviedoggytranscribe.controller.Controller;
 import app.moviedoggytranscribe.controller.DataController;
 import javafx.fxml.FXMLLoader;
 import org.springframework.context.ApplicationContext;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.logging.Logger;
 
 public class SpringFxmlLoader extends FXMLLoader{
@@ -32,7 +35,10 @@ public class SpringFxmlLoader extends FXMLLoader{
         try {
             T controller = context.getBean(controllerClass);
 
-            FXMLLoader loader = new FXMLLoader(controllerClass.getResource(resourcePath));
+            URL url = new URL(controllerClass.getClassLoader().getResource(
+                    AppConstants.VIEWS_FOLDER_NAME + File.separator + resourcePath).toString());
+            FXMLLoader loader = new FXMLLoader(url);
+
             loader.setController(controller);
 
             if (data != null && DataController.class.isAssignableFrom(controllerClass)) {

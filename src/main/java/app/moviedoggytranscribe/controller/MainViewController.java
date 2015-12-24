@@ -110,8 +110,8 @@ public class MainViewController implements ControllerObserver {
                 }
 
                 SpringFxmlLoader loader = ApplicationCore.getLoader();
-                FxmlElement<AnchorPane, MovieViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                     + File.separator + ViewConstants.MOVIE_DETAIL_VIEW_FILE_NAME, MovieViewController.class, selectedMovie);
+                FxmlElement<AnchorPane, MovieViewController> fxmlElement = loader.load(
+                        ViewConstants.MOVIE_DETAIL_VIEW_FILE_NAME, MovieViewController.class, selectedMovie);
 
                 ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_VIEW_TITLE, 595, 679);
             }
@@ -150,8 +150,8 @@ public class MainViewController implements ControllerObserver {
             }
 
             SpringFxmlLoader loader = ApplicationCore.getLoader();
-            FxmlElement<AnchorPane, MovieEditViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                + File.separator + ViewConstants.MOVIE_EDIT_VIEW_FILE_NAME, MovieEditViewController.class, selectedMovie);
+            FxmlElement<AnchorPane, MovieEditViewController> fxmlElement = loader.load(
+                    ViewConstants.MOVIE_EDIT_VIEW_FILE_NAME, MovieEditViewController.class, selectedMovie);
 
             ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_VIEW_TITLE, 700, 689);
         });
@@ -160,8 +160,8 @@ public class MainViewController implements ControllerObserver {
 
         addMovie.setOnAction((event) -> {
             SpringFxmlLoader loader = ApplicationCore.getLoader();
-            FxmlElement<AnchorPane, MovieAddViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                    + File.separator + ViewConstants.MOVIE_ADD_VIEW_FILE_NAME, MovieAddViewController.class);
+            FxmlElement<AnchorPane, MovieAddViewController> fxmlElement = loader.load(
+                    ViewConstants.MOVIE_ADD_VIEW_FILE_NAME, MovieAddViewController.class);
 
             ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MOVIE_ADD_VIEW_TITLE, 396, 810);
         });
@@ -170,8 +170,8 @@ public class MainViewController implements ControllerObserver {
 
         adminView.setOnAction((event) -> {
             SpringFxmlLoader loader = ApplicationCore.getLoader();
-            FxmlElement<AnchorPane, MovieAddViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                    + File.separator + ViewConstants.ADMIN_VIEW_FILE_NAME, AdminViewController.class);
+            FxmlElement<AnchorPane, AdminViewController> fxmlElement = loader.load(
+                    ViewConstants.ADMIN_VIEW_FILE_NAME, AdminViewController.class);
 
             ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.ADMIN_VIEW_TITLE, 750, 600);
         });

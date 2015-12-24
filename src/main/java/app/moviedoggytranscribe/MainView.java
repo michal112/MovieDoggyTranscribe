@@ -16,8 +16,7 @@ public class MainView extends Application {
     @SuppressWarnings("unchecked")
     public void start(Stage primaryStage)  {
         SpringFxmlLoader loader = ApplicationCore.getLoader();
-        FxmlElement<VBox, MainViewController> fxmlElement = loader.load(File.separator + AppConstants.VIEWS_FOLDER_NAME
-                + File.separator + ViewConstants.MAIN_VIEW_FILE_NAME, MainViewController.class);
+        FxmlElement<VBox, MainViewController> fxmlElement = loader.load(ViewConstants.MAIN_VIEW_FILE_NAME, MainViewController.class);
 
         ApplicationCore.getInstance().displayFxmlElement(fxmlElement, ViewConstants.MAIN_VIEW_TITLE, 570, 1000);
     }
