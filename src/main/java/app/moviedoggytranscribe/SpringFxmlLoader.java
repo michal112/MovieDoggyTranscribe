@@ -35,8 +35,7 @@ public class SpringFxmlLoader extends FXMLLoader{
         try {
             T controller = context.getBean(controllerClass);
 
-            URL url = new URL(controllerClass.getClassLoader().getResource(
-                    AppConstants.VIEWS_FOLDER_NAME + File.separator + resourcePath).toString());
+            URL url = new URL(controllerClass.getClassLoader().getResource(resourcePath).toString());
             FXMLLoader loader = new FXMLLoader(url);
 
             loader.setController(controller);
