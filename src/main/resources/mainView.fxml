@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="1000.0" stylesheets="@styles/Styles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox prefHeight="59.0" prefWidth="1000.0">
+         <children>
+            <GridPane alignment="CENTER" prefHeight="54.0" prefWidth="1000.0">
+              <columnConstraints>
+                <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="182.0" />
+                <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="245.0" />
+                  <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+                  <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="373.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label prefHeight="19.0" prefWidth="148.0" text="Wpisz nazwę filmu:" textAlignment="JUSTIFY" wrapText="true" />
+                  <TextField fx:id="searchField" minHeight="29.0" prefHeight="29.0" prefWidth="239.0" GridPane.columnIndex="1" />
+                  <Label prefHeight="25.0" prefWidth="150.0" text="Filtruj po statusach:" textAlignment="JUSTIFY" GridPane.columnIndex="2" />
+                  <ChoiceBox fx:id="statusChoiceBox" minHeight="28.0" prefHeight="35.0" prefWidth="346.0" GridPane.columnIndex="3" />
+               </children>
+            </GridPane>
+         </children>
+        </HBox>
+      <TableView fx:id="mainTable" prefHeight="460.0" prefWidth="1000.0" stylesheets="@styles/Styles.css">
+        <columns>
+          <TableColumn fx:id="movieColumn" prefWidth="342.0" text="Nazwa filmu" />
+          <TableColumn fx:id="watchersColumn" prefWidth="278.0" text="Oglądający" />
+            <TableColumn fx:id="statusesColumn" prefWidth="378.0" text="Status" />
+        </columns>
+      </TableView>
+        <ToolBar prefHeight="54.0" prefWidth="1000.0">
+            <items>
+                <Button fx:id="addMovie" mnemonicParsing="false" text="Dodaj film" prefWidth="120.0" />
+                <Button fx:id="editMovie" mnemonicParsing="false" text="Edytuj film" prefWidth="120.0" />
+                <Button fx:id="deleteMovie" mnemonicParsing="false" text="Usuń film" prefWidth="120.0" />
+                <Button fx:id="adminView" mnemonicParsing="false" text="USTAWIENIA" prefWidth="120.0" />
+            </items>
+        </ToolBar>
+    </children>
+</VBox>

@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class MovieWatcherDao implements Dao<MovieWatcher> {
+public class MovieWatcherDao implements SimpleMovieWatcherDao {
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
@@ -55,6 +55,13 @@ public class MovieWatcherDao implements Dao<MovieWatcher> {
     @Transactional
     public void update(MovieWatcher movieWatcher) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    @Transactional
+    public MovieWatcher getByMovieIdAndWatcherId(Integer movieId, Integer watcherId) {
+        return jdbcTemplate.queryForObject(AppConstants.GET_MOVIE_WATCHER_BY_MOVIE_ID_AND_WATCHER_ID, new Integer[]{
+                movieId, watcherId }, BeanPropertyRowMapper.newInstance(MovieWatcher.class));
     }
 
 }
